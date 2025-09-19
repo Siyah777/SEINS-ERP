@@ -22,7 +22,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DJANGO_SETTINGS_MODULE=SEINS-ERP.settings.dev
+      - DJANGO_SETTINGS_MODULE=SEINSERP.settings.dev
       - DATABASE_URL=postgres://seinsuser:seins_password@db:5432/seinsdb
     depends_on:
       - db

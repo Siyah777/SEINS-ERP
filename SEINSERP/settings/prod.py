@@ -63,8 +63,8 @@ SECURE_SSL_REDIRECT = False
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 CSRF_TRUSTED_ORIGINS = [
-    'https://seinsv.com',
-    'https://www.seinsv.com',
+    'https://seinsv.online',
+    'https://www.seinsv.online',
 ]
 
 LOGGING = {
