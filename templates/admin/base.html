@@ -1,0 +1,16 @@
+{% extends "jazzmin/base.html" %}
+
+{% block top_navbar %}
+  {{ block.super }}
+
+  {% load static %}
+
+  <li class="nav-item dropdown">
+      <a class="nav-link" href="{% url 'admin:comunicacion_notificacion_changelist' %}">
+          🔔 Notificaciones
+          {% if total_nuevas_notificaciones > 0 %}
+            <span class="badge badge-danger navbar-badge">{{ total_nuevas_notificaciones }}</span>
+          {% endif %}
+      </a>
+  </li>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'admin/base_site.html' %}
+{% load static %}
+
+{% block title %}Panel de Administración{% endblock %}
+{% block content %}
+    <div class="admin-dashboard">
+        <!-- Aquí agregamos el ícono de campanita con contador -->
+        <div class="notification-bell">
+            <a href="{% url 'admin_notificaciones' %}">
+                <img src="{% static 'images/bell-icon.png' %}" alt="Notificaciones">
+                {% if count_notificaciones > 0 %}
+                    <span class="notification-badge">{{ count_notificaciones }}</span>
+                {% endif %}
+            </a>
+        </div>
+
+        <div class="notification-list">
+            <h3>Notificaciones</h3>
+            <ul>
+                {% for notificacion in notificaciones %}
+                    <li class="notification-item">
+                        <p>{{ notificacion.mensaje }}</p>
+                        <small>{{ notificacion.fecha }}</small>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}

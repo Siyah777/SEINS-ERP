@@ -1,0 +1,10 @@
+{% extends "admin/base_site.html" %}
+
+{% block top_navbar %}
+    {{ block.super }}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'notificaciones' %}">
+            <i class="fas fa-bell"></i> Notificaciones
+        </a>
+    </li>
+{% endblock %}

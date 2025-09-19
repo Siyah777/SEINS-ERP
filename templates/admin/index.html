@@ -1,0 +1,181 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block content %}
+<!-- ENCABEZADO PERSONALIZADO AQUÍ -->
+  <div class="encabezado-seins">
+    <h2>Panel de Administración</h2>
+  </div>
+  <div class="modulos-container">
+    {% for app in app_list %}
+      <div class="modulo">
+        <h3><i class="fas fa-tools"></i> {{ app.name }}</h3>
+        <div class="d-grid gap-2">
+          {% for model in app.models %}
+            <a href="{{ model.admin_url }}" class="btn btn-success">
+              {% if "cliente" in model.name|lower %}
+                <i class="fas fa-cash-register"></i>
+              {% elif "proveedor" in model.name|lower %}
+                <i class="fas fa-handshake me-2"></i>
+              {% elif "factura" in model.name|lower %}
+                <i class="fas fa-file-invoice-dollar me-2"></i>
+              {% elif "producto" in model.name|lower %}
+                <i class="fas fa-box-open me-2"></i>
+              {% elif "inventario" in model.name|lower %}
+                <i class="fas fa-warehouse me-2"></i>
+              {% elif "equipo" in model.name|lower %}
+                <i class="fas fa-tools me-2"></i>
+              {% elif "usuario" in model.name|lower %}
+                <i class="fas fa-user-cog me-2"></i>
+              {% elif "proyecto" in model.name|lower %}
+                <i class="fas fa-project-diagram me-2"></i>
+              {% elif "indicador" in model.name|lower %}
+                <i class="fas fa-chart-line me-2"></i>
+              {% elif "servicio" in model.name|lower %}
+                <i class="fas fa-concierge-bell me-2"></i>
+              {% elif "recurso" in model.name|lower %}
+                <i class="fas fa-users-cog me-2"></i>
+              {% elif "documento" in model.name|lower %}
+                <i class="fas fa-file-alt me-2"></i>
+              {% elif "compra" in model.name|lower %}
+                <i class="fas fa-shopping-cart me-2"></i>
+              {% elif "analisis" in model.name|lower %}
+                <i class="fas fa-search me-2"></i>
+              {% elif "notificacion" in model.name|lower %}
+                <i class="fas fa-bell me-2"></i>
+              {% elif "calendario" in model.name|lower or "actividad" in model.name|lower %}
+                <i class="fas fa-tasks"></i>
+              {% elif "finanza" in model.name|lower or "contabilidad" in model.name|lower %}
+                <i class="fas fa-dollar-sign me-2"></i>
+              {% elif "capacitacion" in model.name|lower %}
+                <i class="fas fa-chalkboard-teacher me-2"></i>
+              {% else %}
+                <i class="fas fa-database me-2"></i>
+              {% endif %}
+              {{ model.name }}
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <style>
+    #content-related, .module.recent-actions {
+      display: none !important;
+    }
+
+    body, #container, main#content, .content {
+      margin-top: 0 !important;
+      padding-top: 0 !important;
+    }
+
+    #content {
+      width: 100% !important;
+      padding-top: 0 !important;
+      margin-top: 0 !important;
+    }
+
+    .modulos-container {
+      display: grid;
+      grid-template-columns: repeat( 3, 1fr);
+      gap: 20px;
+      background: rgb(233, 231, 231);
+      padding: 20px 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    
+
+    .modulo {
+      background: linear-gradient(135deg, #91ccd6, #e0d27e);
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: box-shadow 0.3s ease;  
+      display: flex;
+      flex-direction: column;
+      height: 90%;
+    }
+    
+
+    .modulo:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .modulo h3 {
+      margin-bottom: 15px;
+      color: #2c3e50;
+      font-size: 1.2em;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-outline-primary {
+      display: flex;
+      align-items: center;
+      font-size: 0.9em;
+    }
+
+    .btn-outline-primary i {
+      min-width: 20px;
+    }
+
+    .btn-success {
+        padding: 6px 6px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: flex-start;
+        font-size: 0.9em;
+        border-radius: 20px; 
+        /*background-color: #acd4e0 !important;*/
+        background: linear-gradient(135deg, #e0d27e, #91ccd6);
+        border: 2px solid rgb(80, 75, 75) !important; /* borde negro */
+        color: rgb(82, 75, 75) !important;
+        transition: background-color 0.2s ease, border-color 0.2s ease;
+        margin-bottom: 8px; /* espacio abajo */
+        width: auto;
+        box-sizing: border-box;
+         gap: 10px; 
+    }
+
+    .btn-success:hover {
+        background-color: #218838 !important;
+        border-color: black !important;
+        color: white !important;
+    }
+
+    .encabezado-seins {
+      text-align: center;
+      width: 100vw;
+      margin-top: 0 !important;
+      margin: 0 0 10px 0 !important;
+      padding: 10px;
+      background-color: #f3f0e9;
+      border-top: 2px solid #ccc;
+      border-bottom: 2px solid #ccc;
+    }
+
+    .encabezado-seins h2 {
+      font-size: 1.8em;
+      color: #2c3e50;
+      font-weight: bold;
+    }
+
+
+  </style>
+{% endblock %}
+
+{% block extrahead %}
+  {{ block.super }}
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-yzKwKcmGg1p8bmwJfG5cM3wz7N0uX+KtI4Tyo6DQFby3kZ2r7v8+v8Gk0UR1SzOac2lJ3h6kM97gMvE3T+kxdw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+{% endblock %}
+

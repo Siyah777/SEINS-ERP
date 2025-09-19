@@ -1,0 +1,32 @@
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: seins
+      POSTGRES_USER: siyah777
+      POSTGRES_PASSWORD: Debian16Siyah32
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  web:
+    build: .
+    command: waitress-serve --port=8000 SEINS-ERP.wsgi:application
+    volumes:
+      - .:/app
+      - ./logs:/app/logs
+      - ./staticfiles:/app/staticfiles   # IMPORTANTE para archivos estáticos
+    env_file:
+    - .env.prod 
+    ports:
+      - "8000:8000"
+    environment:
+      - DJANGO_SETTINGS_MODULE=SEINS-ERP.settings.prod
+      - DATABASE_URL=postgres://seinsuser:seins_password@db:5432/seinsdb
+    depends_on:
+      - db
+
+volumes:
+  pgdata:

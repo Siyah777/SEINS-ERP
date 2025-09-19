@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 10pt;
+            color: #000;
+            margin: 10px;
+        }
+
+        h2, h3 {
+            color: #003366;
+            margin: 0 0 10px 0;
+        }
+
+        table {
+            width: 50%;
+            max-width: 50%;
+            table-layout: fixed;
+            word-wrap: break-word;
+        }
+
+
+        th, td {
+            border: 1px solid #000;
+            padding: 5px;
+            vertical-align: top;
+            text-align: left;
+        }
+
+        .firma-linea {
+            border-top: 1px solid #000;
+            width: 80%;
+            margin: 30px auto 5px auto;
+        }
+
+        p {
+            margin: 0;
+        }
+
+        img {
+            width: 100px;
+        }
+
+        th {
+            background-color: #D9E1F2; /* Azul claro para encabezados */
+            color: #000;
+        }
+
+        .columna-izquierda {
+            background-color: #F2F2F2; /* Gris claro para celdas de la columna izquierda */
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 12px;
+        }
+
+        th, td {
+            border: 1px solid #000;
+            padding: 5px;
+            vertical-align: top;
+            text-align: left;
+        }
+
+        .tabla-borde-azul {
+            border-top: 2px solid #003366;
+            border-bottom: 2px solid #003366;
+            margin: 10px 0;
+        }
+
+        .fila-alta {
+            padding-top: 20px;
+            padding-bottom: 20px;
+            vertical-align: top; /* o middle si querés centrar verticalmente */
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Logo -->
+    <table>
+        <tr>
+            <td style="text-align: center; border: none;">
+                <img src="data:image/png;base64,{{ logo_base64 }}" alt="Logo" />
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: center; border: none;">
+                <h2>Orden de Trabajo N.º {{ orden.correlativo }}</h2>
+            </td>
+        </tr>
+    </table>
+    
+
+    <!-- Tabla: Fechas, Cotización, Personal -->
+    <table class="tabla-borde-azul">
+        <tr>
+            <th class="columna-izquierda">Cliente</th>
+            <td colspan="3">{{ orden.cliente }}</td>
+        </tr>
+        <tr>
+            <th class="columna-izquierda">Fecha de Inicio</th>
+            <td>{{ orden.fecha_inicio|date:"d/m/Y" }}</td>
+            <th class="columna-izquierda">Fecha de Fin</th>
+            <td>{{ orden.fecha_fin|date:"d/m/Y" }}</td>
+        </tr>
+        <tr>
+            <th class="columna-izquierda">Prioridad del Trabajo</th>
+            <td colspan="3">
+                {{ orden.prioridad }}
+            </td>
+        </tr>
+        <tr>
+            <th class="columna-izquierda">Descripcion del trabajo</th>
+            <td colspan="3">
+                - {{ orden.cotizacion.Descripcion }} (según {{ orden.cotizacion.correlativo }})<br/>
+                {% if orden.equipo_cliente %}
+                    al equipo: {{ orden.equipo_cliente.nombre }},
+                    modelo: {{ orden.equipo_cliente.modelo }},
+                    serie: {{ orden.equipo_cliente.serie }}
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th class="columna-izquierda">Personal Asignado</th>
+            <td colspan="3">
+                {% for user in orden.personal_asignado.all %}
+                    - {{ user.get_full_name }}<br/>
+                {% empty %}
+                    No hay personal asignado
+                {% endfor %}
+            </td>
+        </tr>
+    </table>
+
+    <!-- Tabla: Detalles técnicos -->
+   <table class="tabla-borde-azul">
+    <tr>
+        <th class="columna-izquierda">Estado</th>
+        <td colspan="3">{{ orden.estatus|capfirst }}</td>
+    </tr>
+    <tr>
+        <th class="columna-izquierda">Horas Hombre Estimadas</th>
+        <td colspan="3">{{ orden.horas_hombre_estimadas }}</td>
+    </tr>
+    <tr>
+        <th class="columna-izquierda">Herramientas necesarias</th>
+        <td colspan="3">
+            {% for herramienta in orden.herramientas_necesarias.all %}
+                - {{ herramienta.nombre }}<br/>
+            {% empty %}
+                No hay herramientas necesarias
+            {% endfor %}
+        </td>
+    </tr>
+    <tr>
+        <th class="columna-izquierda">Productos necesarios</th>
+        <td colspan="3">
+            {% if orden.cotizacion.detalles_productos.all %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cantidad</th>
+                            <th>Unidad</th>
+                            <th>Nombre del Producto</th>
+                            <th>Correlativo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in orden.cotizacion.detalles_productos.all %}
+                            <tr>
+                                <td>{{ item.cantidad }}</td>
+                                <td>{{ item.producto.unidades_cantidad|default:"Unidad" }}</td>
+                                <td>{{ item.producto.nombre }}</td>
+                                <td>{{ item.producto.correlativo }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No hay productos necesarios asignados.</p>
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <th class="columna-izquierda">Documentos necesarios</th>
+        <td colspan="3">
+            {% for doc in orden.documentos_necesarios.all %}
+                - {{ doc.nombre }}<br/>
+            {% empty %}
+                No hay documentos necesarios
+            {% endfor %}
+        </td>
+    </tr>
+    <tr>
+        <th class="columna-izquierda">Proveedores</th>
+        <td colspan="3">
+            {% for prov in orden.proveedores.all %}
+                - {{ prov.nombre }}<br/>
+            {% empty %}
+                No hay proveedores
+            {% endfor %}
+        </td>
+    </tr>
+    <tr>
+        <th class="columna-izquierda">Equipo funcionando</th>
+        <td colspan="3">{{ orden.equipo_funcionando }}</td>
+    </tr>
+    <tr>
+        <th class="columna-izquierda">Notas</th>
+        <td colspan="3">{{ orden.notas }}</td>
+    </tr>
+    <tr>
+        <th class="columna-izquierda fila-alta">Comentarios finales</th>
+        <td colspan="3" class="fila-alta">{{ orden.comentarios }}</td>
+    </tr>
+</table>
+
+    <!-- Firmas -->
+    <h3>Firmas</h3>
+    <table>
+        <tr>
+            <td style="text-align: center; border: none;">
+                <p>______________________________</p>
+                <p>Firma del responsable</p>
+                {% with orden.personal_asignado.all|first as responsable %}
+                    {% if responsable %}
+                        <p>{{ responsable.get_full_name }}</p>
+                    {% else %}
+                        <p>No asignado</p>
+                    {% endif %}
+                {% endwith %}
+            </td>
+            <td style="text-align: center; border: none;">
+                <p>______________________________</p>
+                <p>Firma del cliente</p>
+                <p>{{ orden.cliente.nombre_empresa }}</p>
+            </td>
+        </tr>
+    </table>
+
+    
+
+</body>
+</html>
+

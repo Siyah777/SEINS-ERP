@@ -1,0 +1,49 @@
+# Entorno virtual
+venv/
+*.pyc
+__pycache__/
+
+# Archivos de Python compilados
+__pycache__/
+#*.py[cod]
+*$py.class
+
+# Archivos del entorno
+*.env
+.env
+.env.dev
+.env.prod
+
+# Archivos de configuración del editor
+.vscode/
+.idea/
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Base de datos SQLite (si la usas)
+#*.sqlite3
+
+# Archivos de migraciones (opcional ignorarlos, depende del flujo de trabajo)
+# **No recomendado si necesitas compartir migraciones**
+# */migrations/*.py
+# */migrations/*.pyc
+
+# Archivos de logs
+*.log
+
+# Archivos generados por tests o cobertura
+htmlcov/
+.coverage
+.tox/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# Archivos de compilación y caché
+build/
+dist/
+*.egg-info/
+.eggs/

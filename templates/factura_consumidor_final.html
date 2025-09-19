@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        .header {
+            width: 100%;
+            border: none;
+            border-collapse: collapse;
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+        .header td, .header tr, .header table {
+            border: none !important;
+        }
+        body { font-family: DejaVu Sans, sans-serif; font-size: 10pt; margin: 0px; }
+         h1, h2 {
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            color: #0B5394;
+        }
+        .empresa-cliente-info {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 0px;
+        }
+        .empresa-cliente-info td {
+            border: 1px solid black;
+            padding: 5px;
+            vertical-align: top;
+        }
+        .empresa-info, .cliente-info {
+            width: 50%;
+        }
+        .logo { width: 150px; height: auto; }
+        table { width: 100%;  }
+        th, td { border: 1px solid #000; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .right { text-align: right; }
+        .summary-table { margin-top: 30px; width: 100%; margin-left: auto; margin-right: 0; }
+        .summary-table td { border: none; padding: 5px; margin-left: auto; margin-right: 0; }
+    </style>
+</head>
+<body>
+
+    <table class="header">
+    <tr>
+        <td style="text-align: center;">
+            <img src="data:image/png;base64,{{ logo_base64 }}" width="100" style="margin-bottom: 10px;">
+            <img src="data:image/png;base64,{{ qr_base64 }}" alt="Código QR" width="120" height="120">
+            <h2>DTE FACTURA CONSUMIDOR FINAL {{ factura.correlativo }}</h2>
+            Codigo de generación: {{ factura.codigo_generacion }} <br>
+            Número de control: {{ factura.numero_control }} <br>
+            Sello de Recepción: {{ factura.sello_recepcion }} <br>
+            Modelo de Facturación: Modelo de facturación Electrónica <br>
+            Tipo de transmisión: Transmisión normal <br>
+            Fecha y hora de generación: {{ factura.fecha_envio }} <br>
+        </td>
+    </tr>
+    </table>
+
+     <table class="empresa-cliente-info">
+        <tr>
+            <td class="empresa-info">
+                <strong class="resaltado">Datos de la Empresa:</strong><br>
+                SERVICIOS ESTRATEGICOS INTEGRALES DE INGENIERIA SALVADOREÑOS (SEINSV)<br>
+                NIT: 037941384<br>
+                NRC: 3628812<br>
+                Dirección: Urb. Cumbres de San Bartolo, Senda Villa Toledo, casa 31, Poligono 59,<br>
+                Tonacatepeque, San Salvador Este<br>
+                Tel: (503) 7537-9826<br>
+                Correo: administracion@seinsv.com<br>
+                Municipio: San Salvador Este<br>
+                Departamento: San Salvador
+            </td>
+            <td class="cliente-info">
+                <strong class="resaltado">Datos del Cliente:</strong><br>
+                Nombre: {{ factura.cliente.nombre_empresa }}<br>
+                NIT: {{ factura.cliente.nit }}<br>
+                NRC: {{ factura.cliente.nrc }}<br>
+                Dirección: {{ factura.cliente.direccion }}<br>
+                Tel: {{ factura.cliente.telefono_contacto }}<br>
+                Correo: {{ factura.cliente.correo }}<br>
+                Municipio: {{ factura.cliente.get_municipio_display }}<br>
+                Departamento: {{ factura.cliente.get_departamento_display }}
+            </td>
+        </tr>
+    </table>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Cantidad</th>
+                <th>Descripción</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if factura.producto %}
+            <tr>
+                <td>{{ factura.cantidad_producto }}</td>
+                <td>{{ factura.producto.nombre }}</td>
+                <td class="right">${{ factura.producto.precio_unitario|floatformat:2 }}</td>
+            </tr>
+            {% endif %}
+            {% if factura.servicio %}
+            <tr>
+                <td>{{ factura.cantidad_servicio }}</td>
+                <td>{{ factura.servicio.categoria }}</td>
+                <td class="right">${{ factura.servicio.precio_unitario|floatformat:2 }}</td>
+            </tr>
+            {% endif %}
+            {% if factura.cotizacion %}
+            <tr>
+                <td>1</td>
+                <td>Cotización # {{ factura.cotizacion.correlativo }} - {{ factura.cotizacion.Descripcion }}</td>
+                <td class="right">${{ factura.cotizacion.total|floatformat:2 }}</td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+    <table class="summary-table">
+        <tr>
+            <td class="right" colspan="2"><strong>Total sin IVA:</strong></td>
+            <td class="right">${{ factura.total_sin_iva|floatformat:2 }}</td>
+        </tr>
+        <tr>
+            <td class="right" colspan="2"><strong>IVA (13%):</strong></td>
+            <td class="right">${{ factura.iva|floatformat:2 }}</td>        
+        </tr>
+        <tr>
+            <td class="right" colspan="2"><strong>Total con IVA:</strong></td>
+            <td class="right"><strong>${{ factura.total_con_iva|floatformat:2 }}</strong></td>
+        </tr>
+        <tr>
+            <td class="right" colspan="2"><strong>Total en letras:</strong></td>
+            <td class="right">{{ factura.total_letras }}</td>
+        </tr>
+        <tr>
+            <td class="right" colspan="2"><strong>Condicion de Operación:</strong></td>
+            <td class="right">{{ factura.get_condicion_operacion_display }}</td>
+        </tr>
+    </table>
+    version: {{ factura.version_json }} <br>
+
+</body>
+</html>
+
+

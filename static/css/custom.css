@@ -1,0 +1,35 @@
+/* Estilo para distribuir los módulos en la página principal en forma de tarjetas */
+.dashboard #content-main .app-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.dashboard #content-main .app-list .app-block {
+  background: blue;
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.login-container {
+    background-color: #1a1a2e;
+    color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+}
+.login-container h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+body.login {
+    background: url("/static/images/login.jpg") no-repeat center center fixed;
+    background-size: cover;
+}
+
+#login-form {
+    background-color: rgba(255, 255, 255, 0.8); /* opcional: caja semitransparente */
+    padding: 20px;
+    border-radius: 10px;
+}

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<style>
+    @page {
+        size: letter;
+        margin: 50px 60px;
+    }
+
+    body {
+        font-family: "Times New Roman", serif;
+        font-size: 16px;
+        line-height: 1.25;
+        color: #333;
+        margin: 0;
+        position: relative;
+        padding-bottom: 150px;
+    }
+
+    .contenedor-principal {
+        page-break-inside: avoid !important;
+        page-break-after: avoid !important;
+        page-break-before: avoid !important;
+        break-inside: avoid !important;
+        break-after: avoid !important;
+        break-before: avoid !important;
+        padding-bottom: 15px;
+    }
+
+    .header-container {
+        text-align: center;
+        margin-bottom: 5px;
+        page-break-inside: avoid;
+    }
+
+    .logo {
+        width: 85px;
+        height: auto;
+        margin-bottom: 8px;
+    }
+
+    .empresa-info {
+        font-size: 14px;
+        line-height: 1.2;
+        color: #555;
+        margin-bottom: 0px;
+    }
+
+    h2 {
+        font-size: 18px;
+        margin-bottom: 0px;
+        text-align: center;
+        color: #2a4d69;
+        page-break-inside: avoid;
+    }
+
+    h3 {
+        font-size: 16px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        color: #4b86b4;
+        border-bottom: 2px solid #4b86b4;
+        padding-bottom: 3px;
+        page-break-inside: avoid;
+    }
+
+    p {
+        margin: 6px 0;
+        text-align: justify;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 5px;
+        page-break-inside: avoid;
+        page-break-after: auto;
+    }
+
+    th, td {
+        border: 1px solid #bbb;
+        padding: 6px 8px;
+        text-align: left;
+        vertical-align: middle;
+        font-size: 13px;
+    }
+
+    th {
+        background-color: #4b86b4;
+        color: white;
+    }
+
+    tbody tr:nth-child(even) {
+        background-color: #f2f7fb;
+    }
+
+    .section {
+        margin-top: 12px;
+        page-break-inside: avoid;
+    }
+
+    .saludo, .despedida {
+        font-style: italic;
+        margin-top: 8px;
+        margin-bottom: 8px;
+    }
+
+   .signature-table {
+        position: absolute;
+        bottom: 50px;
+        left: 60px;
+        right: 60px;
+        width: auto;
+        page-break-inside: avoid;
+    }
+
+    .signature-cell {
+        width: 50%;
+        text-align: center;
+        vertical-align: top;
+        font-size: 12px;
+    }
+
+    .signature-line {
+        border-top: 1px solid #000;
+        margin: 0 auto 6px auto;
+        width: 80%;
+    }
+</style>
+</head>
+<body>
+
+    <div class="contenedor-principal">
+
+        <div class="header-container">
+            <img src="data:image/png;base64,{{ logo_base64 }}" alt="Logo" class="logo" />
+        </div>
+        <div class="empresa-info">
+                <br><strong>Cotización N.º </strong>{{ cotizacion.correlativo }}<br />
+                <br><strong>Fecha:</strong> {{ cotizacion.fecha|date:"d/m/Y" }}<br />
+        </div>
+
+        <h3><strong>Cliente:</strong> {{ cotizacion.cliente }}</h3>
+
+        <div class="section">
+            {% if cotizacion.detalles_servicios.all or cotizacion.detalles_productos.all %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ cotizacion.Descripcion }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+
+        <div class="section">
+            <h3>Productos incluidos:</h3>
+            {% if cotizacion.detalles_productos.all %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cantidad</th>
+                            <th>Unidad</th>
+                            <th>Nombre del Producto</th>
+                            <th>Correlativo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in cotizacion.detalles_productos.all %}
+                            <tr>
+                                <td>{{ item.cantidad }}</td>
+                                <td>{{ item.producto.unidades_cantidad|default:"Unidad" }}</td>
+                                <td>{{ item.producto.nombre }}</td>
+                                <td>{{ item.producto.correlativo }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No se han agregado productos a esta cotización.</p>
+            {% endif %}
+        </div>
+
+    </div> <!-- fin contenedor-principal -->
+
+    <h3>Firmas:</h3>
+    <table class="signature-table">
+        <tr>
+            <td class="signature-cell">
+                <div class="signature-line"></div>
+                <p>Nombre del emisor:</p>
+                <p>{{ cotizacion.usuario.get_full_name }}</p>
+            </td>
+            <td class="signature-cell">
+                <div class="signature-line"></div>
+                <p>Estatus de la cotización:</p>
+                <p><strong>{{ cotizacion.estatus }}</strong></p>
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>
+
+
