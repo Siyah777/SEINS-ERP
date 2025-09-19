@@ -18,7 +18,7 @@ Está construido en **Django**, **PostgreSQL** y **Docker**, con un enfoque modu
 ## 📦 Instalación Rápida (Docker)
 
 ```bash
-git clone https://github.com/tuusuario/seins-erp.git
+git clone https://github.com/Siyah777/seins-erp.git
 cd seins-erp
 docker compose up -d
 🛠 Tecnologías Usadas
