@@ -1,25 +1,29 @@
 {
   "files": {
     "main.css": "/static/css/main.3135486a.css",
-    "main.js": "/static/js/main.e9b524b1.js",
+    "main.js": "/static/js/main.a9205fc1.js",
+    "static/media/erp.png": "/static/media/erp.c70c116487c95dc7899b.png",
     "static/media/logo.png": "/static/media/logo.6a1600e82dd55b2f5e34.png",
     "static/media/imagen3.jpg": "/static/media/imagen3.69f7fa96cefc847b00fe.jpg",
+    "static/media/inventario.png": "/static/media/inventario.aa07b3c1fa3245f06cbc.png",
+    "static/media/manto.png": "/static/media/manto.6f4797f21848859f3984.png",
     "static/media/imagen2.jpg": "/static/media/imagen2.4d2c26af805bc727ac4d.jpg",
-    "static/media/meca.png": "/static/media/meca.1fe4cc139632115336e8.png",
-    "static/media/robo.png": "/static/media/robo.62580ee2eb14972b96a1.png",
-    "static/media/ray.png": "/static/media/ray.c63b199bb4aa83e26af6.png",
     "static/media/imagen4.jpg": "/static/media/imagen4.56b128e1df780b6d16ab.jpg",
+    "static/media/compra.png": "/static/media/compra.456d301dbd67d7c9d985.png",
     "static/media/imagen1.jpg": "/static/media/imagen1.a8997deb2e7f3de5801d.jpg",
+    "static/media/grafo.png": "/static/media/grafo.05e20b5432e4988a3950.png",
+    "static/media/cmms.png": "/static/media/cmms.d23765da465f377ad740.png",
+    "static/media/ventas.png": "/static/media/ventas.679869226369d2766400.png",
     "static/media/slick.svg": "/static/media/slick.2630a3e3eab21c607e21.svg",
     "static/media/slick.eot": "/static/media/slick.a4e97f5a2a64f0ab1323.eot",
     "static/media/slick.ttf": "/static/media/slick.c94f7671dcc99dce43e2.ttf",
     "static/media/slick.woff": "/static/media/slick.295183786cd8a1389865.woff",
     "index.html": "/index.html",
     "main.3135486a.css.map": "/static/css/main.3135486a.css.map",
-    "main.e9b524b1.js.map": "/static/js/main.e9b524b1.js.map"
+    "main.a9205fc1.js.map": "/static/js/main.a9205fc1.js.map"
   },
   "entrypoints": [
     "static/css/main.3135486a.css",
-    "static/js/main.e9b524b1.js"
+    "static/js/main.a9205fc1.js"
   ]
 }
