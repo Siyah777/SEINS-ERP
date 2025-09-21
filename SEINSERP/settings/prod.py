@@ -13,14 +13,10 @@ SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-ALLOWED_HOSTS = ["seinsv.com", "www.seinsv.com", "3.86.0.104", "127.0.0.1", "localhost"]
+ALLOWED_HOSTS = ["seinsv.online", "www.seinsv.online", "3.86.0.104", "127.0.0.1", "localhost"]
 
 DATABASES = {
-    #'dev': {  # Base de datos local SQLite
-    #    'ENGINE': 'django.db.backends.sqlite3',
-    #    'NAME': BASE_DIR / "db.sqlite3",
-    #},
-    'default': { # base de datos alojada en instanca EC2 de AWS
+    'default': { 
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': config('DB_NAME'),
         'USER': config('DB_USER'),

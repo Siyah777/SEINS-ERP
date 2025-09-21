@@ -23,7 +23,7 @@ __pycache__/
 Thumbs.db
 
 # Base de datos SQLite (si la usas)
-#*.sqlite3
+*.sqlite3
 
 # Archivos de migraciones (opcional ignorarlos, depende del flujo de trabajo)
 # **No recomendado si necesitas compartir migraciones**

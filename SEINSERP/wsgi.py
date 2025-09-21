@@ -1,5 +1,5 @@
 """
-WSGI config for plataformaSEINS project.
+WSGI config for SEINSERP project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -17,6 +17,6 @@ load_dotenv(dotenv_path)
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'plataformaSEINS.settings.prod')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'SEINSERP.settings.prod')
 
 application = get_wsgi_application()
