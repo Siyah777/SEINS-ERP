@@ -19,8 +19,9 @@ Está construido en **Django**, **PostgreSQL** y **Docker**, con un enfoque modu
 
 ```bash
 git clone https://github.com/Siyah777/seins-erp.git
-cd seins-erp
-docker compose up -d
+renonombrar carpeta a SEINSERP
+cd SEINSERP
+docker compose -f docker-compose.prod.yml up -d --build"
 🛠 Tecnologías Usadas
 
 Backend: Django 5.x, Django Rest Framework
@@ -53,6 +54,6 @@ Este proyecto está licenciado bajo la MIT License - consulta el archivo LICENSE
 
 Sitio web: https://seinsv.com
 
-Autor: Sergio Erazo
+Autor: Sergio Erazo (Siyah777)
 
 Correo: administracion@seinsv.com
