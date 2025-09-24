@@ -21,7 +21,9 @@ class ListaDeMaterialesInline(admin.StackedInline): #StackedInline
 class CotizacionAdmin(admin.ModelAdmin):
     list_display = ("correlativo", "cliente", "Descripcion", "fecha", "estatus_coloreado", "total_con_dolar", "ver_pdf")
     list_per_page = 20
-    readonly_fields = ("total", "total_iva", "correlativo")
+    readonly_fields = ("total", "total_iva", "correlativo", "usuario")
+    list_filter = ("usuario", "estatus")
+    
     def total_con_dolar(self, obj):
      return mark_safe(f"${float(obj.total_iva):.2f}")
     total_con_dolar.short_description = 'Total ($)'
@@ -47,6 +49,11 @@ class CotizacionAdmin(admin.ModelAdmin):
 
     estatus_coloreado.short_description = 'Estatus'
     inlines = [DetalleCotizacionProductosInline, DetalleCotizacionServiciosInline, ListaDeMaterialesInline]
+    
+    def save_model(self, request, obj, form, change):
+        if obj.usuario is None:
+            obj.usuario = request.user
+        super().save_model(request, obj, form, change)
 
 admin.site.register(DetalleCotizacionProductos)
 admin.site.register(DetalleCotizacionServicios)

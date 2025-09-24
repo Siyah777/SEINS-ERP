@@ -12,6 +12,7 @@ class GastoInline(admin.TabularInline):
 @admin.register(Presupuesto)
 class PresupuestoAdmin(admin.ModelAdmin):
     list_display = ('nombre', 'total_ingresos', 'total_gastos', 'balance_total')
+    readonly_fields = ('total_ingresos', 'total_gastos', 'balance_total')
     inlines = [IngresoInline, GastoInline]
 
 @admin.register(CuentaPorCobrar)

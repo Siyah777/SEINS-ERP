@@ -51,6 +51,6 @@ class HistorialMantenimientoAdmin(admin.ModelAdmin):
 
 @admin.register(Herramienta)
 class HerramientaAdmin(admin.ModelAdmin):
-    list_display = ('nombre', 'categoria', 'cantidad', 'modelo', 'marca', 'codigo_interno', 'estado')
+    list_display = ('codigo_interno', 'nombre', 'categoria', 'cantidad', 'modelo', 'marca', 'estado')
     list_filter = ('estado', 'categoria', 'marca')
     search_fields = ('nombre', 'modelo', 'serie', 'marca')

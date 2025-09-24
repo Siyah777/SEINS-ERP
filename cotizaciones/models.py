@@ -18,8 +18,8 @@ class Cotizacion(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)  # Cliente que solicita la cotización
     correlativo = models.CharField(max_length=20, unique=True, blank=True, null=True)
     Descripcion = models.TextField(blank=False, null=False, default='Descripcion de la cotización')  # Descripción de la cotización
-    porcentaje_administracion = models.DecimalField(max_digits=5, decimal_places=0, default=15)  # Porcentaje de administración
-    porcentaje_ganancia = models.DecimalField(max_digits=5, decimal_places=0, default=15)  # Porcentaje de ganancia
+    porcentaje_administracion = models.DecimalField(max_digits=5, decimal_places=0, default=0)  # Porcentaje de administración
+    porcentaje_ganancia = models.DecimalField(max_digits=5, decimal_places=0, default=0)  # Porcentaje de ganancia
     validez_oferta = models.PositiveIntegerField(default=15)  # Días de validez de la oferta
     unidades_oferta = models.CharField(max_length=50, default='dias')  # Unidades de la oferta
     condiciones_pago = models.CharField(
@@ -32,7 +32,7 @@ class Cotizacion(models.Model):
         verbose_name="Condición de Operación"
     )  # Condiciones de pago
     dias_credito = models.PositiveIntegerField(default=0, null=False, help_text="Días de crédito otorgado")
-    usuario = models.ForeignKey(User, on_delete=models.CASCADE)  # Usuario que la generó
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, editable=False, null=True, blank=True)  # Usuario que la generó
     fecha = models.DateTimeField(auto_now_add=True)  # Fecha de creación
     total = models.DecimalField(max_digits=10, decimal_places=2, default=0, blank=True)  # Total de la cotización
     total_iva = models.DecimalField(max_digits=10, decimal_places=2, default=0, blank=True)  # Total con IVA
