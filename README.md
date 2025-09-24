@@ -19,7 +19,7 @@ Está construido en **Django**, **PostgreSQL** y **Docker**, con un enfoque modu
 
 ```bash
 git clone https://github.com/Siyah777/seins-erp.git
-renonombrar carpeta a SEINSERP
+renombrar carpeta a SEINSERP
 cd SEINSERP
 docker compose -f docker-compose.prod.yml up -d --build"
 🛠 Tecnologías Usadas
