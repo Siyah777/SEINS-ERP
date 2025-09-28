@@ -106,9 +106,9 @@
         </tr>
         <tr>
             <th class="columna-izquierda">Fecha de Inicio</th>
-            <td>{{ orden.fecha_inicio|date:"d/m/Y" }}</td>
+            <td>{{ orden.fecha_inicio|date:"d/m/Y" }} a las {{orden.hora_inicio}}</td>
             <th class="columna-izquierda">Fecha de Fin</th>
-            <td>{{ orden.fecha_fin|date:"d/m/Y" }}</td>
+            <td>{{ orden.fecha_fin|date:"d/m/Y" }} a las {{orden.hora_fin}}</td>
         </tr>
         <tr>
             <th class="columna-izquierda">Prioridad del Trabajo</th>
@@ -209,7 +209,7 @@
         </td>
     </tr>
     <tr>
-        <th class="columna-izquierda">Equipo funcionando</th>
+        <th class="columna-izquierda">¿El equipo debe estar funcionando para realizar la actividad?</th>
         <td colspan="3">{{ orden.equipo_funcionando }}</td>
     </tr>
     <tr>

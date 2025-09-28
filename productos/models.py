@@ -14,7 +14,7 @@ class Producto(models.Model):
     serie = models.CharField(max_length=100, unique=True)
     modelo = models.CharField(max_length=100)
     existencia = models.TextField(choices=EXISTENCIA_CHOICES, default='EN STOCK')
-    precio_unitario = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    precio_unitario = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, help_text="Colocar precios sin IVA")
     
     def save(self, *args, **kwargs):
         if not self.correlativo:

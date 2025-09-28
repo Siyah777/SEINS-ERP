@@ -44,7 +44,7 @@ class Herramienta(models.Model):
     notas = models.TextField(blank=True)
 
     def __str__(self):
-        return self.nombre
+        return f"{self.nombre} - {self.codigo_interno}"
     
 class HistorialMantenimiento(models.Model):
     UNIDADES = [

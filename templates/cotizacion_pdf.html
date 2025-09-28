@@ -149,11 +149,13 @@
                 <thead>
                     <tr>
                         <th>Descripción</th>
+                        <th>Total</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>{{ cotizacion.Descripcion }}</td>
+                        <td>${{ cotizacion.total }} + IVA (${{cotizacion.total_iva}})</td>
                     </tr>
                 </tbody>
             </table>

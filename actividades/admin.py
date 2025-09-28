@@ -8,9 +8,12 @@ class TrabajoAdmin(admin.ModelAdmin):
     list_display = (
         'correlativo',
         'cliente',
+        'descripcion',
         'fecha_inicio',
+        'hora_inicio',
         'fecha_fin',
-        'estatus',
+        'hora_fin',
+        'estatus_coloreado',
         #'horas_hombre_estimadas',
         #'equipo_funcionando',
         #'mostrar_herramientas_necesarias',
@@ -22,7 +25,17 @@ class TrabajoAdmin(admin.ModelAdmin):
     
     list_per_page = 20
     
-    readonly_fields = ('cliente', 'correlativo',) # Campos de solo lectura
+    readonly_fields = ('cliente', 'correlativo', 'descripcion') # Campos de solo lectura
+    
+    def estatus_coloreado(self, obj):
+        colores = {
+            'en_proceso': 'orange',
+            'terminado': 'green',
+            'pendiente': 'red',
+        }
+        color = colores.get(obj.estatus, 'black')
+        return format_html(f'<strong style="color: {color};">{obj.get_estatus_display()}</strong>')
+    
     def mostrar_herramientas_necesarias(self, obj):
         return ", ".join([h.nombre for h in obj.herramientas_necesarias.all()])
     mostrar_herramientas_necesarias.short_description = "Herramientas"
@@ -32,7 +45,7 @@ class TrabajoAdmin(admin.ModelAdmin):
     mostrar_productos_necesarios.short_description = "Productos"
 
     def mostrar_proveedores(self, obj):
-        return ", ".join([p.nombre for p in obj.proveedores.all()])
+        return ", ".join([p.nombre_empresa for p in obj.proveedores.all()])
     mostrar_proveedores.short_description = "Proveedores"
 
     def mostrar_documentos_necesarios(self, obj):

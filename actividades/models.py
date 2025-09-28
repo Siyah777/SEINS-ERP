@@ -22,6 +22,7 @@ class Ordendetrabajo(models.Model):
     HORARIOS = [
         ('AM', 'Matutino'),  
         ('PM', 'Vespertino'),
+        ('PM2', 'Nocturno'),
         ('8-5', 'Horario Normal'),
     ]
     
@@ -34,10 +35,13 @@ class Ordendetrabajo(models.Model):
     cliente = models.ForeignKey('clientes.Cliente', on_delete=models.CASCADE)
     equipo_cliente = models.ForeignKey('equipos_clientes.EquipoCliente', on_delete=models.CASCADE, blank=True, null=True)
     correlativo = models.CharField(max_length=20, unique=True, blank=True, null=True)
+    descripcion = models.TextField(blank=True)
     cotizacion = models.ForeignKey(Cotizacion, blank=False, on_delete=models.CASCADE, default=1)
     prioridad = models.CharField(max_length=10, choices=PRIORIDAD_CHOICES, default='media')
     fecha_inicio = models.DateField(blank=True, null=True)
+    hora_inicio = models.TimeField(blank=True, null=True)
     fecha_fin = models.DateField(blank=True, null=True)
+    hora_fin = models.TimeField(blank=True, null=True)
     estatus = models.CharField(max_length=20, choices=ESTATUS_CHOICES, default='pendiente')
     personal_asignado = models.ManyToManyField(
         User,
@@ -58,6 +62,7 @@ class Ordendetrabajo(models.Model):
         
     def save(self, *args, **kwargs):
         self.cliente = self.cotizacion.cliente  # Asegura que el cliente siempre coincida con la cotización
+        self.descripcion = self.cotizacion.Descripcion  # Asegura que la descripción siempre coincida con la cotización
         if not self.correlativo:
             anio = datetime.now().year % 100  # 2025 -> 25
             ultimo = Ordendetrabajo.objects.order_by('-id').first()
@@ -71,6 +76,6 @@ class Ordendetrabajo(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"OT {self.correlativo} - {self.cliente.nombre_empresa}"
+        return f"{self.correlativo} - {self.cliente.nombre_empresa}"
 
 
