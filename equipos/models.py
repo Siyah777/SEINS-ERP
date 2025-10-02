@@ -19,7 +19,7 @@ class Equipo(models.Model):
     #costo_total_acumulado = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     def __str__(self):
-        return f"{self.nombre} - {self.serie}"
+        return f"{self.nombre} - {self.codigo_interno}"
     
     def calcular_costo_total_mantenimientos(self):
         total = self.historial_mantenimientos.aggregate(total=Sum('costo_total'))['total']

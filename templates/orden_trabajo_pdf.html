@@ -105,11 +105,26 @@
             <td colspan="3">{{ orden.cliente }}</td>
         </tr>
         <tr>
-            <th class="columna-izquierda">Fecha de Inicio</th>
-            <td>{{ orden.fecha_inicio|date:"d/m/Y" }} a las {{orden.hora_inicio}}</td>
-            <th class="columna-izquierda">Fecha de Fin</th>
-            <td>{{ orden.fecha_fin|date:"d/m/Y" }} a las {{orden.hora_fin}}</td>
+        <th class="columna-izquierda">Fecha de Inicio</th>
+            <td>
+                {% if orden.fecha_inicio %}
+                    {{ orden.fecha_inicio|date:"d/m/Y" }}
+                {% endif %}
+                {% if orden.hora_inicio %}
+                    a las {{ orden.hora_inicio }}
+                {% endif %}
+            </td>
+        <th class="columna-izquierda">Fecha de Fin</th>
+            <td>
+                {% if orden.fecha_fin %}
+                    {{ orden.fecha_fin|date:"d/m/Y" }}
+                {% endif %}
+                {% if orden.hora_fin %}
+                    a las {{ orden.hora_fin }}
+                {% endif %}
+            </td>
         </tr>
+|
         <tr>
             <th class="columna-izquierda">Prioridad del Trabajo</th>
             <td colspan="3">
@@ -202,7 +217,7 @@
         <th class="columna-izquierda">Proveedores</th>
         <td colspan="3">
             {% for prov in orden.proveedores.all %}
-                - {{ prov.nombre }}<br/>
+                - {{ prov.nombre_empresa }}<br/>
             {% empty %}
                 No hay proveedores
             {% endfor %}

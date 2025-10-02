@@ -9,6 +9,8 @@ class TrabajoAdmin(admin.ModelAdmin):
         'correlativo',
         'cliente',
         'descripcion',
+        'mostrar_personal_asignado',
+        'horarios_actividad',
         'fecha_inicio',
         'hora_inicio',
         'fecha_fin',
@@ -17,7 +19,6 @@ class TrabajoAdmin(admin.ModelAdmin):
         #'horas_hombre_estimadas',
         #'equipo_funcionando',
         #'mostrar_herramientas_necesarias',
-        #'horarios_actividad',
         #'mostrar_documentos_necesarios',
         'mostrar_proveedores',
         'pdf_orden_trabajo',
@@ -51,13 +52,22 @@ class TrabajoAdmin(admin.ModelAdmin):
     def mostrar_documentos_necesarios(self, obj):
         return ", ".join([d.nombre for d in obj.documentos_necesarios.all()])
     mostrar_documentos_necesarios.short_description = "Documentos"
+    
+    def mostrar_personal_asignado(self, obj):
+        return ", ".join([str(c) for c in obj.personal_asignado.all()])
+    mostrar_personal_asignado.short_description = "personal asignado"
 
     def pdf_orden_trabajo(self, obj):
         url = reverse('actividades:generar_pdf_orden_trabajo', args=[obj.pk])
         return format_html('<a class="button" href="{}" target="_blank">Descargar O.T.</a>', url)
     pdf_orden_trabajo.short_description = 'PDF'
     
-    list_filter = ('estatus', 'fecha_inicio', 'fecha_fin')
+    list_filter = ('estatus',
+    'fecha_inicio',
+    'fecha_fin',
+    ("personal_asignado", admin.RelatedOnlyFieldListFilter),
+    'horarios_actividad',
+    )
     #search_fields = ('cliente__nombre', 'correlativo') 
     filter_horizontal = ('personal_asignado',)  # Para seleccionar múltiples usuarios con un widget más cómodo
     date_hierarchy = 'fecha_inicio'

@@ -42,5 +42,5 @@ class Proveedor(models.Model):
 
     # Método que devuelve el nombre del proveedor en la representación en cadena
     def __str__(self):
-        return self.nombre_empresa
+        return f"{self.nombre_empresa} {self.correlativo}"
 

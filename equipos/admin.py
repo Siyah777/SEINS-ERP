@@ -42,6 +42,7 @@ class HistorialMantenimientoAdmin(admin.ModelAdmin):
         'usuario_asignado',)
     list_filter = ('fecha_mant', 'descripcion_mant', 'proximo_mant',)
     search_fields = ('descripcion_mant',)
+    list_per_page = 20
     
     def changelist_view(self, request, extra_context=None):
         total_costo = HistorialMantenimiento.objects.aggregate(total=Sum('costo_total'))['total'] or 0
@@ -54,3 +55,4 @@ class HerramientaAdmin(admin.ModelAdmin):
     list_display = ('codigo_interno', 'nombre', 'categoria', 'cantidad', 'modelo', 'marca', 'estado')
     list_filter = ('estado', 'categoria', 'marca')
     search_fields = ('nombre', 'modelo', 'serie', 'marca')
+    list_per_page = 20

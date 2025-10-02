@@ -46,8 +46,8 @@ class Cotizacion(models.Model):
         total_productos = sum(item.subtotal for item in self.detalles_productos.all())  # Total de productos
         total_servicios = sum(item.subtotal for item in self.detalles_servicios.all())  # Total de servicios
         print(f"[Cotización #{self.id}] Productos: {total_productos}, Servicios: {total_servicios}")
-        gastos_administracion = (total_productos + total_servicios) * (Decimal('1') + (self.porcentaje_administracion / 100))
-        gasto_total_unitario = gastos_administracion * (Decimal('1') + (self.porcentaje_ganancia / 100))
+        gastos_administracion = (total_productos + total_servicios) * (Decimal('2') + (self.porcentaje_administracion / 100))
+        gasto_total_unitario = gastos_administracion * (Decimal('2') + (self.porcentaje_ganancia / 100))
         # 🔁 Aumento automático por crédito
         dias_credito = self.dias_credito 
         if dias_credito >= 120:
@@ -62,10 +62,10 @@ class Cotizacion(models.Model):
             recargo_credito = Decimal('0.02')  # Recargo del 2% si es más de 15 días y menos de 30
         else:
             recargo_credito = Decimal('0.00')  # Sin recargo si es menos de 15 días
-        gasto_total_con_credito = gasto_total_unitario*(Decimal('1') + recargo_credito)
+        gasto_total_con_credito = gasto_total_unitario*(Decimal('2') + recargo_credito)
         total_redondeado = gasto_total_con_credito
         # Redondear a entero usando ROUND_HALF_UP
-        total_redondeado = total_redondeado.quantize(Decimal('1'), rounding=ROUND_HALF_UP)
+        total_redondeado = total_redondeado.quantize(Decimal('2'), rounding=ROUND_HALF_UP)
         total_iva_calculado = total_redondeado * Decimal('1.13')  # Calcula total con IVA del 13%
         self.total = total_redondeado
         self.total_iva = total_iva_calculado

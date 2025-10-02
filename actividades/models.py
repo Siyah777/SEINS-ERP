@@ -20,10 +20,10 @@ class Ordendetrabajo(models.Model):
     ]
     
     HORARIOS = [
-        ('AM', 'Matutino'),  
-        ('PM', 'Vespertino'),
-        ('PM2', 'Nocturno'),
-        ('8-5', 'Horario Normal'),
+        ('AM', 'Matutino 6-3'),  
+        ('PM', 'Vespertino 12-9'),
+        ('PM2', 'Nocturno 9-6'),
+        ('8-5', 'Horario Normal 8-5'),
     ]
     
     PRIORIDAD_CHOICES = [

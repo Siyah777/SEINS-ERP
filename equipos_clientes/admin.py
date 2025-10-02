@@ -27,3 +27,4 @@ class HistorialMantenimientoAdmin(admin.ModelAdmin):
     filter_horizontal = ('ordenes_trabajo',)
     list_filter = ('fecha_mant',) #'descripcion_mant', 'proximo_mant',)
     search_fields = ('fecha_mant',)
+    list_per_page = 20
