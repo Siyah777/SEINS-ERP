@@ -8,6 +8,9 @@ from decimal import Decimal
 from decimal import Decimal, ROUND_HALF_UP
 from datetime import datetime
 from django.db import transaction
+import logging
+
+logger = logging.getLogger(__name__)
 
 class Cotizacion(models.Model):
     ESTATUS_CHOICES = [
@@ -45,9 +48,21 @@ class Cotizacion(models.Model):
     def calcular_total(self):
         total_productos = sum(item.subtotal for item in self.detalles_productos.all())  # Total de productos
         total_servicios = sum(item.subtotal for item in self.detalles_servicios.all())  # Total de servicios
-        print(f"[Cotización #{self.id}] Productos: {total_productos}, Servicios: {total_servicios}")
-        gastos_administracion = (total_productos + total_servicios) * (Decimal('2') + (self.porcentaje_administracion / 100))
-        gasto_total_unitario = gastos_administracion * (Decimal('2') + (self.porcentaje_ganancia / 100))
+        logger.debug(f"[Cotización #{self.id}] Productos: {total_productos}, Servicios: {total_servicios}")
+        
+        if not self.detalles_productos.exists() and not self.detalles_servicios.exists():
+            self.total = Decimal('0.00')
+            self.total_iva = Decimal('0.00')
+            return self.total
+        
+        # Convertir porcentajes a Decimal para evitar errores de flotantes
+        porcentaje_admin = Decimal(self.porcentaje_administracion) / Decimal('100')
+        porcentaje_gan = Decimal(self.porcentaje_ganancia) / Decimal('100')
+        
+        # Cálculos base
+        gastos_administracion = (total_productos + total_servicios) * (Decimal('1') + porcentaje_admin)
+        gasto_total_unitario = gastos_administracion * (Decimal('1') + porcentaje_gan)
+        
         # 🔁 Aumento automático por crédito
         dias_credito = self.dias_credito 
         if dias_credito >= 120:
@@ -62,11 +77,12 @@ class Cotizacion(models.Model):
             recargo_credito = Decimal('0.02')  # Recargo del 2% si es más de 15 días y menos de 30
         else:
             recargo_credito = Decimal('0.00')  # Sin recargo si es menos de 15 días
-        gasto_total_con_credito = gasto_total_unitario*(Decimal('2') + recargo_credito)
+        gasto_total_con_credito = gasto_total_unitario*(Decimal('1') + recargo_credito)
         total_redondeado = gasto_total_con_credito
-        # Redondear a entero usando ROUND_HALF_UP
-        total_redondeado = total_redondeado.quantize(Decimal('2'), rounding=ROUND_HALF_UP)
-        total_iva_calculado = total_redondeado * Decimal('1.13')  # Calcula total con IVA del 13%
+        
+        # Redondear a 2 decimales (centavos) usando ROUND_HALF_UP
+        total_redondeado = total_redondeado.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP) 
+        total_iva_calculado = (total_redondeado * Decimal('1.13')).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP) # Calcula total con IVA del 13%
         self.total = total_redondeado
         self.total_iva = total_iva_calculado
         Cotizacion.objects.filter(pk=self.pk).update(total=self.total, total_iva=self.total_iva)  # evita recursión
@@ -84,25 +100,38 @@ class Cotizacion(models.Model):
                     pass
             self.correlativo = f"COT-{anio}-{numero:06d}"  # COT-25-000001
         
-        # Detectar si se está aprobando
+        # Detectar estado previo
         cotizacion_anterior = None
-        if self.pk:  # Si ya existía
+        if self.pk:
             cotizacion_anterior = Cotizacion.objects.filter(pk=self.pk).first()
-        is_new = self.pk is None  
-        super().save(*args, **kwargs)
-        
-        # Si antes era pendiente/no_aprobada y ahora es aprobada => descontar inventario
-        if self.estatus == 'aprobada':
+            estado_anterior = cotizacion_anterior.estatus
+        else:
+            estado_anterior = None
+
+        super().save(*args, **kwargs)  # Guardamos primero para tener pk
+
+        # Manejo de inventario solo si hay productos
+        detalles = self.detalles_productos.all()
+        if detalles.exists():
             try:
                 with transaction.atomic():
-                    for detalle in self.detalles_productos.all():
+                    for detalle in detalles:
                         inventario = Inventario.objects.get(producto=detalle.producto)
-                        if inventario.cantidad >= detalle.cantidad:
-                            inventario.cantidad -= detalle.cantidad
-                        else:
-                            inventario.cantidad = 0
+
+                        # Si antes NO estaba aprobada y ahora sí => descontar
+                        if estado_anterior != 'aprobada' and self.estatus == 'aprobada':
+                            if inventario.cantidad >= detalle.cantidad:
+                                inventario.cantidad -= detalle.cantidad
+                            else:
+                                inventario.cantidad = 0
+
+                        # Si antes estaba aprobada y ahora NO => devolver inventario
+                        elif estado_anterior == 'aprobada' and self.estatus != 'aprobada':
+                            inventario.cantidad += detalle.cantidad
+
                         inventario.save()
             except Inventario.DoesNotExist:
+                # Podés agregar logging aquí si un producto no tiene inventario
                 pass
 
     def __str__(self):

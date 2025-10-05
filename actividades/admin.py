@@ -16,6 +16,7 @@ class TrabajoAdmin(admin.ModelAdmin):
         'fecha_fin',
         'hora_fin',
         'estatus_coloreado',
+        'prioridad_coloreado',
         #'horas_hombre_estimadas',
         #'equipo_funcionando',
         #'mostrar_herramientas_necesarias',
@@ -36,6 +37,16 @@ class TrabajoAdmin(admin.ModelAdmin):
         }
         color = colores.get(obj.estatus, 'black')
         return format_html(f'<strong style="color: {color};">{obj.get_estatus_display()}</strong>')
+    
+    def prioridad_coloreado(self, obj):
+        colores = {
+            'baja': 'green',
+            'media': 'yellow',
+            'alta': 'orange',
+            'critica': 'red',
+        }
+        color = colores.get(obj.prioridad, 'black')
+        return format_html(f'<strong style="color: {color};">{obj.get_prioridad_display()}</strong>')
     
     def mostrar_herramientas_necesarias(self, obj):
         return ", ".join([h.nombre for h in obj.herramientas_necesarias.all()])
@@ -67,7 +78,8 @@ class TrabajoAdmin(admin.ModelAdmin):
     'fecha_fin',
     ("personal_asignado", admin.RelatedOnlyFieldListFilter),
     'horarios_actividad',
+    'cliente',
     )
-    #search_fields = ('cliente__nombre', 'correlativo') 
+    search_fields = ('correlativo',) 
     filter_horizontal = ('personal_asignado',)  # Para seleccionar múltiples usuarios con un widget más cómodo
     date_hierarchy = 'fecha_inicio'

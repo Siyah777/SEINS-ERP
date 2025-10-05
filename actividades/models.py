@@ -32,12 +32,30 @@ class Ordendetrabajo(models.Model):
         ('alta', 'Alta'),
         ('critica', 'Critica'),
     ]
+    
+    TIPO_ACTIVIDAD = [
+        ('mantenimiento_preventivo', 'Mantenimiento Preventivo'),
+        ('mantenimiento_correctivo', 'Mantenimiento Correctivo'),
+        ('rutina', 'Rutina'),
+        ('instalacion', 'Instalación'),
+        ('desinstalacion', 'Desinstalación'),
+        ('montaje', 'Montaje'),
+        ('desmontaje', 'Desmontaje'),
+        ('reparacion', 'Reparación'),
+        ('otro', 'Otro'),
+    ]
+    
     cliente = models.ForeignKey('clientes.Cliente', on_delete=models.CASCADE)
     equipo_cliente = models.ForeignKey('equipos_clientes.EquipoCliente', on_delete=models.CASCADE, blank=True, null=True)
     correlativo = models.CharField(max_length=20, unique=True, blank=True, null=True)
     descripcion = models.TextField(blank=True)
     cotizacion = models.ForeignKey(Cotizacion, blank=False, on_delete=models.CASCADE, default=1)
     prioridad = models.CharField(max_length=10, choices=PRIORIDAD_CHOICES, default='media')
+    tipo_actividad = models.CharField(
+        max_length=30,   # suficiente para el valor más largo
+        choices=TIPO_ACTIVIDAD,
+        default='mantenimiento_correctivo'
+    )
     fecha_inicio = models.DateField(blank=True, null=True)
     hora_inicio = models.TimeField(blank=True, null=True)
     fecha_fin = models.DateField(blank=True, null=True)
