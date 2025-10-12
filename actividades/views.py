@@ -7,11 +7,22 @@ import base64
 from django.conf import settings
 from django.shortcuts import get_object_or_404
 from .models import Ordendetrabajo
+from django.core.files.base import ContentFile
 
 def obtener_logo_base64():
     logo_path = os.path.join(settings.BASE_DIR, 'static', 'img', 'logo.png')
     with open(logo_path, 'rb') as image_file:
         return base64.b64encode(image_file.read()).decode('utf-8')
+
+def image_to_base64(field):
+    """Convierte un ImageField a base64 para usar en el HTML del PDF."""
+    if not field:
+        return ""
+    try:
+        with field.open('rb') as f:
+            return base64.b64encode(f.read()).decode('utf-8')
+    except Exception:
+        return ""
 
 def generar_pdf_orden_trabajo(request, orden_id):
     orden = get_object_or_404(Ordendetrabajo, pk=orden_id)
@@ -20,6 +31,12 @@ def generar_pdf_orden_trabajo(request, orden_id):
     context = {
         'orden': orden,
         'logo_base64': obtener_logo_base64(),
+        'imagen_antes_1': image_to_base64(orden.imagen_antes_1),
+        'imagen_antes_2': image_to_base64(orden.imagen_antes_2),
+        'imagen_despues_1': image_to_base64(orden.imagen_despues_1),
+        'imagen_despues_2': image_to_base64(orden.imagen_despues_2),
+        'firma_cliente': image_to_base64(orden.firma_cliente_img),
+        'firma_tecnico': image_to_base64(orden.firma_tecnico_img),
     }
 
     html_content = template.render(context)

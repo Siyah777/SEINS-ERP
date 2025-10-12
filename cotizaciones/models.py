@@ -19,6 +19,7 @@ class Cotizacion(models.Model):
         ('no_aprobada', 'No aprobada'),
     ]
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)  # Cliente que solicita la cotización
+    equipo_cliente = models.ForeignKey('equipos_clientes.EquipoCliente', on_delete=models.CASCADE, blank=True, null=True)
     correlativo = models.CharField(max_length=20, unique=True, blank=True, null=True)
     Descripcion = models.TextField(blank=False, null=False, default='Descripcion de la cotización')  # Descripción de la cotización
     porcentaje_administracion = models.DecimalField(max_digits=5, decimal_places=0, default=0)  # Porcentaje de administración

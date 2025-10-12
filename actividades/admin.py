@@ -25,13 +25,17 @@ class TrabajoAdmin(admin.ModelAdmin):
         'pdf_orden_trabajo',
         )
     
+    class Media:
+        js = ('js/firma.js',)
+        
     list_per_page = 20
     
-    readonly_fields = ('cliente', 'correlativo', 'descripcion') # Campos de solo lectura
+    readonly_fields = ('cliente', 'correlativo', 'descripcion', 'equipo_cliente') # Campos de solo lectura
     
     def estatus_coloreado(self, obj):
         colores = {
             'en_proceso': 'orange',
+            'programado': 'blue',
             'terminado': 'green',
             'pendiente': 'red',
         }

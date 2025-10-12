@@ -97,8 +97,6 @@
         </tr>
     </table>
     
-
-    <!-- Tabla: Fechas, Cotización, Personal -->
     <table class="tabla-borde-azul">
         <tr>
             <th class="columna-izquierda">Cliente</th>
@@ -124,7 +122,6 @@
                 {% endif %}
             </td>
         </tr>
-|
         <tr>
             <th class="columna-izquierda">Prioridad del Trabajo</th>
             <td colspan="3">
@@ -137,7 +134,7 @@
                 - {{ orden.cotizacion.Descripcion }} (según {{ orden.cotizacion.correlativo }})<br/>
                 {% if orden.equipo_cliente %}
                     al equipo: {{ orden.equipo_cliente.nombre }},
-                    modelo: {{ orden.equipo_cliente.modelo }},
+                    codigo: {{ orden.equipo_cliente.codigo_interno }},
                     serie: {{ orden.equipo_cliente.serie }}
                 {% endif %}
             </td>
@@ -237,31 +234,61 @@
     </tr>
 </table>
 
-    <!-- Firmas -->
-    <h3>Firmas</h3>
-    <table>
-        <tr>
-            <td style="text-align: center; border: none;">
-                <p>______________________________</p>
-                <p>Firma del responsable</p>
-                {% with orden.personal_asignado.all|first as responsable %}
-                    {% if responsable %}
-                        <p>{{ responsable.get_full_name }}</p>
-                    {% else %}
-                        <p>No asignado</p>
-                    {% endif %}
-                {% endwith %}
-            </td>
-            <td style="text-align: center; border: none;">
-                <p>______________________________</p>
-                <p>Firma del cliente</p>
-                <p>{{ orden.cliente.nombre_empresa }}</p>
-            </td>
-        </tr>
-    </table>
+<!-- Fotos Antes de la Actividad -->
+<h2 style="text-align: center;">Fotos Antes de la Actividad</h2>
+<table class="tabla-borde-azul" style="margin-bottom: 20px; width:100%;">
+    <tr>
+        <td style="text-align: center;">
+            {% if imagen_antes_1 %}
+                <img src="data:image/png;base64,{{ imagen_antes_1 }}" alt="Antes 1" style="width:100%; height:auto;"/>
+            {% endif %}
+        </td>
+        <td style="text-align: center;">
+            {% if imagen_antes_2 %}
+                <img src="data:image/png;base64,{{ imagen_antes_2 }}" alt="Antes 2" style="width:100%; height:auto;"/>
+            {% endif %}
+        </td>
+    </tr>
+</table>
 
-    
+<!-- Fotos Después de la Actividad -->
+<h2 style="text-align: center;">Fotos Después de la Actividad</h2>
+<table class="tabla-borde-azul" style="margin-bottom: 20px; width:100%;">
+    <tr>
+        <td style="text-align: center;">
+            {% if imagen_despues_1 %}
+                <img src="data:image/png;base64,{{ imagen_despues_1 }}" alt="Después 1" style="width:100%; height:auto;"/>
+            {% endif %}
+        </td>
+        <td style="text-align: center;">
+            {% if imagen_despues_2 %}
+                <img src="data:image/png;base64,{{ imagen_despues_2 }}" alt="Después 2" style="width:100%; height:auto;"/>
+            {% endif %}
+        </td>
+    </tr>
+</table>
 
-</body>
-</html>
-
+<!-- Firmas -->
+<h2 style="text-align: center;">Firmas</h2>
+<table class="tabla-borde-azul" style="margin-bottom: 20px;">
+    <tr>
+        <td style="text-align: center; border: none;">
+            <p>Responsable</p>
+            {% with orden.personal_asignado.all|first as responsable %}
+                {% if responsable %}
+                    <img src="data:image/png;base64,{{ firma_tecnico }}" alt="Firma Responsable" style="width:150px;"/>
+                    <p>{{ responsable.get_full_name }}</p>
+                {% else %}
+                    <p>No asignado</p>
+                {% endif %}
+            {% endwith %}
+        </td>
+        <td style="text-align: center; border: none;">
+            <p>Cliente</p>
+            {% if firma_cliente %}
+                <img src="data:image/png;base64,{{ firma_cliente }}" alt="Firma Cliente" style="width:150px;"/>
+            {% endif %}
+            <p>{{ orden.cliente.nombre_empresa }}</p>
+        </td>
+    </tr>
+</table>
