@@ -98,6 +98,7 @@ class Ordendetrabajo(models.Model):
     imagen_antes_2 = models.ImageField(upload_to=ruta_imagen_antes, null=True, blank=True)
     imagen_despues_1 = models.ImageField(upload_to=ruta_imagen_despues, null=True, blank=True)
     imagen_despues_2 = models.ImageField(upload_to=ruta_imagen_despues, null=True, blank=True)
+    nombre_recibe = models.CharField(max_length=200, blank=True, null=True)
     firma_cliente = models.TextField(blank=True, null=True)
     firma_tecnico = models.TextField(blank=True, null=True)
     firma_cliente_img = models.ImageField(upload_to=firma_upload_path, blank=True, null=True)
@@ -120,6 +121,10 @@ class Ordendetrabajo(models.Model):
                 except ValueError:
                     pass
             self.correlativo = f"OT-{anio}-{numero:06d}"  # OT-25-000001
+        
+        if self.nombre_recibe is None:
+            self.nombre_recibe = ""  # evita que aparezca "None" en la plantilla
+        
         super().save(*args, **kwargs)
         
         # 1️⃣ Reducir imágenes antes/después

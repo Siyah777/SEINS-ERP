@@ -288,6 +288,7 @@
             {% if firma_cliente %}
                 <img src="data:image/png;base64,{{ firma_cliente }}" alt="Firma Cliente" style="width:150px;"/>
             {% endif %}
+            <p>Recibe: {{ orden.nombre_recibe|default_if_none:"" }}</p>
             <p>{{ orden.cliente.nombre_empresa }}</p>
         </td>
     </tr>
