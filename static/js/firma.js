@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
+        // window.addEventListener('resize', resizeCanvas);
 
         // --- Variables de dibujo ---
         let dibujando = false;

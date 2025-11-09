@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+def firma_upload_path(instance, filename):
+    return f"recursos_humanos/firmas_tecnicos/{instance.usuario.username}/{filename}"
+
 class Empleado(models.Model):
     usuario = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="Usuario")
     fecha_ingreso = models.DateField(verbose_name="Fecha de ingreso")
@@ -13,6 +16,8 @@ class Empleado(models.Model):
     fotografia = models.ImageField(upload_to='fotografias_empleados/', blank=True, null=True, verbose_name="Fotografía")
     permisos = models.TextField(blank=True, null=True, verbose_name="Permisos adicionales")
     observaciones = models.TextField(blank=True, null=True, verbose_name="Observaciones")
+    firma_tecnico = models.TextField(blank=True, null=True)
+    firma_tecnico_img = models.ImageField(upload_to=firma_upload_path, blank=True, null=True)
 
     def __str__(self):
         return f"{self.usuario.get_full_name()} - {self.cargo}"

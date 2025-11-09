@@ -4,6 +4,8 @@ from django.apps import apps
 from django.utils.translation import gettext_lazy as _
 from notificaciones.models import Notificacion
 from notificaciones.admin import NotificacionAdmin
+from actividades.models import Ordendetrabajo
+from django.db.models import Count
 
 class CustomAdminSite(AdminSite):
     site_header = _("Panel de administración SEINS-ERP")
@@ -20,6 +22,22 @@ class CustomAdminSite(AdminSite):
             ).count()
         else:
             context['notificaciones_pendientes'] = 0
+        
+        # --- Resumen de órdenes de trabajo ---
+        try:
+            context['resumen_actividades'] = {
+                'pendiente': Ordendetrabajo.objects.filter(estatus__iexact='pendiente').count(),
+                'programada': Ordendetrabajo.objects.filter(estatus__iexact='programado').count(),
+                'en_proceso': Ordendetrabajo.objects.filter(estatus__iexact='en_proceso').count(),
+            }
+            
+        except Exception:
+            # Evita errores si el modelo no está disponible en migraciones
+            context['resumen_actividades'] = {
+                'pendiente': 0,
+                'programada': 0,
+                'en_proceso': 0,
+            }
         return context
 
 # Crear la instancia de admin personalizada

@@ -30,7 +30,11 @@ class TrabajoAdmin(admin.ModelAdmin):
         
     list_per_page = 20
     
-    readonly_fields = ('cliente', 'correlativo', 'descripcion', 'equipo_cliente') # Campos de solo lectura
+    readonly_fields = ('cliente',
+        'correlativo',
+        'descripcion',
+        'equipo_cliente',
+        ) # Campos de solo lectura
     
     def estatus_coloreado(self, obj):
         colores = {
@@ -77,12 +81,28 @@ class TrabajoAdmin(admin.ModelAdmin):
         return format_html('<a class="button" href="{}" target="_blank">Descargar O.T.</a>', url)
     pdf_orden_trabajo.short_description = 'PDF'
     
+    def resumen_actividades(self, request):
+        actividades = Ordendetrabajo.objects.all()
+        resumen_actividades = {
+            'pendientes': actividades.filter(estado='pendiente').count(),
+            'en_proceso': actividades.filter(estado='en_proceso').count(),
+            'completadas': actividades.filter(estado='completada').count(),
+        }
+        context = {
+            'resumen_actividades': resumen_actividades,
+            'actividades': actividades,
+        }
+        return 
+
+    
     list_filter = ('estatus',
     'fecha_inicio',
     'fecha_fin',
     ("personal_asignado", admin.RelatedOnlyFieldListFilter),
+    ("proveedores", admin.RelatedOnlyFieldListFilter),
     'horarios_actividad',
     'cliente',
+    'prioridad',
     )
     search_fields = ('correlativo',) 
     filter_horizontal = ('personal_asignado',)  # Para seleccionar múltiples usuarios con un widget más cómodo

@@ -100,9 +100,9 @@ class Ordendetrabajo(models.Model):
     imagen_despues_2 = models.ImageField(upload_to=ruta_imagen_despues, null=True, blank=True)
     nombre_recibe = models.CharField(max_length=200, blank=True, null=True)
     firma_cliente = models.TextField(blank=True, null=True)
-    firma_tecnico = models.TextField(blank=True, null=True)
+    #firma_tecnico = models.TextField(blank=True, null=True)
     firma_cliente_img = models.ImageField(upload_to=firma_upload_path, blank=True, null=True)
-    firma_tecnico_img = models.ImageField(upload_to=firma_upload_path, blank=True, null=True)
+    #firma_tecnico_img = models.ImageField(upload_to=firma_upload_path, blank=True, null=True)
     class Meta:
         verbose_name = "Orden de trabajo"
         verbose_name_plural = "Órdenes de trabajo"
@@ -160,7 +160,7 @@ class Ordendetrabajo(models.Model):
     # -----------------------------
     def _procesar_firmas(self):
         updated_fields = []
-        for tipo in ["cliente", "tecnico"]:
+        for tipo in ["cliente",]:
             signature_data = getattr(self, f"firma_{tipo}")
             if signature_data:
                 path = self._save_signature_as_image(

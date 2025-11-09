@@ -108,6 +108,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'notificaciones.context_processors.notificaciones_pendientes',
+                'actividades.context_processors.resumen_actividades',
             ],
         },
     },
@@ -169,7 +170,7 @@ JAZZMIN_SETTINGS = {
     "theme": "dark",
     "welcome_sign": "Administración de SEINS-ERP",
     "copyright": "SEINS S. A. de C. V",
-    "search_model": ["actividades.ordendetrabajo", "facturacion.factura", "cotizaciones.cotizacion"],
+    "search_model": ["actividades.ordendetrabajo", "cotizaciones.cotizacion"], #"facturacion.factura",
     "show_sidebar": True,
     "navigation_expanded": True,
     "topmenu_links": [

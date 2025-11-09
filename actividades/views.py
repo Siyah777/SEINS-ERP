@@ -8,6 +8,7 @@ from django.conf import settings
 from django.shortcuts import get_object_or_404
 from .models import Ordendetrabajo
 from django.core.files.base import ContentFile
+from recursos_humanos.models import Empleado
 
 def obtener_logo_base64():
     logo_path = os.path.join(settings.BASE_DIR, 'static', 'img', 'logo.png')
@@ -27,6 +28,29 @@ def image_to_base64(field):
 def generar_pdf_orden_trabajo(request, orden_id):
     orden = get_object_or_404(Ordendetrabajo, pk=orden_id)
     template = get_template('orden_trabajo_pdf.html')
+    
+    # 🔹 Obtener técnico principal (el primero asignado)
+    tecnico = orden.personal_asignado.first()
+    firma_tecnico_base64 = None
+    nombre_tecnico = "No asignado"
+    
+    if tecnico:
+        nombre_tecnico = tecnico.get_full_name() or tecnico.username
+        try:
+            empleado = Empleado.objects.get(usuario=tecnico)
+            if empleado.firma_tecnico_img:
+                firma_tecnico_base64 = image_to_base64(empleado.firma_tecnico_img)
+        except Empleado.DoesNotExist:
+            pass
+
+    # 🔹 Si el técnico no tiene firma, usar una firma genérica o sello
+    if not firma_tecnico_base64:
+        ruta_generica = os.path.join("static", "img", "firma_generica.png")
+        if os.path.exists(ruta_generica):
+            with open(ruta_generica, "rb") as f:
+                firma_tecnico_base64 = base64.b64encode(f.read()).decode("utf-8")
+        else:
+            firma_tecnico_base64 = None  # No hay imagen, se mostrará texto
 
     context = {
         'orden': orden,
@@ -36,7 +60,8 @@ def generar_pdf_orden_trabajo(request, orden_id):
         'imagen_despues_1': image_to_base64(orden.imagen_despues_1),
         'imagen_despues_2': image_to_base64(orden.imagen_despues_2),
         'firma_cliente': image_to_base64(orden.firma_cliente_img),
-        'firma_tecnico': image_to_base64(orden.firma_tecnico_img),
+        'firma_tecnico': firma_tecnico_base64,
+        
     }
 
     html_content = template.render(context)
