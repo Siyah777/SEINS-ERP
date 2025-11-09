@@ -20,6 +20,7 @@ from django.contrib import admin
 from django.contrib.auth.views import LoginView
 from django.contrib.auth import views as auth_views
 from usuarios.views import CustomAdminLoginView 
+from .views import react_app, resumen_actividades_api
 #from comunicacion.admin import admin_site
 from . import views
 
@@ -33,6 +34,7 @@ urlpatterns = [
     path("admin/login/", CustomAdminLoginView.as_view(), name="admin_login"),
     path('admin/', admin.site.urls),
     #path('admin/', admin_site.urls),
+    path('api/resumen/', resumen_actividades_api, name='resumen-actividades'),
     path('', views.react_app, name='react_app'),  # Página principal con React
     path('', include('comunicacion.urls')), 
     path('', include('notificaciones.urls')), 
