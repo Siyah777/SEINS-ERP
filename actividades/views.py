@@ -9,6 +9,9 @@ from django.shortcuts import get_object_or_404
 from .models import Ordendetrabajo
 from django.core.files.base import ContentFile
 from recursos_humanos.models import Empleado
+from django.http import JsonResponse
+from django.utils import timezone
+
 
 def obtener_logo_base64():
     logo_path = os.path.join(settings.BASE_DIR, 'static', 'img', 'logo.png')
@@ -76,3 +79,20 @@ def generar_pdf_orden_trabajo(request, orden_id):
         return response
     return HttpResponse("Error al generar el PDF", status=500)
 
+def calendario_eventos(request):
+    actividades = Ordendetrabajo.objects.filter(estatus="programado")
+
+    eventos = [
+        {
+            "title": getattr(act, "titulo", f"{act.correlativo}"),
+            "start": act.fecha_inicio.isoformat(),
+            "url": f"/admin/actividades/ordendetrabajo/{act.id}/change/",
+            "extendedProps": {
+                "descripcion": getattr(act, "descripcion", ""),
+                "equipo": act.equipo.nombre if hasattr(act, "equipo") else "",
+            }
+        }
+        for act in actividades
+    ]
+
+    return JsonResponse(eventos, safe=False)

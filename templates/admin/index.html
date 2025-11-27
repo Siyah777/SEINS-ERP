@@ -1,6 +1,5 @@
 {% extends "admin/base_site.html" %}
 {% load static %}
-
 {% block content %}
   <!-- RESUMEN DE ACTIVIDADES -->
   <div class="resumen-actividades">
@@ -32,38 +31,216 @@
     </div>
   </div>
 
+  <!-- CALENDARIO -->
+<div class="calendario-container">
+  <h2>Calendario de Actividades Programadas</h2>
+  <div id="calendar"></div>
+</div>
+
   <!-- MÓDULOS -->
   <div class="modulos-container">
-    {% for app in app_list %}
-      <div class="modulo">
-        <h3>{{ app.name }}</h3>
-        <div class="modulo-grid">
-          {% for model in app.models %}
-            <a href="{{ model.admin_url }}" class="modulo-card">
-              {% if "cliente" in model.name|lower %}
-                <i class="fas fa-cash-register"></i>
-              {% elif "proveedor" in model.name|lower %}
-                <i class="fas fa-handshake"></i>
-              {% elif "factura" in model.name|lower %}
-                <i class="fas fa-file-invoice-dollar"></i>
-              {% elif "producto" in model.name|lower %}
-                <i class="fas fa-box-open"></i>
-              {% elif "inventario" in model.name|lower %}
-                <i class="fas fa-warehouse"></i>
-              {% elif "equipo" in model.name|lower %}
-                <i class="fas fa-tools"></i>
-              {% elif "actividad" in model.name|lower %}
-                <i class="fas fa-tasks"></i>
-              {% else %}
-                <i class="fas fa-database"></i>
-              {% endif %}
-              <span>{{ model.name }}</span>
-            </a>
-          {% endfor %}
-        </div>
+  {% for app in app_list %}
+    <div class="modulo">
+      <h3>{{ app.name }}</h3>
+      <div class="modulo-grid">
+        {% for model in app.models %}
+          <a href="{{ model.admin_url }}" class="modulo-card">
+
+            {# === CLIENTES === #}
+            {% if "cliente" in model.name|lower %}
+              <i class="fas fa-cash-register"></i>
+            {% elif "seguimiento" in model.name|lower %}
+              <i class="fas fa-cash-register"></i>
+
+            {# === ACTIVIDADES === #}
+            {% elif "ordendetrabajo" in model.name|lower %}
+              <i class="fas fa-boxes"></i>
+
+            {# === CALENDARIO === #}
+            {% elif "actividade" in model.name|lower %}
+              <i class="fas fa-tasks"></i>
+
+            {# === COMPRAS === #}
+            {% elif "compra" in model.name|lower %}
+              <i class="fas fa-shopping-cart"></i>
+
+            {# === COMUNICACION === #}
+            {% elif "comunicacion" in model.name|lower %}
+              <i class="fas fa-comments"></i>
+            {% elif "mensajecontacto" in model.name|lower %}
+              <i class="fas fa-comments"></i>
+            {% elif "notificacion" in model.name|lower %}
+              <i class="fas fa-comments"></i>
+
+            {# === COTIZACIONES === #}
+            {% elif "cotizacion" in model.name|lower %}
+              <i class="fas fa-file-invoice"></i>
+            {% elif "detallecotizacionproductos" in model.name|lower %}
+              <i class="fas fa-file-invoice"></i>
+            {% elif "detallecotizacionservicios" in model.name|lower %}
+              <i class="fas fa-file-invoice"></i>
+            {% elif "listademateriales" in model.name|lower %}
+              <i class="fas fa-file-invoice"></i>
+
+            {# === DOCUMENTACION === #}
+            {% elif "documentacion" in model.name|lower %}
+              <i class="fas fa-folder-open"></i>
+
+            {# === EQUIPOS === #}
+            {% elif "equipo" in model.name|lower %}
+              <i class="fas fa-tools"></i>
+            {% elif "herramienta" in model.name|lower %}
+              <i class="fas fa-tools"></i>
+            {% elif "historialmantenimiento" in model.name|lower %}
+              <i class="fas fa-tools"></i>
+
+            {# === EQUIPOS CLIENTES === #}
+            {% elif "equipocliente" in model.name|lower %}
+              <i class="fas fa-handshake"></i>
+            {% elif "historialmantenimiento" in model.name|lower %}
+              <i class="fas fa-handshake"></i>
+
+            {# === FACTURACION === #}
+            {% elif "factura" in model.name|lower %}
+              <i class="fas fa-file-invoice-dollar"></i>
+            {% elif "anulacion" in model.name|lower %}
+              <i class="fas fa-file-invoice-dollar"></i>
+            {% elif "comprobantedonacion" in model.name|lower %}
+              <i class="fas fa-file-invoice-dollar"></i>
+            {% elif "comprobanteretencion" in model.name|lower %}
+              <i class="fas fa-file-invoice-dollar"></i>
+            {% elif "facturasujetoexcluido" in model.name|lower %}
+              <i class="fas fa-file-invoice-dollar"></i>
+            {% elif "notacreditodebito" in model.name|lower %}
+              <i class="fas fa-file-invoice-dollar"></i>
+            {% elif "notaremision" in model.name|lower %}
+              <i class="fas fa-file-invoice-dollar"></i>
+            {% elif "contingencia" in model.name|lower %}
+              <i class="fas fa-file-invoice-dollar"></i>
+
+            {# === INDICADORES === #}
+            {% elif "indicador" in model.name|lower %}
+              <i class="fas fa-bolt"></i>
+
+            {# === INVENTARIO === #}
+            {% elif "inventario" in model.name|lower %}
+              <i class="fas fa-warehouse"></i>
+
+            {# === PLANES DE MANTENIMIENTO === #}
+            {% elif "planmantenimiento" in model.name|lower %}
+              <i class="fas fa-calendar-check"></i>
+            {% elif "detalleplanmantenimiento" in model.name|lower %}
+              <i class="fas fa-calendar-check"></i>
+
+            {# === PRODUCTOS === #}
+            {% elif "producto" in model.name|lower %}
+              <i class="fas fa-tags"></i>
+
+            {# === PROYECTOS === #}
+            {% elif "proyecto" in model.name|lower %}
+              <i class="fas fa-project-diagram"></i>
+
+            {# === REPORTES === #}
+            {% elif "reporte" in model.name|lower %}
+              <i class="fas fa-file-alt"></i>
+
+            {# === SERVICIOS === #}
+            {% elif "servicio" in model.name|lower %}
+              <i class="fas fa-concierge-bell"></i>
+
+            {# === PROVEEDORES === #}
+            {% elif "proveedor" in model.name|lower %}
+              <i class="fas fa-truck"></i>
+
+            {# === RECURSOS HUMANOS === #}
+            {% elif "empleado" in model.name|lower %}
+              <i class="fa fa-id-card"></i>
+
+            {# === REGISTROS === #}
+            {% elif "atestado" in model.name|lower %}
+              <i class="fa fa-clipboard"></i>
+            {% elif "descripcionespuesto" in model.name|lower %}
+              <i class="fa fa-clipboard"></i>
+
+            {# === PROCESOS INTERNOS === #}
+            {% elif "proceso" in model.name|lower %}
+              <i class="fa fa-cogs"></i>
+
+            {# === ACTIVOS FIJOS === #}
+            {% elif "activo" in model.name|lower %}
+              <i class="fa fa-archive"></i>
+            {% elif "infraestructura" in model.name|lower %}
+              <i class="fa fa-archive"></i>
+
+            {# === FINANZAS === #}
+            {% elif "gasto" in model.name|lower %}
+              <i class="fa-solid fa-money-bill-wave"></i>
+            {% elif "ingreso" in model.name|lower %}
+              <i class="fa-solid fa-money-bill-wave"></i>
+            {% elif "cuentaporcobrar" in model.name|lower %}
+              <i class="fa-solid fa-money-bill-wave"></i>
+            {% elif "cuentaporpagar" in model.name|lower %}
+              <i class="fa-solid fa-money-bill-wave"></i>
+            {% elif "presupuesto" in model.name|lower %}
+              <i class="fa-solid fa-money-bill-wave"></i>
+
+            {# === PLANIFICACION === #}
+            {% elif "planificacion" in model.name|lower %}
+              <i class="fas fa-check-circle"></i>
+
+            {# === CONTROL DE CALIDAD === #}
+            {% elif "accioncorrectiva" in model.name|lower %}
+              <i class="fas fa-clipboard-check"></i>
+            {% elif "auditoria" in model.name|lower %}
+              <i class="fas fa-clipboard-check"></i>
+            {% elif "noconformidad" in model.name|lower %}
+              <i class="fas fa-clipboard-check"></i>
+            {% elif "proceso" in model.name|lower %}
+              <i class="fas fa-clipboard-check"></i>
+
+            {# === CAPACITACIONES === #}
+            {% elif "certificado" in model.name|lower %}
+              <i class="fas fa-chalkboard-teacher"></i>
+            {% elif "curso" in model.name|lower %}
+              <i class="fas fa-chalkboard-teacher"></i>
+            {% elif "inscripcion" in model.name|lower %}
+              <i class="fas fa-chalkboard-teacher"></i>
+
+            {# === INNOVACIÓN === #}
+            {% elif "innovacion" in model.name|lower %}
+              <i class="fas fa-lightbulb"></i>
+
+            {# === ANALISIS y RETROALIMENTACION === #}
+            {% elif "analisis" in model.name|lower %}
+              <i class="fas fa-chart-line"></i>
+            {% elif "planaccion" in model.name|lower %}
+              <i class="fas fa-chart-line"></i>
+            {% elif "retroalimentacion" in model.name|lower %}
+              <i class="fas fa-chart-line"></i>
+
+            {# === CONTABILIDAD === #}
+            {% elif "asientocontable" in model.name|lower %}
+              <i class="fas fa-book"></i>
+            {% elif "creditofiscal" in model.name|lower %}
+              <i class="fas fa-book"></i>
+            {% elif "declaracionfiscal" in model.name|lower %}
+              <i class="fas fa-book"></i>
+            {% elif "tributo" in model.name|lower %}
+              <i class="fas fa-book"></i>
+
+            {# === DEFAULT === #}
+            {% else %}
+              <i class="fas fa-tools"></i>
+            {% endif %}
+
+            <span>{{ model.name }}</span>
+          </a>
+        {% endfor %}
       </div>
-    {% endfor %}
-  </div>
+    </div>
+  {% endfor %}
+</div>
+
 {% endblock %}
 
 {% block extrastyle %}
@@ -148,7 +325,7 @@
   }
   .modulo h3 {
     font-size: 1.5em;
-    color: #2c3e50;
+    color: #111;
     margin-bottom: 20px;
     text-align: center;
   }
@@ -161,7 +338,7 @@
   .modulo-card {
     flex: 1 1 200px;
     max-width: 240px;
-    background: linear-gradient(135deg, #e0d27e, #91ccd6);
+    background: linear-gradient(135deg, #D4AF37, #91ccd6);
     border-radius: 16px;
     padding: 20px;
     box-shadow: 0 6px 18px rgba(0,0,0,0.08);
@@ -170,7 +347,7 @@
     align-items: center;
     justify-content: center;
     gap: 12px;
-    color: #333;
+    color: #111;
     font-weight: 600;
     text-decoration: none;
     transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
@@ -201,13 +378,90 @@
       max-width: none;
     }
   }
+
+/* --- CALENDARIO --- */
+.calendario-container {
+  max-width: 1000px;
+  margin: 40px auto;
+  background: white;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+.calendario-container h2 {
+  text-align: center;
+  font-size: 1.8em;
+  color: #111;
+  margin-bottom: 20px;
+}
+
+#calendar {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.fc .fc-toolbar-title {
+  font-size: 1.4em;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.fc-daygrid-event {
+  background: #91ccd6 !important;
+  border: none !important;
+  color: #1d3c45 !important;
+  font-weight: 600;
+  padding: 3px 6px;
+  border-radius: 6px;
+}
+
 </style>
 {% endblock %}
 
 {% block extrahead %}
 {{ block.super }}
-<link rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-  crossorigin="anonymous" />
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+
+{% endblock %}
+
+
+{% block extrajs %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    var calendarEl = document.getElementById('calendar');
+
+    if (!calendarEl) {
+        console.error("No se encontró el div #calendar");
+        return;
+    }
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        locale: 'es',
+        height: 650,
+
+        // 🔥 AQUÍ se conecta al backend correctamente
+        events: '/actividades/calendario/eventos/',
+
+
+        eventDisplay: "list-item",  // 🔥 esto hace que aparezcan los puntos
+
+        eventClick: function(info) {
+            info.jsEvent.preventDefault();
+            if (info.event.url) {
+                window.location.href = info.event.url;
+            }
+        }
+    });
+
+    calendar.render();
+});
+</script>
 {% endblock %}

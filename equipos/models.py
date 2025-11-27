@@ -13,6 +13,7 @@ class Equipo(models.Model):
     modelo = models.CharField(max_length=100, default='Modelo Generico')
     serie = models.CharField(max_length=100, default='Serie Generica')
     codigo_interno = models.CharField(max_length=100, default='Codigo Interno segun SG')
+    ubicación = models.CharField(max_length=100, default='Ubicación del equipo en la empresa')
     estatus = models.CharField(max_length=50, default='funcionando')
     categoria = models.CharField(max_length=100, null=False, default='General')
     cantidad = models.PositiveIntegerField(default=0)

@@ -12,6 +12,7 @@ class EquipoCliente(models.Model):
     modelo = models.CharField(max_length=100, default='Modelo Generico')
     serie = models.CharField(max_length=100, default='Serie Generica')
     codigo_interno = models.CharField(max_length=100, default='Codigo Interno segun SG')
+    ubicación = models.CharField(max_length=100, default='Ubicación del equipo segun el cliente')
     estatus = models.CharField(max_length=50, default='funcionando')  # Ej. "Disponible", "En mantenimiento", etc.
     categoria = models.CharField(max_length=100, null=False, default='General')  # Ej. "Computadoras", "Herramientas", etc.
     cantidad = models.PositiveIntegerField(default=0)  # Para contar la cantidad de equipos
