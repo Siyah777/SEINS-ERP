@@ -22,7 +22,7 @@ class CotizacionAdmin(admin.ModelAdmin):
     list_display = ("correlativo", "cliente", "Descripcion", "fecha", "estatus_coloreado", "total_con_dolar", "ver_pdf")
     list_per_page = 20
     readonly_fields = ("total", "total_iva", "correlativo", "usuario")
-    list_filter = ("usuario", "cliente", "estatus")
+    list_filter = ("usuario", "cliente", "estatus", "fecha")
     
     def total_con_dolar(self, obj):
      return mark_safe(f"${float(obj.total_iva):.2f}")

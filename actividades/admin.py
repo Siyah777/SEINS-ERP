@@ -17,10 +17,6 @@ class TrabajoAdmin(admin.ModelAdmin):
         'hora_fin',
         'estatus_coloreado',
         'prioridad_coloreado',
-        #'horas_hombre_estimadas',
-        #'equipo_funcionando',
-        #'mostrar_herramientas_necesarias',
-        #'mostrar_documentos_necesarios',
         'mostrar_proveedores',
         'pdf_orden_trabajo',
         )
@@ -33,7 +29,7 @@ class TrabajoAdmin(admin.ModelAdmin):
     readonly_fields = ('cliente',
         'correlativo',
         'descripcion',
-        'equipo_cliente',
+        'equipo',
         ) # Campos de solo lectura
     
     def estatus_coloreado(self, obj):

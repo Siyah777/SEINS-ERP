@@ -7,8 +7,8 @@ class DetallePlanMantenimientoInline(admin.StackedInline):
 
 @admin.register(PlanMantenimiento)
 class PlanMantenimientoAdmin(admin.ModelAdmin):
-    list_display = ('equipo', 'descripcion')
-    search_fields = ('equipo__nombre',)
+    list_display = ('equipo', 'codigo_plan', 'descripcion')
+    search_fields = ('equipo__nombre', 'codigo_plan')
     inlines = [DetallePlanMantenimientoInline]
 
 @admin.register(DetallePlanMantenimiento)

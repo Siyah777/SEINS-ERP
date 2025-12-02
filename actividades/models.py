@@ -66,7 +66,7 @@ class Ordendetrabajo(models.Model):
     ]
     
     cliente = models.ForeignKey('clientes.Cliente', on_delete=models.CASCADE)
-    equipo_cliente = models.ForeignKey('equipos_clientes.EquipoCliente', on_delete=models.CASCADE, blank=True, null=True)
+    equipo = models.ForeignKey('equipos.Equipo', on_delete=models.CASCADE, blank=True, null=True)
     correlativo = models.CharField(max_length=20, unique=True, blank=True, null=True)
     descripcion = models.TextField(blank=True)
     cotizacion = models.ForeignKey(Cotizacion, blank=False, on_delete=models.CASCADE, default=1)
@@ -109,7 +109,7 @@ class Ordendetrabajo(models.Model):
         
     def save(self, *args, **kwargs):
         self.cliente = self.cotizacion.cliente  # Asegura que el cliente siempre coincida con la cotización
-        self.equipo_cliente = self.cotizacion.equipo_cliente  # Asegura que el equipo_cliente siempre coincida con la cotización
+        self.equipo = self.cotizacion.equipo  # Asegura que el equipo_cliente siempre coincida con la cotización
         self.descripcion = self.cotizacion.Descripcion  # Asegura que la descripción siempre coincida con la cotización
         if not self.correlativo:
             anio = datetime.now().year % 100  # 2025 -> 25

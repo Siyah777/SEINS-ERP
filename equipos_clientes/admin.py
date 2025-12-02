@@ -23,7 +23,7 @@ class HistorialMantenimientoAdmin(admin.ModelAdmin):
         #'tiempo_reparacion',
         'proximo_mant',
         'notas',
-        'usuario_asignado')
+        )
     filter_horizontal = ('ordenes_trabajo',)
     list_filter = ('fecha_mant',) #'descripcion_mant', 'proximo_mant',)
     search_fields = ('fecha_mant',)

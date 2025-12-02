@@ -243,7 +243,7 @@ JAZZMIN_SETTINGS = {
         "documentacion.documentacion": "fas fa-folder-open",
         "equipos.equipo": "fas fa-tools",
         "equipos.herramienta": "fas fa-tools",
-        "equipos.historialmantenimiento": "fas fa-tools",
+        "equipos.historialtrabajos": "fas fa-tools",
         "facturacion.factura": "fas fa-file-invoice-dollar",
         "facturacion.anulacion": "fas fa-file-invoice-dollar",
         "facturacion.comprobantedonacion": "fas fa-file-invoice-dollar",

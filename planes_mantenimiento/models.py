@@ -5,6 +5,7 @@ from proveedores.models import Proveedor
 
 class PlanMantenimiento(models.Model):
     equipo = models.ForeignKey(Equipo, on_delete=models.CASCADE)
+    codigo_plan = models.CharField(max_length=100, unique=True, default='PM-001')
     descripcion = models.TextField(default="Plan de mantenimiento personalizado")
 
     def __str__(self):
