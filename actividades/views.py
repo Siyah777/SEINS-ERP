@@ -89,7 +89,9 @@ def calendario_eventos(request):
     
     eventos = []
     for act in actividades:
-        fecha = act.fecha_inicio.strftime("%Y-%m-%d")  # Día exacto
+        if act.fecha_inicio is None:
+            continue  # o poner fecha por defecto
+        fecha = act.fecha_inicio.strftime("%Y-%m-%d")
 
         # Construir URL filtrada en el admin
         url_filtrada = reverse("admin:actividades_ordendetrabajo_changelist") + "?" + urlencode({
