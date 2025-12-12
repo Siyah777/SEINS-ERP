@@ -42,6 +42,8 @@ urlpatterns = [
     path('actividades/', include('actividades.urls', namespace='actividades')),
     path('facturacion/', include('facturacion.urls', namespace='facturacion')),
     path("accounts/login/", auth_views.LoginView.as_view(), name="login"),
+    path('planes/', include('planes_mantenimiento.urls')),
+
 
 ]
 

@@ -66,10 +66,10 @@ class Ordendetrabajo(models.Model):
     ]
     
     cliente = models.ForeignKey('clientes.Cliente', on_delete=models.CASCADE)
-    equipo = models.ForeignKey('equipos.Equipo', on_delete=models.CASCADE, blank=True, null=True)
+    equipo = models.ManyToManyField('equipos.Equipo', blank=True)
     correlativo = models.CharField(max_length=20, unique=True, blank=True, null=True)
     descripcion = models.TextField(blank=True)
-    cotizacion = models.ForeignKey(Cotizacion, blank=False, on_delete=models.CASCADE, default=1)
+    cotizacion = models.ForeignKey(Cotizacion, blank=False, on_delete=models.CASCADE,)
     prioridad = models.CharField(max_length=10, choices=PRIORIDAD_CHOICES, default='media')
     tipo_actividad = models.CharField(
         max_length=30,   # suficiente para el valor más largo
@@ -100,16 +100,20 @@ class Ordendetrabajo(models.Model):
     imagen_despues_2 = models.ImageField(upload_to=ruta_imagen_despues, null=True, blank=True)
     nombre_recibe = models.CharField(max_length=200, blank=True, null=True)
     firma_cliente = models.TextField(blank=True, null=True)
-    #firma_tecnico = models.TextField(blank=True, null=True)
     firma_cliente_img = models.ImageField(upload_to=firma_upload_path, blank=True, null=True)
-    #firma_tecnico_img = models.ImageField(upload_to=firma_upload_path, blank=True, null=True)
+    detalleplan = models.ForeignKey(
+    'planes_mantenimiento.DetallePlanMantenimiento',
+    on_delete=models.SET_NULL,
+    null=True,
+    blank=True,
+    related_name="ots_generadas"
+    )
     class Meta:
         verbose_name = "Orden de trabajo"
         verbose_name_plural = "Órdenes de trabajo"
         
     def save(self, *args, **kwargs):
         self.cliente = self.cotizacion.cliente  # Asegura que el cliente siempre coincida con la cotización
-        self.equipo = self.cotizacion.equipo  # Asegura que el equipo_cliente siempre coincida con la cotización
         self.descripcion = self.cotizacion.Descripcion  # Asegura que la descripción siempre coincida con la cotización
         if not self.correlativo:
             anio = datetime.now().year % 100  # 2025 -> 25
@@ -126,6 +130,7 @@ class Ordendetrabajo(models.Model):
             self.nombre_recibe = ""  # evita que aparezca "None" en la plantilla
         
         super().save(*args, **kwargs)
+        self.equipo.set(self.cotizacion.equipo.all())  # Sincroniza el equipo con la cotización
         
         # 1️⃣ Reducir imágenes antes/después
         for campo in [self.imagen_antes_1, self.imagen_antes_2,
@@ -198,3 +203,4 @@ class Ordendetrabajo(models.Model):
 
     def __str__(self):
         return f"{self.correlativo} - {self.cliente.nombre_empresa}"   
+    

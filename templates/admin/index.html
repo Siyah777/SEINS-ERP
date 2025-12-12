@@ -14,11 +14,11 @@
       </a>
 
       <a href="{% url 'admin:actividades_ordendetrabajo_changelist' %}?estatus__exact=programado" class="resumen-card programada">
-        <i class="fas fa-calendar-alt"></i>
-        <div>
-          <h4>Programadas</h4>
-          <p>{{ resumen_actividades.programado|default:0 }}</p>
-        </div>
+          <i class="fas fa-calendar-alt"></i>
+          <div>
+            <h4>Programadas</h4>
+            <p>{{ resumen_actividades.programado|default:0 }}</p>
+          </div>
       </a>
 
       <a href="{% url 'admin:actividades_ordendetrabajo_changelist' %}?estatus__exact=en_proceso" class="resumen-card proceso">

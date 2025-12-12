@@ -132,10 +132,15 @@
             <th class="columna-izquierda">Descripcion del trabajo</th>
             <td colspan="3">
                 - {{ orden.cotizacion.Descripcion }} (según {{ orden.cotizacion.correlativo }})<br/>
-                {% if orden.equipo %}
-                    al equipo: {{ orden.equipo.nombre }},
-                    codigo: {{ orden.equipo.codigo_interno }},
-                    serie: {{ orden.equipo.serie }}
+                {% if orden.equipo.all %}
+                    A el(los) equipo(s):
+                    <ul style="margin: 0; padding-left: 10px;">
+                        {% for eq in orden.equipo.all %}
+                            <li>
+                                {{ eq.nombre }}, Código: {{ eq.codigo_interno }} 
+                            </li>
+                        {% endfor %}
+                    </ul>
                 {% endif %}
             </td>
         </tr>

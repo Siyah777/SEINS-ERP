@@ -154,11 +154,13 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>{{ cotizacion.Descripcion }} 
-                            {% if cotizacion.equipo %}
-                                al equipo: {{ cotizacion.equipo.nombre }},
-                                codigo: {{ cotizacion.equipo.codigo_interno }},
-                                serie: {{ cotizacion.equipo.serie }}
+                        <td>
+                            {{ cotizacion.Descripcion }}
+                            {% if cotizacion.equipo.all %}
+                                <br>A el(los) equipo(s):
+                                {% for eq in cotizacion.equipo.all %}
+                                    <br>• {{ eq.nombre }} (Código: {{ eq.codigo_interno }})
+                                {% endfor %}
                             {% endif %}
                         </td>
                         <td>${{ cotizacion.total }} + IVA (${{cotizacion.total_iva}})</td>

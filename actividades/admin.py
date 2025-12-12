@@ -2,12 +2,14 @@ from django.contrib import admin
 from .models import Ordendetrabajo
 from django.urls import reverse
 from django.utils.html import format_html
+from django.contrib.admin import DateFieldListFilter
 
 @admin.register(Ordendetrabajo)
 class TrabajoAdmin(admin.ModelAdmin):
     list_display = (
         'correlativo',
         'cliente',
+        'mostrar_equipo',
         'descripcion',
         'mostrar_personal_asignado',
         'horarios_actividad',
@@ -30,6 +32,7 @@ class TrabajoAdmin(admin.ModelAdmin):
         'correlativo',
         'descripcion',
         'equipo',
+        'detalleplan',
         ) # Campos de solo lectura
     
     def estatus_coloreado(self, obj):
@@ -71,6 +74,10 @@ class TrabajoAdmin(admin.ModelAdmin):
     def mostrar_personal_asignado(self, obj):
         return ", ".join([str(c) for c in obj.personal_asignado.all()])
     mostrar_personal_asignado.short_description = "personal asignado"
+    
+    def mostrar_equipo(self, obj):
+        return ", ".join([str(c) for c in obj.equipo.all()])
+    mostrar_equipo.short_description = "equipo"
 
     def pdf_orden_trabajo(self, obj):
         url = reverse('actividades:generar_pdf_orden_trabajo', args=[obj.pk])
@@ -92,10 +99,11 @@ class TrabajoAdmin(admin.ModelAdmin):
 
     
     list_filter = ('estatus',
-    'fecha_inicio',
+    ('fecha_inicio', DateFieldListFilter),
     'fecha_fin',
     ("personal_asignado", admin.RelatedOnlyFieldListFilter),
     ("proveedores", admin.RelatedOnlyFieldListFilter),
+    ("equipo", admin.RelatedOnlyFieldListFilter),
     'horarios_actividad',
     'cliente',
     'prioridad',

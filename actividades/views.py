@@ -11,6 +11,9 @@ from django.core.files.base import ContentFile
 from recursos_humanos.models import Empleado
 from django.http import JsonResponse
 from django.utils import timezone
+from datetime import timedelta
+from django.urls import reverse
+from urllib.parse import urlencode
 
 
 def obtener_logo_base64():
@@ -80,19 +83,29 @@ def generar_pdf_orden_trabajo(request, orden_id):
     return HttpResponse("Error al generar el PDF", status=500)
 
 def calendario_eventos(request):
-    actividades = Ordendetrabajo.objects.filter(estatus="programado")
+    actividades = Ordendetrabajo.objects.filter(
+        estatus="programado",
+    )
+    
+    eventos = []
+    for act in actividades:
+        fecha = act.fecha_inicio.strftime("%Y-%m-%d")  # Día exacto
 
-    eventos = [
-        {
+        # Construir URL filtrada en el admin
+        url_filtrada = reverse("admin:actividades_ordendetrabajo_changelist") + "?" + urlencode({
+            "estatus__exact": "programado",
+            "fecha_inicio__gte": fecha,
+            "fecha_inicio__lte": fecha,
+            "q": "",
+        })
+        
+        eventos.append({
             "title": getattr(act, "titulo", f"{act.correlativo}"),
             "start": act.fecha_inicio.isoformat(),
-            "url": f"/admin/actividades/ordendetrabajo/{act.id}/change/",
+            "url": url_filtrada,
             "extendedProps": {
                 "descripcion": getattr(act, "descripcion", ""),
-                "equipo": act.equipo.nombre if hasattr(act, "equipo") else "",
             }
-        }
-        for act in actividades
-    ]
-
+        })
+    
     return JsonResponse(eventos, safe=False)
