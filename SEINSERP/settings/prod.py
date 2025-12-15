@@ -13,7 +13,7 @@ SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-ALLOWED_HOSTS = ["seinsv.online", "www.seinsv.online", "3.86.0.104", "127.0.0.1", "localhost"]
+ALLOWED_HOSTS = ["seinsv.online", "www.seinsv.online", "127.0.0.1", "localhost"]
 
 DATABASES = {
     'default': { 
