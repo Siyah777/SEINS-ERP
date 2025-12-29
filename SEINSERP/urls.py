@@ -43,7 +43,7 @@ urlpatterns = [
     path('facturacion/', include('facturacion.urls', namespace='facturacion')),
     path("accounts/login/", auth_views.LoginView.as_view(), name="login"),
     path('planes/', include('planes_mantenimiento.urls')),
-
-
+    path('compras/', include('compras.urls')),
+    path('equipos/', include('equipos.urls')),
 ]
 

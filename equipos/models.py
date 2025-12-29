@@ -1,20 +1,57 @@
 from django.db import models
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
+from PIL import Image
+from io import BytesIO
+
+def ruta_imagen_equipo(instance, filename):
+    correlativo = instance.correlativo or 'sin_correlativo'
+    return f"equipos/{correlativo}/imagenes/{filename}"
+
+def ruta_imagen_herramienta(instance, filename):
+    correlativo = instance.correlativo or 'sin_correlativo'
+    return f"equipos/herramientas/{correlativo}/imagenes/{filename}"
+
+def _reducir_imagen(self, imagen_field, max_kb=300):
+        if imagen_field and hasattr(imagen_field, 'path'):
+            try:
+                img = Image.open(imagen_field.path)
+                img_format = img.format or 'JPEG'
+                quality = 85
+                buffer = BytesIO()
+                while True:
+                    buffer.seek(0)
+                    buffer.truncate()
+                    img.save(buffer, format=img_format, optimize=True, quality=quality)
+                    size_kb = buffer.tell() / 1024
+                    if size_kb <= max_kb or quality <= 30:
+                        break
+                    quality -= 5
+                with open(imagen_field.path, 'wb') as f:
+                    f.write(buffer.getvalue())
+            except Exception as e:
+                print(f"⚠️ Error reduciendo {imagen_field.name}: {e}")
 
 class Equipo(models.Model):
-    nombre = models.CharField(max_length=100, default='equipo_interno')
-    descripcion = models.CharField(max_length=100, default='equipo de uso en empresa')
+    nombre = models.CharField(max_length=500, default='equipo_interno')
+    descripcion = models.CharField(max_length=1000, default='equipo de uso en empresa')
+    cliente = models.ForeignKey('clientes.Cliente', on_delete=models.CASCADE, blank=True, null=True)
     marca = models.CharField(max_length=100, default='Generico')
     modelo = models.CharField(max_length=100, default='Modelo Generico')
     serie = models.CharField(max_length=100, default='Serie Generica')
     codigo_interno = models.CharField(max_length=100, default='Codigo Interno segun SG')
-    ubicacion = models.CharField(max_length=100, default='Ubicación del equipo en la empresa')
+    ubicacion = models.CharField(max_length=1000, default='Ubicación del equipo en la empresa')
     estatus = models.CharField(max_length=50, default='funcionando')
     categoria = models.CharField(max_length=100, null=False, default='General')
-    cantidad = models.PositiveIntegerField(default=0)
+    componentes = models.PositiveIntegerField(default=1)
+    especificaciones = models.CharField(max_length=1000, default='especificaciones técnicas del equipo')
     notas = models.TextField(blank=True)
+    imagen_equipo = models.ImageField(upload_to=ruta_imagen_equipo, null=True, blank=True)
     
+    def save(self, *args, **kwargs):
+        self._reducir_imagen(self.imagen_equipo)
+        super().save(*args, **kwargs)
+        
     def __str__(self):
         return f"{self.codigo_interno} - {self.nombre}"
     
@@ -34,89 +71,23 @@ class Herramienta(models.Model):
     codigo_interno = models.CharField(max_length=100, blank=True)
     marca = models.CharField(max_length=100, blank=True)
     estado = models.CharField(max_length=20, choices=ESTADOS, default='en_uso')
+    componentes = models.PositiveIntegerField(default=1)
+    especificaciones = models.CharField(max_length=1000, default='especificaciones técnicas de la herramienta')
     notas = models.TextField(blank=True)
+    imagen_herramienta = models.ImageField(upload_to=ruta_imagen_herramienta, null=True, blank=True)
+    
+    def save(self, *args, **kwargs):
+        self._reducir_imagen(self.imagen_herramienta)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.codigo_interno} - {self.nombre}"
     
 class HistorialTrabajos(models.Model):
     equipo = models.ForeignKey(Equipo, on_delete=models.CASCADE, related_name='historial_mantenimientos', default=1)
-    #fecha_mant = models.DateField("Fecha de Mantenimiento", auto_now=False, auto_now_add=False, default=datetime.date.today)
-    #descripcion_mant = models.CharField(max_length=100, default='breve descripción del mantenimiento realizado')
-    #mot_mant = models.CharField(max_length=100, default='debe especificar el motivo del porque se realiza el mantenimiento')
-    #repuestos = models.CharField(max_length=100, default= 'especificar los repuestos utilizados, nombre y cantidad')
     ordenes_trabajo = models.ManyToManyField("actividades.Ordendetrabajo")
-    #tiempo_falla = models.DurationField(default=timedelta(days=1))
-    #tiempo_reparacion = models.DurationField(default=timedelta(days=1))
     fecha_registro = models.DateField("Fecha de Registro", auto_now_add=False)
     notas = models.TextField(blank=True)
     class Meta:
         verbose_name = "Historial de trabajo"
         verbose_name_plural = "Historial de trabajos"
-
-    #def __str__(self):
-     #return f"Mantenimiento de {self.equipo.nombre} en {self.fecha_mant}"
-
-#class HistorialMantenimiento(models.Model):
-    #UNIDADES = [
-        #('M', 'Millas'),
-        #('Km', 'Kilometros'),
-        #('Hr', 'Horas'),
-        #('%', 'Porcentaje'),
-    #]
-    #equipo = models.ForeignKey(Equipo, on_delete=models.CASCADE, related_name='historial_mantenimientos', default=1)
-    #fecha_mant = models.DateField("Fecha del Mantenimiento", default=datetime.date.today)
-    #descripcion_mant = models.CharField(max_length=100, default='breve descripción del mantenimiento realizado')
-    #mot_mant = models.CharField(max_length=100, default='debe especificar el motivo del porque se realiza el mantenimiento')
-    #repuestos = models.CharField(max_length=100, default='especificar los repuestos utilizados, nombre y cantidad')
-    
-    #proveedor_mantenimiento = models.ForeignKey(
-        #Proveedor,
-        #on_delete=models.CASCADE,
-        #related_name='mantenimientos_realizados_equipos',
-        #default=1
-    #)
-    #proveedor_repuestos = models.ForeignKey(
-        #Proveedor,
-        #on_delete=models.CASCADE,
-        #related_name='repuestos_suministrados_equipos',
-        #default=1
-    #)
-
-    #costo_mano_obra = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    #costo_repuestos = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    #costo_total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    #indicacion_odometro = models.DecimalField(max_digits=10, decimal_places=0, default=0)
-    #unidad_odometro = models.CharField(max_length=4, choices=UNIDADES, default='Km')
-    #tiempo_falla = models.DurationField(default=timedelta(days=1))
-    #tiempo_reparacion = models.DurationField(default=timedelta(days=1))
-    #proximo_mant = models.DateField("Fecha de Proximo Mantenimiento", default=datetime.date.today)
-    #notas = models.TextField(blank=True)
-    #usuario_asignado = models.CharField(max_length=50, default='admin')
-    
-    #def __str__(self):
-        #return f"Mantenimiento de {self.equipo.nombre} en {self.fecha_mant}"
-    
-    #def calcular_costo_total(self):
-        #self.costo_total = self.costo_mano_obra + self.costo_repuestos
-        #return self.costo_total
-
-    #def save(self, *args, **kwargs):
-        # Evita errores si alguno es None
-        #self.costo_mano_obra = self.costo_mano_obra or 0
-        #self.costo_repuestos = self.costo_repuestos or 0
-
-        # Calcula el costo total antes de guardar
-        #self.calcular_costo_total()
-        #super().save(*args, **kwargs)
-
-        # Actualiza el costo total acumulado del equipo
-        #self.equipo.costo_total_acumulado = self.equipo.calcular_costo_total_mantenimientos()
-        #self.equipo.save()
-
-#@receiver(post_delete, sender=HistorialTrabajos)
-#def actualizar_costo_total_al_borrar(sender, instance, **kwargs):
-    #equipo = instance.equipo
-    #equipo.costo_total_acumulado = equipo.calcular_costo_total_mantenimientos()
-    #equipo.save()
-

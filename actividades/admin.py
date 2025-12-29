@@ -104,6 +104,7 @@ class TrabajoAdmin(admin.ModelAdmin):
     ("personal_asignado", admin.RelatedOnlyFieldListFilter),
     ("proveedores", admin.RelatedOnlyFieldListFilter),
     ("equipo", admin.RelatedOnlyFieldListFilter),
+    'tipo_actividad',
     'horarios_actividad',
     'cliente',
     'prioridad',

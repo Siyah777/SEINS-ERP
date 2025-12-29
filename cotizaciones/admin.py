@@ -19,10 +19,14 @@ class ListaDeMaterialesInline(admin.StackedInline): #StackedInline
 
 @admin.register(Cotizacion)
 class CotizacionAdmin(admin.ModelAdmin):
-    list_display = ("correlativo", "cliente", "Descripcion", "fecha", "estatus_coloreado", "total_con_dolar", "ver_pdf")
+    list_display = ("correlativo", "cliente", "mostrar_equipo", "Descripcion", "fecha", "estatus_coloreado", "total_con_dolar", "ver_pdf")
     list_per_page = 20
     readonly_fields = ("total", "total_iva", "correlativo", "usuario")
-    list_filter = ("usuario", "cliente", "estatus", "fecha")
+    list_filter = ("usuario", "cliente", ("equipo", admin.RelatedOnlyFieldListFilter), "estatus", "fecha")
+    
+    def mostrar_equipo(self, obj):
+        return ", ".join([str(c) for c in obj.equipo.all()])
+    mostrar_equipo.short_description = "equipo"
     
     def total_con_dolar(self, obj):
      return mark_safe(f"${float(obj.total_iva):.2f}")

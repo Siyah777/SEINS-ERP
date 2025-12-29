@@ -2,11 +2,18 @@ from django.contrib import admin
 from .models import Equipo, HistorialTrabajos, Herramienta
 from django.db.models import Sum
 from django.utils.html import format_html
+from django.urls import reverse 
 
 @admin.register(Equipo)
 class EquipoAdmin(admin.ModelAdmin):
-    list_display = ('codigo_interno', 'nombre', 'descripcion', 'ubicacion', 'categoria')
+    list_display = ('codigo_interno', 'nombre', 'descripcion', 'ubicacion', 'categoria', 'equipo_pdf')
     search_fields = ('codigo_interno', 'nombre', 'categoria')
+    
+    def equipo_pdf(self, obj):
+        url = reverse('equipo_pdf', args=[obj.pk])
+        return format_html('<a class="button" href="{}" target="_blank">Hoja de equipo</a>', url)
+
+    equipo_pdf.short_description = 'PDF'
     
 @admin.register(HistorialTrabajos)
 class HistorialTrabajos(admin.ModelAdmin):
@@ -23,7 +30,13 @@ class HistorialTrabajos(admin.ModelAdmin):
 
 @admin.register(Herramienta)
 class HerramientaAdmin(admin.ModelAdmin):
-    list_display = ('codigo_interno', 'nombre', 'categoria', 'cantidad', 'modelo', 'marca', 'estado')
+    list_display = ('codigo_interno', 'nombre', 'categoria', 'cantidad', 'modelo', 'marca', 'estado', 'herramienta_pdf')
     list_filter = ('estado', 'categoria', 'marca')
     search_fields = ('nombre', 'modelo', 'serie', 'marca')
     list_per_page = 20
+    
+    def herramienta_pdf(self, obj):
+        url = reverse('herramienta_pdf', args=[obj.pk])
+        return format_html('<a class="button" href="{}" target="_blank">Hoja de herramienta</a>', url)
+
+    herramienta_pdf.short_description = 'PDF'

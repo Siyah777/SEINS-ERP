@@ -1,4 +1,5 @@
 from django.template.loader import get_template
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from xhtml2pdf import pisa
 import io
@@ -31,6 +32,7 @@ def image_to_base64(field):
     except Exception:
         return ""
 
+@login_required
 def generar_pdf_orden_trabajo(request, orden_id):
     orden = get_object_or_404(Ordendetrabajo, pk=orden_id)
     template = get_template('orden_trabajo_pdf.html')
