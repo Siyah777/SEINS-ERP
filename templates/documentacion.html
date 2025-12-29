@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ documentacion.titulo }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            line-height: 1.5;
+        }
+        header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        header img {
+            height: 80px;
+            margin-right: 20px;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        section {
+            margin-bottom: 25px;
+        }
+        .paso {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .paso img {
+            max-width: 100%;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        .actividad-final {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-left: 4px solid #3498db;
+            margin-bottom: 10px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 5px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #ecf0f1;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <!-- Logo en Base64 -->
+        <img src="data:image/png;base64,{{ logo_base64 }}" alt="Logo">
+        <div>
+            <h1>{{ documentacion.titulo }}</h1>
+            <p><strong>Código:</strong> {{ documentacion.codigo_documento }}</p>
+            <p><strong>Creado por:</strong> 
+                {% if documentacion.creado_por %}
+                    {{ documentacion.creado_por.username }}
+                {% else %}
+                    Desconocido
+                {% endif %}
+                | <strong>Fecha:</strong> {{ documentacion.fecha_creacion }}
+            </p>
+        </div>
+    </header>
+
+    <section>
+        <h2>Descripción</h2>
+        <p>{{ documentacion.descripcion }}</p>
+    </section>
+
+    <section>
+        <h2>Justificación y Objetivos</h2>
+        <p><strong>Justificación:</strong> {{ documentacion.justificacion }}</p>
+        <p><strong>Objetivos:</strong> {{ documentacion.objetivos }}</p>
+    </section>
+
+    <section>
+        <h2>Categoría y Equipos</h2>
+        <p><strong>Categoría:</strong> {{ documentacion.categoria }}</p>
+        <p><strong>Equipos involucrados:</strong> 
+            {% for equipo in documentacion.equipos.all %}
+                {{ equipo.nombre }}{% if not forloop.last %}, {% endif %}
+            {% empty %}
+                Ninguno
+            {% endfor %}
+        </p>
+    </section>
+
+    <section>
+        <h2>Insumos y Herramientas</h2>
+        <p><strong>Insumos necesarios:</strong> {{ documentacion.insumos_necesarios }}</p>
+        <p><strong>Herramientas necesarias:</strong> {{ documentacion.herramientas_necesarias }}</p>
+    </section>
+
+    <section>
+        <h2>Personal Técnico y Tiempo Estimado</h2>
+        <p><strong>Personal técnico:</strong> {{ documentacion.personal_tecnico }}</p>
+        <p><strong>Tiempo estimado:</strong> {{ documentacion.tiempo_estimado }}</p>
+    </section>
+
+    <section>
+        <h2>Pasos del Procedimiento</h2>
+        {% for paso in documentacion.pasos.all %}
+        <div class="paso">
+            <h3>Paso {{ paso.orden }}</h3>
+            <p>{{ paso.descripcion }}</p>
+            {% if paso.imagen %}
+                <img src="{{ paso.imagen.path }}" width="400">  <!-- ruta local -->
+            {% else %}
+                <p>Sin imagen</p>
+            {% endif %}
+            {% if paso.video %}
+                <p>Video: <a href="{{ paso.video }}" target="_blank">{{ paso.video }}</a></p>
+            {% endif %}
+        </div>
+        {% empty %}
+        <p>No hay pasos definidos.</p>
+        {% endfor %}
+    </section>
+
+    <section>
+        <h2>Actividades Finales</h2>
+        {% for actividad in documentacion.actividades_post.all %}
+        <div class="actividad-final">
+            {{ actividad.descripcion }}
+        </div>
+        {% empty %}
+        <p>Ninguna</p>
+        {% endfor %}
+    </section>
+
+    <section>
+        <h2>Referencias</h2>
+        <p>{{ documentacion.referencias }}</p>
+    </section>
+
+    <footer>
+        <p>Documento generado automáticamente | Activo: {{ documentacion.activo }}</p>
+    </footer>
+</body>
+</html>
+

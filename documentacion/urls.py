@@ -1,10 +1,10 @@
 from django.urls import path
-from .views import procedimiento_pdf
+from .views import documentacion_pdf
 
 urlpatterns = [
     path(
-        'procedimiento/<int:procedimiento_id>/pdf/',
-        procedimiento_pdf,
-        name='procedimiento_pdf'
+        'documentacion/<int:documentacion_id>/pdf/',
+        documentacion_pdf,
+        name='documentacion_pdf'
     ),
 ]

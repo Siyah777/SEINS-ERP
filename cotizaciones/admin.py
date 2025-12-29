@@ -5,11 +5,11 @@ from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.urls import reverse
 
-class DetalleCotizacionProductosInline(admin.TabularInline):
+class DetalleCotizacionProductosInline(admin.StackedInline):
     model = DetalleCotizacionProductos
     extra = 1
 
-class DetalleCotizacionServiciosInline(admin.TabularInline):
+class DetalleCotizacionServiciosInline(admin.StackedInline):
     model = DetalleCotizacionServicios
     extra = 1
 

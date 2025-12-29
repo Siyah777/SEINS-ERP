@@ -1,4 +1,6 @@
 from django.db import models
+from PIL import Image
+from io import BytesIO
 
 class Documentacion(models.Model):
     titulo = models.CharField(max_length=255)
@@ -36,6 +38,8 @@ class Documentacion(models.Model):
     class Meta:
         db_table = 'documentacion_procedimiento'
         ordering = ['codigo_documento']
+        verbose_name = "Documentacion"
+        verbose_name_plural = "Documentaciones"
 
     def __str__(self):
         return f"{self.codigo_documento} - {self.titulo}"
@@ -51,7 +55,7 @@ class PasoProcedimiento(models.Model):
     descripcion = models.TextField()
 
     imagen = models.ImageField(
-        upload_to='procedimientos/pasos/',
+        upload_to='documentacion/procedimientos/pasos/',
         null=True, blank=True
     )
 
@@ -66,6 +70,30 @@ class PasoProcedimiento(models.Model):
 
     def __str__(self):
         return f"Paso {self.orden}"
+    
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)  # Guardar primero para tener path
+        self._reducir_imagen(self.imagen)
+
+    def _reducir_imagen(self, imagen_field, max_kb=300):
+        if imagen_field and hasattr(imagen_field, 'path'):
+            try:
+                img = Image.open(imagen_field.path)
+                img_format = img.format or 'JPEG'
+                quality = 85
+                buffer = BytesIO()
+                while True:
+                    buffer.seek(0)
+                    buffer.truncate()
+                    img.save(buffer, format=img_format, optimize=True, quality=quality)
+                    size_kb = buffer.tell() / 1024
+                    if size_kb <= max_kb or quality <= 30:
+                        break
+                    quality -= 5
+                with open(imagen_field.path, 'wb') as f:
+                    f.write(buffer.getvalue())
+            except Exception as e:
+                print(f"⚠️ Error reduciendo {imagen_field.name}: {e}")
 
 class ActividadFinal(models.Model):
     documentacion = models.ForeignKey(
@@ -73,6 +101,10 @@ class ActividadFinal(models.Model):
         related_name='actividades_post',
         on_delete=models.CASCADE
     )
+    
+    class Meta:
+        verbose_name = "Actividad final"
+        verbose_name_plural = "Actividades finales"
 
     descripcion = models.TextField()
 

@@ -1,17 +1,14 @@
-# documentacion/views.py
-
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from .models import Procedimiento
-from .utils import generar_pdf_procedimiento
+from .models import Documentacion
+from .utils import generar_pdf_documentacion
+from django.shortcuts import get_object_or_404
 
 @login_required
-def procedimiento_pdf(request, procedimiento_id):
-    procedimiento = Procedimiento.objects.prefetch_related(
-        'pasos', 'actividades_post', 'equipos'
-    ).get(id=procedimiento_id)
+def documentacion_pdf(request, documentacion_id):
+    documentacion = get_object_or_404(Documentacion, pk=documentacion_id)
 
-    pdf_buffer = generar_pdf_procedimiento(procedimiento)
+    pdf_buffer = generar_pdf_documentacion(documentacion.id)
 
     if not pdf_buffer:
         return HttpResponse("Error al generar PDF", status=500)
@@ -21,7 +18,7 @@ def procedimiento_pdf(request, procedimiento_id):
         content_type='application/pdf'
     )
     response['Content-Disposition'] = (
-        f'inline; filename="{procedimiento.codigo_documento}.pdf"'
+        f'inline; filename="{documentacion.codigo_documento}.pdf"'
     )
 
     return response
