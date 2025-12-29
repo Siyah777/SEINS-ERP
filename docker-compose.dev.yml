@@ -1,31 +1,42 @@
+version: "3.9"
 
 services:
   db:
     image: postgres:15
-    environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: siyah777
-
+    container_name: seins_db_dev
+    restart: unless-stopped
+    env_file:
+      - .env.dev
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - pgdata_dev:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "5432:5432"   # ✔️ Expuesto SOLO en desarrollo
+    networks:
+      - devnet
 
   web:
     build: .
+    container_name: seins_web_dev
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/app
     env_file:
-    - .env.dev 
+      - .env.dev
+    environment:
+      DJANGO_SETTINGS_MODULE: SEINSERP.settings.dev
     ports:
       - "8000:8000"
-    environment:
-      - DJANGO_SETTINGS_MODULE=SEINSERP.settings.dev
-      - DATABASE_URL=postgres://seinsuser:seins_password@db:5432/seinsdb
     depends_on:
       - db
+    networks:
+      - devnet
+    stdin_open: true
+    tty: true
 
 volumes:
-  pgdata:
+  pgdata_dev:
+
+networks:
+  devnet:
+    driver: bridge
+

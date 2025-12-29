@@ -34,6 +34,7 @@ class Documentacion(models.Model):
     activo = models.BooleanField(default=True)
 
     class Meta:
+        db_table = 'documentacion_procedimiento'
         ordering = ['codigo_documento']
 
     def __str__(self):
