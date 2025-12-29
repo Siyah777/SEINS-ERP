@@ -3,12 +3,20 @@ from django.contrib import admin
 from django.db.models import Q, F
 from .models import Inventario
 from notificaciones.models import Notificacion
+from django.utils.html import format_html
+from django.urls import reverse
 
 @admin.register(Inventario)
 class InventarioAdmin(admin.ModelAdmin):
-    list_display = ('producto', 'categoria', 'cantidad', 'stock_minimo', 'proveedor', 'fecha_ingreso', 'fecha_salida')
+    list_display = ('producto', 'categoria', 'cantidad', 'stock_minimo', 'proveedor', 'fecha_ingreso', 'fecha_salida', 'inventario_pdf')
     list_filter = ('categoria', 'fecha_ingreso', 'fecha_salida', 'proveedor')
     search_fields = ('producto__nombre', 'proveedor__nombre')
+    
+    def inventario_pdf(self, obj):
+        url = reverse('inventario_pdf', args=[obj.pk])
+        return format_html('<a class="button" href="{}" target="_blank">ficha inventario</a>', url)
+
+    inventario_pdf.short_description = 'PDF'
 
 def alertar_stock_bajo(usuario_id=1):
     """
@@ -29,3 +37,4 @@ def alertar_stock_bajo(usuario_id=1):
                 producto=inventario.producto,          # Vinculamos el producto
                 usuario_destino_id=usuario_id,         # Usuario destinatario
             )
+

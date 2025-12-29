@@ -1,6 +1,6 @@
 from django.db import models          
 from equipos.models import Herramienta            
-from documentacion.models import Documentacion  
+from documentacion.models import Documentacion
 from proveedores.models import Proveedor
 from cotizaciones.models import Cotizacion
 from datetime import datetime, timedelta

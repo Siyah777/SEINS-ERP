@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Producto {{ producto.correlativo }}</title>
+
+<style>
+body {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 10px;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #000;
+    padding: 4px;
+    vertical-align: top;
+}
+
+th {
+    background-color: #ddd;
+    font-weight: bold;
+}
+
+.text-right { text-align: right; }
+.text-center { text-align: center; }
+
+.no-border td {
+    border: none;
+}
+
+.imagen-box {
+    width: 140px;
+    height: 140px;
+    border: 1px solid #000;
+    text-align: center;
+    vertical-align: middle;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<table class="no-border">
+<tr>
+    <td width="70%">
+        <img src="data:image/png;base64,{{ logo_base64 }}" height="60">
+    </td>
+    <td width="30%" class="text-right">
+        <strong>FICHA DE PRODUCTO</strong><br>
+        {{ producto.correlativo|default:"—" }}
+    </td>
+</tr>
+</table>
+
+<hr>
+
+<!-- DATOS GENERALES -->
+<table>
+<tr>
+    <th colspan="4">Información General</th>
+</tr>
+<tr>
+    <td width="20%"><strong>Nombre</strong></td>
+    <td width="30%">{{ producto.nombre }}</td>
+    <td width="20%"><strong>Categoría</strong></td>
+    <td width="30%">{{ producto.categoria }}</td>
+</tr>
+<tr>
+    <td><strong>Marca</strong></td>
+    <td>{{ producto.marca }}</td>
+    <td><strong>Modelo</strong></td>
+    <td>{{ producto.modelo }}</td>
+</tr>
+<tr>
+    <td><strong>Serie</strong></td>
+    <td>{{ producto.serie }}</td>
+    <td><strong>Existencia</strong></td>
+    <td>{{ producto.existencia }}</td>
+</tr>
+<tr>
+    <td><strong>Proveedor</strong></td>
+    <td colspan="3">
+        {{ producto.proveedor.nombre_empresa|default:"—" }}
+    </td>
+</tr>
+</table>
+
+<br>
+
+<!-- DESCRIPCIÓN -->
+<table>
+<tr>
+    <th>Descripción</th>
+</tr>
+<tr>
+    <td>{{ producto.descripcion|default:"—" }}</td>
+</tr>
+</table>
+
+<br>
+
+<!-- EQUIPOS ASOCIADOS -->
+<table>
+<tr>
+    <th>Equipo(s) Asociado(s)</th>
+</tr>
+<tr>
+    <td>
+        {% for equipo in producto.equipo.all %}
+            {{ equipo.codigo_interno }} - {{ equipo.nombre }}<br>
+        {% empty %}
+            —
+        {% endfor %}
+    </td>
+</tr>
+</table>
+
+<br>
+
+<!-- INFORMACIÓN DE COMPRA -->
+<table>
+<tr>
+    <th colspan="4">Información de Compra</th>
+</tr>
+<tr>
+    <td width="20%"><strong>Precio Unitario</strong></td>
+    <td width="30%" class="text-right">
+        $ {{ producto.precio_unitario|floatformat:2 }}
+    </td>
+    <td width="20%"><strong>Factura</strong></td>
+    <td width="30%">{{ producto.factura_compra|default:"—" }}</td>
+</tr>
+<tr>
+    <td><strong>Fecha Compra</strong></td>
+    <td colspan="3">{{ producto.fecha_compra|default:"—" }}</td>
+</tr>
+</table>
+
+<br>
+
+<!-- IMAGEN -->
+<table>
+<tr>
+    <th colspan="2">Imagen del Producto</th>
+</tr>
+<tr>
+    <td width="30%" class="text-center">
+        <div class="imagen-box">
+            {% if producto.imagen_producto %}
+            <img src="{{ producto.imagen_producto.path }}" width="170" height="170">
+        {% else %}
+            <br><br><br>
+            <strong>Sin imagen</strong>
+        {% endif %}
+        </div>
+    </td>
+    <td width="70%">
+        <strong>Notas:</strong><br>
+        {{ producto.notas|default:"—" }}
+    </td>
+</tr>
+</table>
+
+<br><br>
+
+<center>
+    Documento generado por SEINS-ERP
+</center>
+
+</body>
+</html>

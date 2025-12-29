@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Inventario - {{ inventario.producto.nombre }}</title>
+
+<style>
+body {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td, th {
+    border: 1px solid #000;
+    padding: 4px;
+    vertical-align: top;
+}
+
+th {
+    background-color: #ddd;
+    font-weight: bold;
+}
+
+.no-border td {
+    border: none;
+}
+
+.text-right { text-align: right; }
+.text-center { text-align: center; }
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<table class="no-border">
+<tr>
+    <td width="70%">
+        <img src="data:image/png;base64,{{ logo_base64 }}" height="60">
+    </td>
+    <td width="30%" class="text-right">
+        <strong>INVENTARIO</strong><br>
+        {{ inventario.producto.correlativo|default:"—" }}
+    </td>
+</tr>
+</table>
+
+<hr>
+
+<!-- DATOS GENERALES -->
+<table>
+<tr>
+    <th width="25%">Producto</th>
+    <td width="75%">{{ inventario.producto.nombre }}</td>
+</tr>
+<tr>
+    <th>Categoría</th>
+    <td>{{ inventario.categoria }}</td>
+</tr>
+<tr>
+    <th>Proveedor</th>
+    <td>{{ inventario.proveedor.nombre_empresa|default:"—" }}</td>
+</tr>
+<tr>
+    <th>Ubicación</th>
+    <td>{{ inventario.ubicacion }}</td>
+</tr>
+</table>
+
+<br>
+
+<!-- IMAGEN DEL PRODUCTO -->
+<table>
+<tr>
+    <th width="30%">Imagen de la ubicacion del producto</th>
+    <td width="70%" class="text-center">
+        {% if inventario.imagen_inventario %}
+            <img src="{{ inventario.imagen_inventario.path }}" width="170" height="170">
+        {% else %}
+            <br><br><br>
+            <strong>Sin imagen de ubicación</strong>
+        {% endif %}
+
+    </td>
+</tr>
+</table>
+
+<br>
+
+<!-- STOCK -->
+<table>
+<tr>
+    <th width="25%">Cantidad actual</th>
+    <td width="25%" class="text-center">{{ inventario.cantidad }}</td>
+
+    <th width="25%">Stock mínimo</th>
+    <td width="25%" class="text-center">{{ inventario.stock_minimo }}</td>
+</tr>
+<tr>
+    <th>Fecha ingreso</th>
+    <td>{{ inventario.fecha_ingreso }}</td>
+
+    <th>Fecha salida</th>
+    <td>{{ inventario.fecha_salida|default:"—" }}</td>
+</tr>
+</table>
+
+<br>
+
+<!-- CONSIDERACIONES -->
+<table>
+<tr>
+    <th width="25%">Consideraciones</th>
+    <td width="75%">
+        {{ inventario.consideraciones|default:"—" }}
+    </td>
+</tr>
+</table>
+
+<br><br>
+
+<center>Documento generado por SEINS-ERP</center>
+
+</body>
+</html>

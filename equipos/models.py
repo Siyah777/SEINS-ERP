@@ -5,32 +5,12 @@ from PIL import Image
 from io import BytesIO
 
 def ruta_imagen_equipo(instance, filename):
-    correlativo = instance.correlativo or 'sin_correlativo'
-    return f"equipos/{correlativo}/imagenes/{filename}"
+    codigo_interno = instance.codigo_interno or 'sin_correlativo'
+    return f"equipos/imagenes_equipos/{codigo_interno}/imagenes/{filename}"
 
 def ruta_imagen_herramienta(instance, filename):
-    correlativo = instance.correlativo or 'sin_correlativo'
-    return f"equipos/herramientas/{correlativo}/imagenes/{filename}"
-
-def _reducir_imagen(self, imagen_field, max_kb=300):
-        if imagen_field and hasattr(imagen_field, 'path'):
-            try:
-                img = Image.open(imagen_field.path)
-                img_format = img.format or 'JPEG'
-                quality = 85
-                buffer = BytesIO()
-                while True:
-                    buffer.seek(0)
-                    buffer.truncate()
-                    img.save(buffer, format=img_format, optimize=True, quality=quality)
-                    size_kb = buffer.tell() / 1024
-                    if size_kb <= max_kb or quality <= 30:
-                        break
-                    quality -= 5
-                with open(imagen_field.path, 'wb') as f:
-                    f.write(buffer.getvalue())
-            except Exception as e:
-                print(f"⚠️ Error reduciendo {imagen_field.name}: {e}")
+    codigo_interno = instance.codigo_interno or 'sin_correlativo'
+    return f"equipos/imagenes_herramientas/{codigo_interno}/imagenes/{filename}"
 
 class Equipo(models.Model):
     nombre = models.CharField(max_length=500, default='equipo_interno')
@@ -51,6 +31,26 @@ class Equipo(models.Model):
     def save(self, *args, **kwargs):
         self._reducir_imagen(self.imagen_equipo)
         super().save(*args, **kwargs)
+    
+    def _reducir_imagen(self, imagen_field, max_kb=300):
+        if imagen_field and hasattr(imagen_field, 'path'):
+            try:
+                img = Image.open(imagen_field.path)
+                img_format = img.format or 'JPEG'
+                quality = 85
+                buffer = BytesIO()
+                while True:
+                    buffer.seek(0)
+                    buffer.truncate()
+                    img.save(buffer, format=img_format, optimize=True, quality=quality)
+                    size_kb = buffer.tell() / 1024
+                    if size_kb <= max_kb or quality <= 30:
+                        break
+                    quality -= 5
+                with open(imagen_field.path, 'wb') as f:
+                    f.write(buffer.getvalue())
+            except Exception as e:
+                print(f"⚠️ Error reduciendo {imagen_field.name}: {e}")
         
     def __str__(self):
         return f"{self.codigo_interno} - {self.nombre}"
@@ -79,6 +79,26 @@ class Herramienta(models.Model):
     def save(self, *args, **kwargs):
         self._reducir_imagen(self.imagen_herramienta)
         super().save(*args, **kwargs)
+    
+    def _reducir_imagen(self, imagen_field, max_kb=300):
+        if imagen_field and hasattr(imagen_field, 'path'):
+            try:
+                img = Image.open(imagen_field.path)
+                img_format = img.format or 'JPEG'
+                quality = 85
+                buffer = BytesIO()
+                while True:
+                    buffer.seek(0)
+                    buffer.truncate()
+                    img.save(buffer, format=img_format, optimize=True, quality=quality)
+                    size_kb = buffer.tell() / 1024
+                    if size_kb <= max_kb or quality <= 30:
+                        break
+                    quality -= 5
+                with open(imagen_field.path, 'wb') as f:
+                    f.write(buffer.getvalue())
+            except Exception as e:
+                print(f"⚠️ Error reduciendo {imagen_field.name}: {e}")
 
     def __str__(self):
         return f"{self.codigo_interno} - {self.nombre}"

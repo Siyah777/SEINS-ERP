@@ -38,7 +38,7 @@ class Migration(migrations.Migration):
                 ('hora_realizacion_estimada', models.TimeField(blank=True, null=True)),
                 ('notas', models.TextField(blank=True)),
                 ('creado_en', models.DateTimeField(auto_now_add=True)),
-                ('procedimiento', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='documentacion.documentacion')),
+                ('procedimiento', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='documentacion.Documentacion')),
                 ('proveedores', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='proveedores.proveedor')),
                 ('plan', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='detalles', to='planes_mantenimiento.planmantenimiento')),
             ],
