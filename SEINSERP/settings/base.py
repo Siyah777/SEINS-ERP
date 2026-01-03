@@ -153,6 +153,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
+# ==============================
+# Upload limits (imagenes / firmas)
+# ==============================
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 4 * 1024 * 1024  # 4 MB
+FILE_UPLOAD_MAX_MEMORY_SIZE = 4 * 1024 * 1024  # 4 MB
+
+
 JAZZMIN_SETTINGS = {
     "site_title": "SEINS-ERP Admin",
     "site_header": "Panel Administrativo",

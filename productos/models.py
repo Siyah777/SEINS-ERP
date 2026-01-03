@@ -29,35 +29,60 @@ class Producto(models.Model):
     imagen_producto = models.ImageField(upload_to=ruta_imagen_producto, null=True, blank=True)
     
     def save(self, *args, **kwargs):
-        if not self.correlativo:
+        es_nuevo = self.pk is None
+
+        # 1️⃣ Generar correlativo solo al crear
+        if es_nuevo and not self.correlativo:
             ultimo = Producto.objects.order_by('-id_producto').first()
             numero = 1
+
             if ultimo and ultimo.correlativo:
                 try:
                     numero = int(ultimo.correlativo.split('-')[-1]) + 1
                 except ValueError:
                     pass
+
             self.correlativo = f"PR-{numero:06d}"  # PR-000001
-        self._reducir_imagen(self.imagen_producto)
+
+        # 2️⃣ Guardar primero
         super().save(*args, **kwargs)
+
+        # 3️⃣ Procesar imagen SOLO si es nuevo y hay imagen
+        if es_nuevo and self.imagen_producto:
+            self._reducir_imagen(self.imagen_producto)
+
     
     def _reducir_imagen(self, imagen_field, max_kb=300):
         if imagen_field and hasattr(imagen_field, 'path'):
             try:
                 img = Image.open(imagen_field.path)
                 img_format = img.format or 'JPEG'
+
+                # 🔹 Limitar resolución
+                img.thumbnail((1920, 1920), Image.LANCZOS)
+
                 quality = 85
                 buffer = BytesIO()
+
                 while True:
                     buffer.seek(0)
                     buffer.truncate()
-                    img.save(buffer, format=img_format, optimize=True, quality=quality)
-                    size_kb = buffer.tell() / 1024
-                    if size_kb <= max_kb or quality <= 30:
+
+                    img.save(
+                        buffer,
+                        format=img_format,
+                        optimize=True,
+                        quality=quality
+                    )
+
+                    if buffer.tell() / 1024 <= max_kb or quality <= 30:
                         break
+
                     quality -= 5
+
                 with open(imagen_field.path, 'wb') as f:
                     f.write(buffer.getvalue())
+
             except Exception as e:
                 print(f"⚠️ Error reduciendo {imagen_field.name}: {e}")
         

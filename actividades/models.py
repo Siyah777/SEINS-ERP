@@ -123,11 +123,14 @@ class Ordendetrabajo(models.Model):
     )
         
     def save(self, *args, **kwargs):
+        es_nuevo = self.pk is None
         self.cliente = self.cotizacion.cliente  # Asegura que el cliente siempre coincida con la cotización
         self.descripcion = self.cotizacion.Descripcion  # Asegura que la descripción siempre coincida con la cotización
         if not self.correlativo:
             anio = datetime.now().year % 100  # 2025 -> 25
-            ultimo = Ordendetrabajo.objects.order_by('-id').first()
+            ultimo = Cotizacion.objects.filter(
+                correlativo__startswith=f"OT-{anio}-"
+            ).order_by('-id').first()
             numero = 1
             if ultimo and ultimo.correlativo:
                 try:
@@ -141,12 +144,13 @@ class Ordendetrabajo(models.Model):
         
         super().save(*args, **kwargs)
         self.equipo.set(self.cotizacion.equipo.all())  # Sincroniza el equipo con la cotización
-        
-        # 1️⃣ Reducir imágenes antes/después
-        self._procesar_imagenes()
+        if es_nuevo:
+            self._procesar_imagenes()
 
-        # 2️⃣ Procesar firmas
-        self._procesar_firmas()
+        # 4️⃣ Procesar firmas SOLO si existen
+        if self.firma_cliente:
+            self._procesar_firmas()
+
         
     def _procesar_imagenes(self):
         for campo in self.IMAGENES_OT:
@@ -171,35 +175,39 @@ class Ordendetrabajo(models.Model):
             print(f"⚠️ Error procesando {imagen_field.name}: {e}")
 
     
-    def _reducir_imagen(self, imagen_field, max_kb):
-        img = Image.open(imagen_field.path)
-        img_format = img.format or 'JPEG'
+    def _reducir_imagen(self, imagen_field, max_kb=300):
+        if imagen_field and hasattr(imagen_field, 'path'):
+            try:
+                img = Image.open(imagen_field.path)
+                img_format = img.format or 'JPEG'
 
-        # 🔹 Limitar resolución (MUY importante)
-        img.thumbnail((1920, 1920), Image.LANCZOS)
+                # 🔹 Limitar resolución
+                img.thumbnail((1920, 1920), Image.LANCZOS)
 
-        quality = 85
-        buffer = BytesIO()
+                quality = 85
+                buffer = BytesIO()
 
-        while True:
-            buffer.seek(0)
-            buffer.truncate()
+                while True:
+                    buffer.seek(0)
+                    buffer.truncate()
 
-            img.save(
-                buffer,
-                format=img_format,
-                optimize=True,
-                quality=quality
-            )
+                    img.save(
+                        buffer,
+                        format=img_format,
+                        optimize=True,
+                        quality=quality
+                    )
 
-            if buffer.tell() / 1024 <= max_kb or quality <= 30:
-                break
+                    if buffer.tell() / 1024 <= max_kb or quality <= 30:
+                        break
 
-            quality -= 5
+                    quality -= 5
 
-        with open(imagen_field.path, 'wb') as f:
-            f.write(buffer.getvalue())
+                with open(imagen_field.path, 'wb') as f:
+                    f.write(buffer.getvalue())
 
+            except Exception as e:
+                print(f"⚠️ Error reduciendo {imagen_field.name}: {e}")
     # -----------------------------
     # Procesar firmas
     # -----------------------------

@@ -92,7 +92,10 @@ class Cotizacion(models.Model):
     def save(self, *args, **kwargs):
         if not self.correlativo:
             anio = datetime.now().year % 100  # 2025 -> 25
-            ultimo = Cotizacion.objects.order_by('-id').first()
+            ultimo = Cotizacion.objects.filter(
+                correlativo__startswith=f"COT-{anio}-"
+            ).order_by('-id').first()
+        
             numero = 1
             if ultimo and ultimo.correlativo:
                 try:

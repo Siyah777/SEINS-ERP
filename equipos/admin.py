@@ -6,8 +6,9 @@ from django.urls import reverse
 
 @admin.register(Equipo)
 class EquipoAdmin(admin.ModelAdmin):
-    list_display = ('codigo_interno', 'nombre', 'descripcion', 'ubicacion', 'categoria', 'equipo_pdf')
-    search_fields = ('codigo_interno', 'nombre', 'categoria')
+    list_display = ('codigo_interno', 'cliente', 'nombre', 'descripcion', 'ubicacion', 'categoria', 'equipo_pdf')
+    search_fields = ('codigo_interno', 'cliente', 'nombre', 'categoria')
+    list_filter = ('codigo_interno', 'cliente', 'nombre', 'categoria')
     
     def equipo_pdf(self, obj):
         url = reverse('equipo_pdf', args=[obj.pk])

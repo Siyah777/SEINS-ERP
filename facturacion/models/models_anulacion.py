@@ -120,7 +120,9 @@ class Anulacion(models.Model):
             
             anio = datetime.now().year % 100  # 2025 -> 25
             
-            ultimo = Anulacion.objects.filter(correlativo__startswith=f"{prefijo}-{anio}-").order_by('-id').first()
+            ultimo = Anulacion.objects.filter(
+                correlativo__startswith=f"{prefijo}-{anio}-"
+            ).order_by('-id').first()
             numero = 1
             if ultimo and ultimo.correlativo:
                 try:

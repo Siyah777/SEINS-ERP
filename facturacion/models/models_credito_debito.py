@@ -122,7 +122,10 @@ class NotaCreditoDebito(models.Model):
             
             anio = datetime.now().year % 100  # 2025 -> 25
             
-            ultimo = NotaCreditoDebito.objects.filter(correlativo__startswith=f"{prefijo}-{anio}-").order_by('-id').first()
+            ultimo = NotaCreditoDebito.objects.filter(
+                correlativo__startswith=f"{prefijo}-{anio}-"
+            ).order_by('-id').first()
+
             numero = 1
             if ultimo and ultimo.correlativo:
                 try:

@@ -8,7 +8,7 @@ class ProductoAdmin(admin.ModelAdmin):
     list_display = ('correlativo', 'nombre', 'proveedor', 'mostrar_equipo', 'marca', 'serie', 'modelo', 'existencia', 'precio_unitario', 'producto_pdf')
     list_per_page = 20
     search_fields = ('categoria', 'marca', 'modelo', 'serie')
-    list_filter = ('categoria', 'marca', ("equipo", admin.RelatedOnlyFieldListFilter), 'proveedor')
+    list_filter = ('categoria', 'marca', ("equipo", admin.RelatedOnlyFieldListFilter), 'proveedor', )
     readonly_fields = ('correlativo',)
     
     def mostrar_equipo(self, obj):
