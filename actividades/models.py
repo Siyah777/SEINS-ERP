@@ -128,7 +128,7 @@ class Ordendetrabajo(models.Model):
         self.descripcion = self.cotizacion.Descripcion  # Asegura que la descripción siempre coincida con la cotización
         if not self.correlativo:
             anio = datetime.now().year % 100  # 2025 -> 25
-            ultimo = Cotizacion.objects.filter(
+            ultimo = Ordendetrabajo.objects.filter(
                 correlativo__startswith=f"OT-{anio}-"
             ).order_by('-id').first()
             numero = 1
