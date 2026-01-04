@@ -8,6 +8,7 @@ from decimal import Decimal
 from decimal import Decimal, ROUND_HALF_UP
 from datetime import datetime
 from django.db import transaction
+from django.utils.timezone import now
 import logging
 
 logger = logging.getLogger(__name__)
@@ -90,30 +91,37 @@ class Cotizacion(models.Model):
         return self.total
     
     def save(self, *args, **kwargs):
-        if not self.correlativo:
-            anio = datetime.now().year % 100  # 2025 -> 25
+
+        # 🔹 Estado previo SIEMPRE definido
+        estado_anterior = None
+        if self.pk:
+            estado_anterior = (
+                Cotizacion.objects
+                .filter(pk=self.pk)
+                .values_list('estatus', flat=True)
+                .first()
+            )
+
+        # 🔹 Correlativo SOLO al crear
+        if self.pk is None and not self.correlativo:
+
+            anio = now().year % 100
+            prefijo = f"COT-{anio}-"
+
             ultimo = Cotizacion.objects.filter(
-                correlativo__startswith=f"COT-{anio}-"
-            ).order_by('-id').first()
-        
+                correlativo__startswith=prefijo
+            ).order_by('-correlativo').first()
+
             numero = 1
-            if ultimo and ultimo.correlativo:
+            if ultimo:
                 try:
                     numero = int(ultimo.correlativo.split('-')[-1]) + 1
-                except ValueError:
+                except (ValueError, IndexError):
                     pass
-            self.correlativo = f"COT-{anio}-{numero:06d}"  # COT-25-000001
-        
-        # Detectar estado previo
-        cotizacion_anterior = None
-        if self.pk:
-            cotizacion_anterior = Cotizacion.objects.filter(pk=self.pk).first()
-            estado_anterior = cotizacion_anterior.estatus
-        else:
-            estado_anterior = None
 
-        super().save(*args, **kwargs)  # Guardamos primero para tener pk
+            self.correlativo = f"{prefijo}{numero:06d}"
 
+        super().save(*args, **kwargs)
         # Manejo de inventario solo si hay productos
         detalles = self.detalles_productos.all()
         if detalles.exists():

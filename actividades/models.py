@@ -3,6 +3,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from cotizaciones.models import Cotizacion
 from documentacion.models import Documentacion
+from django.utils.timezone import now
 from proveedores.models import Proveedor
 from equipos.models import Herramienta
 import base64
@@ -122,34 +123,61 @@ class Ordendetrabajo(models.Model):
         'imagen_despues_2',
     )
         
-    def save(self, *args, **kwargs):
-        es_nuevo = self.pk is None
-        self.cliente = self.cotizacion.cliente  # Asegura que el cliente siempre coincida con la cotización
-        self.descripcion = self.cotizacion.Descripcion  # Asegura que la descripción siempre coincida con la cotización
-        if not self.correlativo:
-            anio = datetime.now().year % 100  # 2025 -> 25
-            ultimo = Ordendetrabajo.objects.filter(
-                correlativo__startswith=f"OT-{anio}-"
-            ).order_by('-id').first()
-            numero = 1
-            if ultimo and ultimo.correlativo:
-                try:
-                    numero = int(ultimo.correlativo.split('-')[-1]) + 1
-                except ValueError:
-                    pass
-            self.correlativo = f"OT-{anio}-{numero:06d}"  # OT-25-000001
-        
-        if self.nombre_recibe is None:
-            self.nombre_recibe = ""  # evita que aparezca "None" en la plantilla
-        
-        super().save(*args, **kwargs)
-        self.equipo.set(self.cotizacion.equipo.all())  # Sincroniza el equipo con la cotización
-        if es_nuevo:
-            self._procesar_imagenes()
+def save(self, *args, **kwargs):
 
-        # 4️⃣ Procesar firmas SOLO si existen
-        if self.firma_cliente:
-            self._procesar_firmas()
+    es_nuevo = self.pk is None
+
+    # 🔹 Estado previo (por si luego lo necesitas)
+    estado_anterior = None
+    if not es_nuevo:
+        estado_anterior = (
+            Ordendetrabajo.objects
+            .filter(pk=self.pk)
+            .values_list('estatus', flat=True)
+            .first()
+        )
+
+    # 🔹 Sincronizar datos SIEMPRE
+    self.cliente = self.cotizacion.cliente
+    self.descripcion = self.cotizacion.Descripcion or ""
+
+    # 🔹 Correlativo SOLO al crear
+    if es_nuevo and not self.correlativo:
+
+        anio = now().year % 100
+        prefijo = f"OT-{anio}-"
+
+        ultimo = Ordendetrabajo.objects.filter(
+            correlativo__startswith=prefijo
+        ).order_by('-correlativo').first()
+
+        numero = 1
+        if ultimo:
+            try:
+                numero = int(ultimo.correlativo.split('-')[-1]) + 1
+            except (ValueError, IndexError):
+                pass
+
+        self.correlativo = f"{prefijo}{numero:06d}"
+
+    # 🔹 Evitar None en plantillas
+    if self.nombre_recibe is None:
+        self.nombre_recibe = ""
+
+    # 🔹 Guardar
+    super().save(*args, **kwargs)
+
+    # 🔹 Sincronizar equipos (M2M solo después del save)
+    self.equipo.set(self.cotizacion.equipo.all())
+
+    # 🔹 Procesar imágenes SOLO una vez
+    if es_nuevo:
+        self._procesar_imagenes()
+
+    # 🔹 Procesar firmas SOLO si existen
+    if self.firma_cliente:
+        self._procesar_firmas()
+
 
         
     def _procesar_imagenes(self):
