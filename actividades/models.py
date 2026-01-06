@@ -12,7 +12,60 @@ from io import BytesIO
 import io
 from datetime import datetime
 import os
+from django.core.files.base import ContentFile
+import os
+import logging
 
+logger = logging.getLogger('media')
+
+
+def reducir_imagen_upload(
+    imagen_field,
+    max_kb=300,
+    max_size=(1920, 1920)
+):
+    if not imagen_field:
+        return
+
+    try:
+        img = Image.open(imagen_field)
+        img = img.convert("RGB")  # evita PNG gigantes
+
+        img.thumbnail(max_size, Image.LANCZOS)
+
+        quality = 85
+        buffer = BytesIO()
+
+        while True:
+            buffer.seek(0)
+            buffer.truncate()
+
+            img.save(
+                buffer,
+                format="JPEG",
+                optimize=True,
+                quality=quality
+            )
+
+            if buffer.tell() / 1024 <= max_kb or quality <= 30:
+                break
+
+            quality -= 5
+
+        nombre = os.path.splitext(imagen_field.name)[0] + ".jpg"
+        imagen_field.file = ContentFile(buffer.getvalue(), name=nombre)
+
+        logger.info(
+            "Imagen optimizada",
+            extra={"archivo": imagen_field.name}
+        )
+
+    except Exception:
+        logger.exception(
+            "Error reduciendo imagen",
+            extra={"archivo": getattr(imagen_field, "name", "desconocido")}
+        )
+        
 def ruta_imagen_antes(instance, filename):
     correlativo = instance.correlativo or 'sin_correlativo'
     return f"ordenes/{correlativo}/imagenes/antes/{filename}"
@@ -163,6 +216,11 @@ def save(self, *args, **kwargs):
     # 🔹 Evitar None en plantillas
     if self.nombre_recibe is None:
         self.nombre_recibe = ""
+        
+    # 🔒 REDUCIR IMÁGENES ANTES DE GUARDAR
+    for campo in self.IMAGENES_OT:
+        imagen = getattr(self, campo)
+        reducir_imagen_upload(imagen, max_kb=300)
 
     # 🔹 Guardar
     super().save(*args, **kwargs)
@@ -170,72 +228,11 @@ def save(self, *args, **kwargs):
     # 🔹 Sincronizar equipos (M2M solo después del save)
     self.equipo.set(self.cotizacion.equipo.all())
 
-    # 🔹 Procesar imágenes SOLO una vez
-    if es_nuevo:
-        self._procesar_imagenes()
-
     # 🔹 Procesar firmas SOLO si existen
     if self.firma_cliente:
         self._procesar_firmas()
 
 
-        
-    def _procesar_imagenes(self):
-        for campo in self.IMAGENES_OT:
-            imagen = getattr(self, campo)
-            if imagen:
-                self._reducir_imagen_si_necesario(imagen)
-
-    def _reducir_imagen_si_necesario(self, imagen_field, max_kb=300):
-        try:
-            if not imagen_field or not imagen_field.path:
-                return
-
-            size_kb = os.path.getsize(imagen_field.path) / 1024
-
-            # 🚀 SALIDA RÁPIDA
-            if size_kb <= max_kb:
-                return
-
-            self._reducir_imagen(imagen_field, max_kb)
-
-        except Exception as e:
-            print(f"⚠️ Error procesando {imagen_field.name}: {e}")
-
-    
-    def _reducir_imagen(self, imagen_field, max_kb=300):
-        if imagen_field and hasattr(imagen_field, 'path'):
-            try:
-                img = Image.open(imagen_field.path)
-                img_format = img.format or 'JPEG'
-
-                # 🔹 Limitar resolución
-                img.thumbnail((1920, 1920), Image.LANCZOS)
-
-                quality = 85
-                buffer = BytesIO()
-
-                while True:
-                    buffer.seek(0)
-                    buffer.truncate()
-
-                    img.save(
-                        buffer,
-                        format=img_format,
-                        optimize=True,
-                        quality=quality
-                    )
-
-                    if buffer.tell() / 1024 <= max_kb or quality <= 30:
-                        break
-
-                    quality -= 5
-
-                with open(imagen_field.path, 'wb') as f:
-                    f.write(buffer.getvalue())
-
-            except Exception as e:
-                print(f"⚠️ Error reduciendo {imagen_field.name}: {e}")
     # -----------------------------
     # Procesar firmas
     # -----------------------------

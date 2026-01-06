@@ -3,12 +3,17 @@ from productos.models import Producto
 from proveedores.models import Proveedor 
 from PIL import Image
 from io import BytesIO
+from core.utils.imagenes import ImageReduceMixin
+
 
 def ruta_imagen_inventario(instance, filename):
     correlativo = instance.producto.correlativo or 'sin_correlativo'
     return f"inventario/imagenes_inventario/{correlativo}/imagenes/{filename}"
 
-class Inventario(models.Model):
+class Inventario(ImageReduceMixin, models.Model):
+    
+    IMAGE_FIELDS = ("imagen_inventario",)
+    
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     categoria = models.CharField(max_length=100)
     cantidad = models.PositiveIntegerField()
@@ -21,6 +26,7 @@ class Inventario(models.Model):
     imagen_inventario = models.ImageField(upload_to=ruta_imagen_inventario, null=True, blank=True)
     
     def save(self, *args, **kwargs):
+        self.reducir_imagenes()
         es_nuevo = self.pk is None
 
         # 1️⃣ Guardar primero

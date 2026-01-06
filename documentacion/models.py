@@ -1,6 +1,6 @@
 from django.db import models
-from PIL import Image
-from io import BytesIO
+from core.utils.imagenes import ImageReduceMixin
+
 
 class Documentacion(models.Model):
     titulo = models.CharField(max_length=255)
@@ -44,7 +44,10 @@ class Documentacion(models.Model):
     def __str__(self):
         return f"{self.codigo_documento} - {self.titulo}"
 
-class PasoProcedimiento(models.Model):
+class PasoProcedimiento(ImageReduceMixin, models.Model):
+    
+    IMAGE_FIELDS = ("imagen",)
+    
     documentacion = models.ForeignKey(
         Documentacion,
         related_name='pasos',
@@ -72,29 +75,9 @@ class PasoProcedimiento(models.Model):
         return f"Paso {self.orden}"
     
     def save(self, *args, **kwargs):
+        self.reducir_imagenes()
         super().save(*args, **kwargs)  # Guardar primero para tener path
-        self._reducir_imagen(self.imagen)
-
-    def _reducir_imagen(self, imagen_field, max_kb=300):
-        if imagen_field and hasattr(imagen_field, 'path'):
-            try:
-                img = Image.open(imagen_field.path)
-                img_format = img.format or 'JPEG'
-                quality = 85
-                buffer = BytesIO()
-                while True:
-                    buffer.seek(0)
-                    buffer.truncate()
-                    img.save(buffer, format=img_format, optimize=True, quality=quality)
-                    size_kb = buffer.tell() / 1024
-                    if size_kb <= max_kb or quality <= 30:
-                        break
-                    quality -= 5
-                with open(imagen_field.path, 'wb') as f:
-                    f.write(buffer.getvalue())
-            except Exception as e:
-                print(f"⚠️ Error reduciendo {imagen_field.name}: {e}")
-
+        
 class ActividadFinal(models.Model):
     documentacion = models.ForeignKey(
         Documentacion,
