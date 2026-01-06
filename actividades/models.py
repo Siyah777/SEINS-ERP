@@ -176,60 +176,60 @@ class Ordendetrabajo(models.Model):
         'imagen_despues_2',
     )
         
-def save(self, *args, **kwargs):
-    # 🔹 Sincronizar datos SIEMPRE
-    self.cliente = self.cotizacion.cliente
-    self.descripcion = self.cotizacion.Descripcion or ""
+    def save(self, *args, **kwargs):
+        # 🔹 Sincronizar datos SIEMPRE
+        self.cliente = self.cotizacion.cliente
+        self.descripcion = self.cotizacion.Descripcion or ""
 
-    es_nuevo = self.pk is None
+        es_nuevo = self.pk is None
 
-    # 🔹 Estado previo (por si luego lo necesitas)
-    estado_anterior = None
-    if not es_nuevo:
-        estado_anterior = (
-            Ordendetrabajo.objects
-            .filter(pk=self.pk)
-            .values_list('estatus', flat=True)
-            .first()
-        )
+        # 🔹 Estado previo (por si luego lo necesitas)
+        estado_anterior = None
+        if not es_nuevo:
+            estado_anterior = (
+                Ordendetrabajo.objects
+                .filter(pk=self.pk)
+                .values_list('estatus', flat=True)
+                .first()
+            )
 
-    # 🔹 Correlativo SOLO al crear
-    if es_nuevo and not self.correlativo:
+        # 🔹 Correlativo SOLO al crear
+        if es_nuevo and not self.correlativo:
 
-        anio = now().year % 100
-        prefijo = f"OT-{anio}-"
+            anio = now().year % 100
+            prefijo = f"OT-{anio}-"
 
-        ultimo = Ordendetrabajo.objects.filter(
-            correlativo__startswith=prefijo
-        ).order_by('-correlativo').first()
+            ultimo = Ordendetrabajo.objects.filter(
+                correlativo__startswith=prefijo
+            ).order_by('-correlativo').first()
 
-        numero = 1
-        if ultimo:
-            try:
-                numero = int(ultimo.correlativo.split('-')[-1]) + 1
-            except (ValueError, IndexError):
-                pass
+            numero = 1
+            if ultimo:
+                try:
+                    numero = int(ultimo.correlativo.split('-')[-1]) + 1
+                except (ValueError, IndexError):
+                    pass
 
-        self.correlativo = f"{prefijo}{numero:06d}"
+            self.correlativo = f"{prefijo}{numero:06d}"
 
-    # 🔹 Evitar None en plantillas
-    if self.nombre_recibe is None:
-        self.nombre_recibe = ""
-        
-    # 🔒 REDUCIR IMÁGENES ANTES DE GUARDAR
-    for campo in self.IMAGENES_OT:
-        imagen = getattr(self, campo)
-        reducir_imagen_upload(imagen, max_kb=300)
+        # 🔹 Evitar None en plantillas
+        if self.nombre_recibe is None:
+            self.nombre_recibe = ""
+            
+        # 🔒 REDUCIR IMÁGENES ANTES DE GUARDAR
+        for campo in self.IMAGENES_OT:
+            imagen = getattr(self, campo)
+            reducir_imagen_upload(imagen, max_kb=300)
 
-    # 🔹 Guardar
-    super().save(*args, **kwargs)
+        # 🔹 Guardar
+        super().save(*args, **kwargs)
 
-    # 🔹 Sincronizar equipos (M2M solo después del save)
-    self.equipo.set(self.cotizacion.equipo.all())
+        # 🔹 Sincronizar equipos (M2M solo después del save)
+        self.equipo.set(self.cotizacion.equipo.all())
 
-    # 🔹 Procesar firmas SOLO si existen
-    if self.firma_cliente:
-        self._procesar_firmas()
+        # 🔹 Procesar firmas SOLO si existen
+        if self.firma_cliente:
+            self._procesar_firmas()
 
 
     # -----------------------------
