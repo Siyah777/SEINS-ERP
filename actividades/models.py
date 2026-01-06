@@ -177,6 +177,9 @@ class Ordendetrabajo(models.Model):
     )
         
 def save(self, *args, **kwargs):
+    # 🔹 Sincronizar datos SIEMPRE
+    self.cliente = self.cotizacion.cliente
+    self.descripcion = self.cotizacion.Descripcion or ""
 
     es_nuevo = self.pk is None
 
@@ -189,10 +192,6 @@ def save(self, *args, **kwargs):
             .values_list('estatus', flat=True)
             .first()
         )
-
-    # 🔹 Sincronizar datos SIEMPRE
-    self.cliente = self.cotizacion.cliente
-    self.descripcion = self.cotizacion.Descripcion or ""
 
     # 🔹 Correlativo SOLO al crear
     if es_nuevo and not self.correlativo:
