@@ -34,6 +34,9 @@ class Equipo(ImageReduceMixin, models.Model):
     def save(self, *args, **kwargs):
         self.reducir_imagenes()
         super().save(*args, **kwargs)
+    
+    def __str__(self):
+        return f"{self.codigo_interno} - {self.nombre}"
 
     
 class Herramienta(ImageReduceMixin, models.Model):
