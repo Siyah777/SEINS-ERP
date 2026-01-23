@@ -23,11 +23,11 @@ class Equipo(ImageReduceMixin, models.Model):
     modelo = models.CharField(max_length=100, default='Modelo Generico')
     serie = models.CharField(max_length=100, default='Serie Generica')
     codigo_interno = models.CharField(max_length=100, default='Codigo Interno segun SG')
-    ubicacion = models.CharField(max_length=1000, default='Ubicación del equipo en la empresa')
+    ubicacion = models.TextField(max_length=1000, default='Ubicación del equipo en la empresa')
     estatus = models.CharField(max_length=50, default='funcionando')
     categoria = models.CharField(max_length=100, null=False, default='General')
     componentes = models.PositiveIntegerField(default=1)
-    especificaciones = models.CharField(max_length=1000, default='especificaciones técnicas del equipo')
+    especificaciones = models.TextField(max_length=1000, default='especificaciones técnicas del equipo')
     notas = models.TextField(blank=True)
     imagen_equipo = models.ImageField(upload_to=ruta_imagen_equipo, null=True, blank=True)
     
@@ -59,7 +59,7 @@ class Herramienta(ImageReduceMixin, models.Model):
     marca = models.CharField(max_length=100, blank=True)
     estado = models.CharField(max_length=20, choices=ESTADOS, default='en_uso')
     componentes = models.PositiveIntegerField(default=1)
-    especificaciones = models.CharField(max_length=1000, default='especificaciones técnicas de la herramienta')
+    especificaciones = models.TextField(max_length=1000, default='especificaciones técnicas de la herramienta')
     notas = models.TextField(blank=True)
     imagen_herramienta = models.ImageField(upload_to=ruta_imagen_herramienta, null=True, blank=True)
     

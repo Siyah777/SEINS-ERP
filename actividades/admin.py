@@ -108,6 +108,7 @@ class TrabajoAdmin(admin.ModelAdmin):
     'horarios_actividad',
     'cliente',
     'prioridad',
+    'cotizacion',
     )
     search_fields = ('correlativo',) 
     filter_horizontal = ('personal_asignado',)  # Para seleccionar múltiples usuarios con un widget más cómodo
