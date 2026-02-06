@@ -1,59 +1,130 @@
 # SEINS-ERP
 
-**SEINS-ERP** es un sistema ERP de código abierto diseñado para empresas de ingeniería, mantenimiento y logística.  
-Está construido en **Django**, **PostgreSQL** y **Docker**, con un enfoque modular y escalable.
+**SEINS-ERP** es un sistema **ERP de código abierto** diseñado para **empresas de ingeniería, mantenimiento industrial y logística**, especialmente aquellas que requieren control técnico, trazabilidad operativa y escalabilidad.
+
+El proyecto nace de la experiencia real en **mantenimiento, metrología y operación de sistemas críticos**, y busca cerrar la brecha entre la gestión administrativa y la realidad técnica del campo.
+
+Está construido con **Django**, **PostgreSQL** y **Docker**, bajo una arquitectura **modular, extensible y orientada a producción**.
 
 ---
 
-## 🚀 Características
+## 🎯 Objetivo del proyecto
 
-- 📦 **Inventarios**: gestión de repuestos y existencias.
-- 🧾 **Ventas y Facturación**: integración con facturación electrónica (DTE).
-- 🛠 **Proyectos y Mantenimiento**: órdenes de trabajo, seguimiento y reportes.
-- 🧩 **Modularidad**: fácil de extender y personalizar.
-- 🔐 **Seguridad**: manejo de usuarios y permisos basado en roles.
+Proveer una plataforma ERP que permita a empresas técnicas:
+
+* Gestionar **inventarios, ventas y facturación** de forma integrada.
+* Administrar **mantenimiento, proyectos y órdenes de trabajo**.
+* Centralizar información técnica para **mejorar la toma de decisiones**.
+* Servir como base para **digitalización de procesos de ingeniería**.
+
+SEINS-ERP no es un proyecto académico; es un sistema pensado para **uso real**, con despliegues en entornos productivos.
 
 ---
 
-## 📦 Instalación Rápida (Docker)
+## 🚀 Características principales
+
+* 📦 **Inventarios**
+  Gestión de repuestos, existencias y control de stock.
+
+* 🧾 **Ventas y Facturación**
+  Generación de documentos comerciales e integración con **facturación electrónica (DTE – El Salvador)**.
+
+* 🛠 **Mantenimiento y Proyectos**
+  Órdenes de trabajo, seguimiento de actividades, historial y reportes técnicos.
+
+* 🧩 **Arquitectura modular**
+  Cada módulo puede evolucionar de forma independiente.
+
+* 🔐 **Seguridad y roles**
+  Gestión de usuarios y permisos basada en roles.
+
+* ☁️ **Listo para producción**
+  Desplegado en entornos reales usando contenedores Docker.
+
+---
+
+## 🏗️ Arquitectura (visión general)
+
+SEINS-ERP utiliza una arquitectura clásica y robusta:
+
+* **Backend**: Django + Django REST Framework
+* **Base de datos**: PostgreSQL
+* **Infraestructura**: Docker / Docker Compose
+* **Servidor web**: Apache + WSGI (Waitress)
+* **Frontend**:
+
+  * Django Admin para administradores internos
+  * React (en desarrollo) para clientes y proveedores
+
+Esta arquitectura permite escalar el sistema y adaptarlo a distintos contextos empresariales.
+
+---
+
+## 📦 Instalación rápida (Docker)
+
+> Recomendado para entornos de prueba y producción controlada.
 
 ```bash
 git clone https://github.com/Siyah777/seins-erp.git
-renombrar carpeta a SEINSERP
+mv seins-erp SEINSERP
 cd SEINSERP
-docker compose -f docker-compose.prod.yml up -d --build"
-🛠 Tecnologías Usadas
+docker compose -f docker-compose.prod.yml up -d --build
+```
 
-Backend: Django 5.x, Django Rest Framework
+Asegúrate de configurar correctamente las **variables de entorno** antes del despliegue.
 
-Base de Datos: PostgreSQL 15
+---
 
-Servidor: Apache + Docker Compose
+## 🧪 Estado del proyecto
 
-Frontend: React (para interfaz personalizada de clientes/proveedores)
+SEINS-ERP se encuentra en **desarrollo activo**, con módulos funcionales y otros en evolución.
 
-📚 Documentación
+✔ Inventarios
+✔ Ventas y facturación básica
+✔ Mantenimiento / OT
+🚧 Indicadores, analítica y automatizaciones avanzadas
 
-Wiki del proyecto
+---
 
-Guía de instalación paso a paso
+## 🌐 Proyectos en producción
 
-🧑‍💻 Contribuir
+* Sitio corporativo: [https://seinsv.com](https://seinsv.com)
+* Plataforma activa: [https://seinsv.online](https://seinsv.online)
 
-¡Contribuciones son bienvenidas!
-Por favor, revisa la Guía de Contribución
- y el Código de Conducta
- antes de enviar un PR.
+Estos entornos demuestran el uso real del sistema en producción.
 
-📄 Licencia
+---
 
-Este proyecto está licenciado bajo la MIT License - consulta el archivo LICENSE
- para más detalles.
+## 🧑‍💻 Contribuciones
 
-📞 Contacto
+Las contribuciones son bienvenidas.
 
-Sitio web: https://seinsv.com
+Antes de enviar un PR:
 
-Autor: Sergio Erazo (Siyah777)
+* Revisa la **Guía de Contribución** (próximamente).
+* Respeta el **Código de Conducta** del proyecto.
+* Documenta los cambios realizados.
 
-Correo: administracion@seinsv.com
+---
+
+## 📄 Licencia
+
+Este proyecto está licenciado bajo la **MIT License**.
+Consulta el archivo `LICENSE` para más detalles.
+
+---
+
+## 👤 Autor y contacto
+
+**Sergio Erazo**
+Ingeniero Mecánico | Software & Cloud Engineering
+
+* GitHub: [https://github.com/Siyah777](https://github.com/Siyah777)
+* Proyecto: [https://github.com/Siyah777/SEINS-ERP](https://github.com/Siyah777/SEINS-ERP)
+* Sitio web: [https://seinsv.com](https://seinsv.com)
+
+---
+
+> SEINS-ERP representa la convergencia entre ingeniería, operación y tecnología.
+> Construido desde la experiencia real, no desde la teoría.
+
