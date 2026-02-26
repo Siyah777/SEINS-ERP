@@ -125,6 +125,15 @@ Ingeniero Mecánico | Software & Cloud Engineering
 
 ---
 
+## 👥 Colaboradores
+
+SEINS-ERP es un proyecto abierto que crece gracias al trabajo colaborativo.
+
+Christian Eduardo Jiménez Escobar
+Colaborador destacado, Inversionista
+
+Email: cristianeescobar03@gmail.com
+
 > SEINS-ERP representa la convergencia entre ingeniería, operación y tecnología.
 > Construido desde la experiencia real, no desde la teoría.
 
