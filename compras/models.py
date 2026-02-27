@@ -1,6 +1,7 @@
 from django.db import models
 from decimal import Decimal, ROUND_HALF_UP
 from proveedores.models import Proveedor
+from core.fields import RichTextSimpleField
 from productos.models import Producto
 from servicios.models import Servicio
 import logging
@@ -11,7 +12,7 @@ class Compra(models.Model):
     proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
     factura_compra = models.CharField(max_length=50, blank=True, null=True)
     correlativo = models.CharField(max_length=20, unique=True, blank=True, null=True)
-    descripcion_general = models.TextField()
+    descripcion_general = RichTextSimpleField()
     costo_total = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'))
     costo_total_iva = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'))
     fecha_compra = models.DateField()
@@ -72,7 +73,7 @@ class DetalleProductos(models.Model):
     compra = models.ForeignKey(Compra, related_name="detalles_productos", on_delete=models.CASCADE)
     producto = models.ForeignKey(Producto, null=True, blank=True, on_delete=models.SET_NULL)
     cantidad = models.PositiveIntegerField(default=1)
-    descripcion_producto = models.TextField(blank=True)
+    descripcion_producto = RichTextSimpleField(blank=True)
     cliente = models.ManyToManyField('clientes.Cliente', blank=True)  # Cliente al que se le realiza la compra
     equipo = models.ManyToManyField('equipos.Equipo', blank=True)
     precio_unitario = models.DecimalField(max_digits=10, decimal_places=2, editable=False)
@@ -86,13 +87,12 @@ class DetalleProductos(models.Model):
     def save(self, *args, **kwargs):
         if self.producto:
             self.precio_unitario = self.producto.precio_unitario
-            self.subtotal = (
-                Decimal(self.cantidad) * self.precio_unitario
-            ).quantize(Decimal('0.01'))
+            self.subtotal = (Decimal(self.cantidad) * self.precio_unitario).quantize(Decimal('0.01'))
+        else:
+            self.precio_unitario = Decimal('0.00')
+            self.subtotal = Decimal('0.00')
 
         super().save(*args, **kwargs)
-
-        # 🔥 recalcula la compra
         self.compra.calcular_total()
         
     def __str__(self):
@@ -102,7 +102,7 @@ class DetalleServicios(models.Model):
     compra = models.ForeignKey(Compra, related_name="detalles_servicios", on_delete=models.CASCADE)
     servicio = models.ForeignKey(Servicio, null=True, blank=True, on_delete=models.SET_NULL)
     cantidad = models.PositiveIntegerField(default=1)
-    descripcion_servicio = models.TextField(blank=True)
+    descripcion_servicio =RichTextSimpleField(blank=True)
     cliente = models.ManyToManyField('clientes.Cliente', blank=True)  # Cliente al que se le realiza la compra
     equipo = models.ManyToManyField('equipos.Equipo', blank=True)
     unidades_cantidad = models.CharField(max_length=50, default='Unidad')  # Unidades de la cantidad
@@ -116,13 +116,12 @@ class DetalleServicios(models.Model):
     def save(self, *args, **kwargs):
         if self.servicio:
             self.precio_unitario = self.servicio.precio_unitario
-            self.subtotal = (
-                Decimal(self.cantidad) * self.precio_unitario
-            ).quantize(Decimal('0.01'))
+            self.subtotal = (Decimal(self.cantidad) * self.precio_unitario).quantize(Decimal('0.01'))
+        else:
+            self.precio_unitario = Decimal('0.00')
+            self.subtotal = Decimal('0.00')
 
         super().save(*args, **kwargs)
-
-        # 🔥 recalcula la compra
         self.compra.calcular_total()
 
     def __str__(self):

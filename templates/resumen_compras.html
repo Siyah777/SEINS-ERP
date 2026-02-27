@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Resumen de Compras seleccionadas</title>
+<style>
+body { font-family: Arial, sans-serif; font-size: 11px; margin:0; padding:0; }
+h1, h2 { margin:0; padding:4px; }
+h2 { background-color:#000; color:#fff; padding:6px; }
+
+.logo { max-height: 50px; margin-bottom:10px; }
+
+table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+th, td { 
+    border: 1px solid #000; 
+    padding: 4px; 
+    vertical-align: top;
+}
+th { background-color: #eee; text-align: left; }
+
+th.cantidad, td.cantidad { width: 10%; text-align: right; }
+th.precio, td.precio { width: 10%; text-align: right; }
+th.subtotal, td.subtotal { width: 10%; text-align: right; }
+th.nombre, td.nombre { width: 20%; }
+th.descripcion, td.descripcion { width: 30%; }
+th.clientes, td.clientes { width: 15%; }
+th.equipos, td.equipos { width: 15%; }
+
+/* Evitar que filas se dividan en páginas */
+tr { page-break-inside: avoid; }
+
+p { margin: 0; word-wrap: break-word; }
+</style>
+</head>
+<body>
+
+<div class="header-container">
+    {% if logo_base64 %}
+        <img src="data:image/png;base64,{{ logo_base64 }}" class="logo" />
+    {% endif %}
+    <h1>Resumen de Compras Seleccionadas</h1>
+</div>
+
+{% for item in resumen_compras %}
+<h2>Compra: {{ item.compra.correlativo }} - {{ item.compra.proveedor.nombre_empresa }}</h2>
+<p>Factura ID: {{ item.compra.factura_compra|default:"-" }} | Fecha: {{ item.compra.fecha_compra }}</p>
+
+{% if item.items %}
+
+<!-- TABLA PRODUCTOS -->
+<table>
+<tr>
+    <th class="nombre">Producto</th>
+    <th class="descripcion">Descripción</th>
+    <th class="clientes">Cliente(s)</th>
+    <th class="cantidad">Cant.</th>
+    <th class="equipos">Equipo(s)</th>
+    <th class="precio">Precio Unitario (IVA)</th>
+    <th class="subtotal">Subtotal (IVA)</th>
+</tr>
+{% for i in item.items %}
+{% if i.tipo == "Producto" %}
+<tr>
+    <td class="nombre"><p>{{ i.nombre }}</p></td>
+    <td class="descripcion"><p>{{ i.descripcion|safe }}</p></td>
+    <td class="clientes"><p>{% if i.clientes %}{{ i.clientes|join:", " }}{% else %}-{% endif %}</p></td>
+    <td class="cantidad"><p>{{ i.cantidad }}</p></td>
+    <td class="equipos"><p>{% if i.equipos %}{{ i.equipos|join:", " }}{% else %}-{% endif %}</p></td>
+    <td class="precio"><p>{{ i.precio_unitario }}</p></td>
+    <td class="subtotal"><p>{{ i.subtotal }}</p></td>
+</tr>
+{% endif %}
+{% endfor %}
+</table>
+
+<!-- TABLA SERVICIOS -->
+<table>
+<tr>
+    <th class="nombre">Servicio</th>
+    <th class="descripcion">Descripción</th>
+    <th class="clientes">Cliente(s)</th>
+    <th class="cantidad">Cant.</th>
+    <th class="equipos">Equipo(s)</th>
+    <th class="precio">Precio Unitario (IVA)</th>
+    <th class="subtotal">Subtotal (IVA)</th>
+</tr>
+{% for i in item.items %}
+{% if i.tipo == "Servicio" %}
+<tr>
+    <td class="nombre"><p>{{ i.nombre }}</p></td>
+    <td class="descripcion"><p>{{ i.descripcion|safe }}</p></td>
+    <td class="clientes"><p>{% if i.clientes %}{{ i.clientes|join:", " }}{% else %}-{% endif %}</p></td>
+    <td class="cantidad"><p>{{ i.cantidad }}</p></td>
+    <td class="equipos"><p>{% if i.equipos %}{{ i.equipos|join:", " }}{% else %}-{% endif %}</p></td>
+    <td class="precio"><p>{{ i.precio_unitario }}</p></td>
+    <td class="subtotal"><p>{{ i.subtotal }}</p></td>
+</tr>
+{% endif %}
+{% endfor %}
+</table>
+
+{% endif %}
+
+<p><strong>Total Compra (IVA incluido):</strong> {{ item.total_compra_iva }}</p>
+<hr>
+{% endfor %}
+
+<h2>Total General: {{ total_general_iva }}</h2>
+
+</body>
+</html>

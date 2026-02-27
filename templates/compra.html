@@ -37,7 +37,6 @@ th {
 
 <body>
 
-<!-- ================= HEADER ================= -->
 <table class="no-border">
 <tr>
     <td width="70%">
@@ -52,7 +51,6 @@ th {
 
 <hr>
 
-<!-- ================= INFO GENERAL ================= -->
 <table class="no-border">
 <tr>
     <td><strong>Proveedor:</strong></td>
@@ -68,13 +66,14 @@ th {
 </tr>
 <tr>
     <td><strong>Descripción General:</strong></td>
-    <td colspan="3">{{ compra.descripcion_general|default:"—" }}</td>
+    <td colspan="3">
+        {{ compra.descripcion_general|default:"—"|safe }}
+    </td>
 </tr>
 </table>
 
 <br>
 
-<!-- ================= PRODUCTOS ================= -->
 {% if compra.detalles_productos.all %}
 <strong>PRODUCTOS</strong>
 <table>
@@ -92,7 +91,7 @@ th {
 {% for item in compra.detalles_productos.all %}
 <tr>
     <td>{{ item.producto.nombre|default:"—" }}</td>
-    <td>{{ item.descripcion_producto|default:"—" }}</td>
+    <td>{{ item.descripcion_producto|default:"—"|safe }}</td>
     <td>
         {% for c in item.cliente.all %}
             {{ c.nombre_empresa }}<br>
@@ -118,7 +117,6 @@ th {
 
 <br>
 
-<!-- ================= SERVICIOS ================= -->
 {% if compra.detalles_servicios.all %}
 <strong>SERVICIOS</strong>
 <table>
@@ -136,7 +134,7 @@ th {
 {% for item in compra.detalles_servicios.all %}
 <tr>
     <td>{{ item.servicio.nombre|default:"—" }}</td>
-    <td>{{ item.descripcion_servicio|default:"—" }}</td>
+    <td>{{ item.descripcion_servicio|default:"—"|safe }}</td>
     <td>
         {% for c in item.cliente.all %}
             {{ c.nombre_empresa }}<br>
@@ -162,7 +160,6 @@ th {
 
 <br>
 
-<!-- ================= TOTALES ================= -->
 <table width="40%" align="right">
 <tr>
     <td><strong>Subtotal</strong></td>
@@ -180,5 +177,4 @@ th {
 
 </body>
 </html>
-
 

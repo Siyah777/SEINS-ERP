@@ -4,10 +4,11 @@ from documentacion.models import Documentacion
 from proveedores.models import Proveedor
 from cotizaciones.models import Cotizacion
 from datetime import datetime, timedelta
+from core.fields import RichTextSimpleField
 
 class PlanMantenimiento(models.Model):
     codigo_plan = models.CharField(max_length=100, unique=True, default='PM-001')
-    descripcion = models.TextField(default="Plan de mantenimiento personalizado")
+    descripcion = RichTextSimpleField(default="Plan de mantenimiento personalizado")
     fecha_creacion = models.DateField(auto_now_add=True)
     fecha_modificacion = models.DateField(auto_now=True)
     
@@ -28,7 +29,6 @@ class DetallePlanMantenimiento(models.Model):
         ("trimestral", "Trimestral"),
         ("semestral", "Semestral"),
         ("anual", "Anual"),
-        ("personalizado", "Personalizado"),
     ]
     
     HORARIOS = [
@@ -39,8 +39,7 @@ class DetallePlanMantenimiento(models.Model):
     ]
     
     plan = models.ForeignKey(PlanMantenimiento, on_delete=models.CASCADE, related_name='detalles')
-    cotizacion = models.ForeignKey(Cotizacion, on_delete=models.CASCADE, related_name='cotizacion', null=True,
-    blank=False)
+    cotizacion = models.ForeignKey(Cotizacion, on_delete=models.CASCADE, related_name='cotizacion', null=True, blank=False)
     motivo_actividad = models.CharField(max_length=500, blank=True)
     frecuencia = models.CharField(
     max_length=20,
@@ -61,7 +60,7 @@ class DetallePlanMantenimiento(models.Model):
     tiempo_realizacion_estimado = models.DurationField(blank=True, null=True)
     hora_realizacion_estimada = models.TimeField(null=True, blank=True)
     proxima_fecha = models.DateTimeField(null=True, blank=True)
-    notas = models.TextField(blank=True)
+    notas = RichTextSimpleField(blank=True)
     creado_en = models.DateTimeField(auto_now_add=True)
     
     
@@ -87,8 +86,6 @@ class DetallePlanMantenimiento(models.Model):
                 self.proxima_fecha = base + timedelta(days=180)
             elif self.frecuencia == "anual":
                 self.proxima_fecha = base + timedelta(days=365)
-            elif self.frecuencia == "personalizado":
-                self.proxima_fecha = base + timedelta(days=self.dias_personalizados)
 
         super().save(*args, **kwargs)
         

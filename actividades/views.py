@@ -38,9 +38,18 @@ def generar_pdf_orden_trabajo(request, orden_id):
     template = get_template('orden_trabajo_pdf.html')
     
     # 🔹 Obtener técnico principal (el primero asignado)
-    tecnico = orden.personal_asignado.first()
+    tecnico = orden.personal_asignado.order_by('id').first()  # forzamos orden estable
     firma_tecnico_base64 = None
-    nombre_tecnico = "No asignado"
+    nombre_tecnico = None
+
+    if tecnico:
+        nombre_tecnico = tecnico.get_full_name() or tecnico.username
+        try:
+            empleado = Empleado.objects.get(usuario=tecnico)
+            if empleado.firma_tecnico_img:
+                firma_tecnico_base64 = image_to_base64(empleado.firma_tecnico_img)
+        except Empleado.DoesNotExist:
+            pass
     
     if tecnico:
         nombre_tecnico = tecnico.get_full_name() or tecnico.username
@@ -69,6 +78,7 @@ def generar_pdf_orden_trabajo(request, orden_id):
         'imagen_despues_2': image_to_base64(orden.imagen_despues_2),
         'firma_cliente': image_to_base64(orden.firma_cliente_img),
         'firma_tecnico': firma_tecnico_base64,
+        'nombre_tecnico': nombre_tecnico,
         
     }
 

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Resumen Plan {{ plan.codigo_plan }}</title>
+<style>
+@page {
+    size: Letter landscape;
+    margin: 20px;
+}
+
+body { font-family: Arial, sans-serif; font-size: 11px; margin:0; padding:0; }
+h1, h2, h3 { margin:0; padding:4px; }
+h2 { background-color:#000; color:#fff; padding:6px; }
+.logo { max-height: 50px; margin-bottom:10px; }
+
+table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+th, td { border: 1px solid #000; padding: 4px; vertical-align: top; }
+th { background-color: #eee; text-align: left; }
+td { word-wrap: break-word; }
+tr:nth-child(even) td { background-color: #f9f9f9; }
+
+/* Columnas */
+th.detalle, td.detalle { width: 25%; }
+th.frecuencia, td.frecuencia { width: 10%; }
+th.cliente, td.cliente { width: 15%; }
+th.horario, td.horario { width: 10%; }
+th.especialista, td.especialista { width: 10%; }
+th.proveedores, td.proveedores { width: 15%; }
+th.herramientas, td.herramientas { width: 15%; }
+th.personas, td.personas { width: 10%; }
+th.tiempo, td.tiempo { width: 15%; }
+
+tr { page-break-inside: avoid; }
+p { margin:0; }
+</style>
+</head>
+<body>
+
+<div class="header-container">
+    {% if logo_base64 %}
+        <img src="data:image/png;base64,{{ logo_base64 }}" class="logo" />
+    {% endif %}
+    <h1>Resumen Plan de Mantenimiento: {{ plan.codigo_plan }}</h1>
+</div>
+
+<p>Descripción: {{ plan.descripcion|safe }}</p>
+<p>Fecha Creación: {{ plan.fecha_creacion }} | Fecha Modificación: {{ plan.fecha_modificacion }}</p>
+
+{% if plan.detalles.all %}
+<table>
+<tr>
+    <th class="detalle">Motivo / Actividad</th>
+    <th class="frecuencia">Frecuencia</th>
+    <th class="cliente">Cliente</th>
+    <th class="horario">Horario</th>
+    <th class="especialista">Especialista</th>
+    <th class="proveedores">Proveedores</th>
+    <th class="herramientas">Herramientas</th>
+    <th class="personas">Cant. Personas</th>
+    <th class="tiempo">Hora Estimada</th>
+</tr>
+
+{% for d in plan.detalles.all %}
+<tr>
+    <td class="detalle">{{ d.motivo_actividad }}</td>
+    <td class="frecuencia">{{ d.get_frecuencia_display }}</td>
+    <td class="cliente">{% if d.cotizacion and d.cotizacion.cliente %}{{ d.cotizacion.cliente.nombre_empresa }}{% else %}-{% endif %}</td>
+    <td class="horario">{{ d.get_horarios_actividad_display }}</td>
+    <td class="especialista">{{ d.especialista }}</td>
+    <td class="proveedores">{% if d.proveedores.all %}{{ d.proveedores.all|join:", " }}{% else %}-{% endif %}</td>
+    <td class="herramientas">{% if d.herramientas.all %}{{ d.herramientas.all|join:", " }}{% else %}-{% endif %}</td>
+    <td class="personas">{{ d.cantidad_personas }}</td>
+    <td class="tiempo">{% if d.tiempo_realizacion_estimado %}{{ d.tiempo_realizacion_estimado }}{% else %}-{% endif %}</td>
+</tr>
+{% endfor %}
+</table>
+{% else %}
+<p>No hay detalles para este plan.</p>
+{% endif %}
+
+</body>
+</html>

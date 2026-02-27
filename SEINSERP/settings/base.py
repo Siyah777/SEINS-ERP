@@ -75,6 +75,7 @@ INSTALLED_APPS = [
     'innovacion',
     'analisis_retroalimentacion',
     'contabilidad',
+    'ckeditor',
 ]
 
 MIDDLEWARE = [
@@ -317,4 +318,16 @@ JAZZMIN_UI_TWEAKS = {
     "body_bg": "bg-dark",  # Esto puede cambiar el fondo general
 }
 
-
+CKEDITOR_CONFIGS = {
+    "basic": {
+        "toolbar": [
+            ["Bold", "Italic", "Underline"],
+            ["NumberedList", "BulletedList"],
+            ["Table"],
+            ["Link"],
+            ["RemoveFormat"],
+        ],
+        "format_tags": "p;h2;h3;h4",
+        "removePlugins": "stylesheetparser,image,uploadimage,flash",
+    },
+}

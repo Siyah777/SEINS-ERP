@@ -4,6 +4,7 @@ from proveedores.models import Proveedor
 from PIL import Image
 from io import BytesIO
 from core.utils.imagenes import ImageReduceMixin
+from core.fields import RichTextSimpleField
 
 
 def ruta_imagen_inventario(instance, filename):
@@ -15,13 +16,13 @@ class Inventario(ImageReduceMixin, models.Model):
     IMAGE_FIELDS = ("imagen_inventario",)
     
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
-    categoria = models.CharField(max_length=100)
+    categoria = RichTextSimpleField(max_length=100)
     cantidad = models.PositiveIntegerField()
     proveedor = models.ForeignKey(Proveedor, on_delete=models.SET_NULL, null=True, blank=True)
-    ubicacion = models.TextField(max_length=1000, default='Bodega Principal')
+    ubicacion = RichTextSimpleField(max_length=1000, default='Bodega Principal')
     fecha_ingreso = models.DateField()
     fecha_salida = models.DateField(null=True, blank=True)
-    consideraciones = models.TextField(blank=True, null=True)
+    consideraciones =RichTextSimpleField(blank=True, null=True)
     stock_minimo = models.PositiveIntegerField(default=0)
     imagen_inventario = models.ImageField(upload_to=ruta_imagen_inventario, null=True, blank=True)
     

@@ -279,14 +279,19 @@
     <tr>
         <td style="text-align: center; border: none;">
             <p>Responsable</p>
-            {% with orden.personal_asignado.all|first as responsable %}
-                {% if responsable %}
-                    <img src="data:image/png;base64,{{ firma_tecnico }}" alt="Firma Responsable" style="width:150px;"/>
-                    <p>{{ responsable.get_full_name }}</p>
-                {% else %}
-                    <p>No asignado</p>
+
+            {% if nombre_tecnico %}
+                
+                {% if firma_tecnico %}
+                    <img src="data:image/png;base64,{{ firma_tecnico }}"
+                        style="width:150px;" />
                 {% endif %}
-            {% endwith %}
+
+                <p>{{ nombre_tecnico }}</p>
+
+            {% else %}
+                <p>No asignado</p>
+            {% endif %}
         </td>
         <td style="text-align: center; border: none;">
             <p>Cliente</p>

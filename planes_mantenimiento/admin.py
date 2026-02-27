@@ -2,6 +2,8 @@ from django.contrib import admin
 from .models import PlanMantenimiento, DetallePlanMantenimiento
 from django.utils.html import format_html
 from django.urls import reverse
+from django.urls import path
+from . import views
 
 class DetallePlanMantenimientoInline(admin.StackedInline):
     model = DetallePlanMantenimiento
@@ -21,7 +23,7 @@ def generar_ots(modeladmin, request, queryset):
 
 @admin.register(PlanMantenimiento)
 class PlanMantenimientoAdmin(admin.ModelAdmin):
-    list_display = ( 'codigo_plan', 'descripcion', 'fecha_modificacion', "btn_generar_ots",)
+    list_display = ( 'codigo_plan', 'descripcion', 'fecha_modificacion','ver_pdf_link', "btn_generar_ots",)
     search_fields = ('equipo__nombre', 'codigo_plan')
     actions = [generar_ots]
     readonly_fields = ('fecha_creacion', 'fecha_modificacion')
@@ -34,6 +36,21 @@ class PlanMantenimientoAdmin(admin.ModelAdmin):
         )
     btn_generar_ots.short_description = "Generar OTs"
     btn_generar_ots.allow_tags = True
+    
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path(
+                'resumen_pdf/<int:plan_id>/',
+                self.admin_site.admin_view(views.resumen_plan_pdf),
+                name='resumen_planes_pdf'
+            ),
+        ]
+        return custom_urls + urls
+
+    def ver_pdf_link(self, obj):
+        url = reverse('admin:resumen_planes_pdf', args=[obj.id])
+        return format_html('<a class="button" href="{}" target="_blank">Ver plan en PDF</a>', url)
     
 @admin.register(DetallePlanMantenimiento)
 class DetallePlanMantenimientoAdmin(admin.ModelAdmin):

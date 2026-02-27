@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .views import resumen_plan_pdf
 
 app_name = 'planes_mantenimiento'  # IMPORTANTE para namespacing
 
@@ -15,4 +16,6 @@ urlpatterns = [
         views.detalle_plan_view,
         name='detalle_plan'
     ),
+    
+    path('resumen_pdf/<int:plan_id>/', resumen_plan_pdf, name='resumen_plan_pdf'),
 ]

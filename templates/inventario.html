@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Inventario - {{ inventario.producto.nombre }}</title>
+<title>Inventario - {{ inventario.producto.nombre|default:"—" }}</title>
 
 <style>
 body {
@@ -32,6 +32,7 @@ th {
 
 .text-right { text-align: right; }
 .text-center { text-align: center; }
+.stock-bajo { background-color: #ffe6e6; font-weight: bold; }
 </style>
 </head>
 
@@ -41,7 +42,9 @@ th {
 <table class="no-border">
 <tr>
     <td width="70%">
-        <img src="data:image/png;base64,{{ logo_base64 }}" height="60">
+        {% if logo_base64 %}
+            <img src="data:image/png;base64,{{ logo_base64 }}" height="60">
+        {% endif %}
     </td>
     <td width="30%" class="text-right">
         <strong>INVENTARIO</strong><br>
@@ -56,19 +59,25 @@ th {
 <table>
 <tr>
     <th width="25%">Producto</th>
-    <td width="75%">{{ inventario.producto.nombre }}</td>
+    <td width="75%">{{ inventario.producto.nombre|default:"—" }}</td>
 </tr>
 <tr>
     <th>Categoría</th>
-    <td>{{ inventario.categoria }}</td>
+    <td>{{ inventario.categoria|default:"—"|safe }}</td>
 </tr>
 <tr>
     <th>Proveedor</th>
-    <td>{{ inventario.proveedor.nombre_empresa|default:"—" }}</td>
+    <td>
+        {% if inventario.proveedor %}
+            {{ inventario.proveedor.nombre_empresa }}
+        {% else %}
+            —
+        {% endif %}
+    </td>
 </tr>
 <tr>
     <th>Ubicación</th>
-    <td>{{ inventario.ubicacion }}</td>
+    <td>{{ inventario.ubicacion|default:"—"|safe }}</td>
 </tr>
 </table>
 
@@ -77,7 +86,7 @@ th {
 <!-- IMAGEN DEL PRODUCTO -->
 <table>
 <tr>
-    <th width="30%">Imagen de la ubicacion del producto</th>
+    <th width="30%">Imagen de la ubicación del producto</th>
     <td width="70%" class="text-center">
         {% if inventario.imagen_inventario %}
             <img src="{{ inventario.imagen_inventario.path }}" width="170" height="170">
@@ -85,7 +94,6 @@ th {
             <br><br><br>
             <strong>Sin imagen de ubicación</strong>
         {% endif %}
-
     </td>
 </tr>
 </table>
@@ -96,17 +104,27 @@ th {
 <table>
 <tr>
     <th width="25%">Cantidad actual</th>
-    <td width="25%" class="text-center">{{ inventario.cantidad }}</td>
+    <td width="25%" class="text-center {% if inventario.cantidad <= inventario.stock_minimo %}stock-bajo{% endif %}">
+        {{ inventario.cantidad|default:"0" }}
+    </td>
 
     <th width="25%">Stock mínimo</th>
-    <td width="25%" class="text-center">{{ inventario.stock_minimo }}</td>
+    <td width="25%" class="text-center">
+        {{ inventario.stock_minimo|default:"0" }}
+    </td>
 </tr>
 <tr>
     <th>Fecha ingreso</th>
-    <td>{{ inventario.fecha_ingreso }}</td>
+    <td>{{ inventario.fecha_ingreso|date:"d/m/Y" }}</td>
 
     <th>Fecha salida</th>
-    <td>{{ inventario.fecha_salida|default:"—" }}</td>
+    <td>
+        {% if inventario.fecha_salida %}
+            {{ inventario.fecha_salida|date:"d/m/Y" }}
+        {% else %}
+            —
+        {% endif %}
+    </td>
 </tr>
 </table>
 
@@ -117,7 +135,7 @@ th {
 <tr>
     <th width="25%">Consideraciones</th>
     <td width="75%">
-        {{ inventario.consideraciones|default:"—" }}
+        {{ inventario.consideraciones|default:"—"|safe }}
     </td>
 </tr>
 </table>

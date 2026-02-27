@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Producto {{ producto.correlativo }}</title>
+<title>Producto {{ producto.correlativo|default:"—" }}</title>
 
 <style>
 body {
@@ -33,12 +33,12 @@ th {
     border: none;
 }
 
-.imagen-box {
-    width: 140px;
-    height: 140px;
-    border: 1px solid #000;
-    text-align: center;
-    vertical-align: middle;
+.estado-stock {
+    font-weight: bold;
+}
+
+.sin-stock {
+    background-color: #ffe6e6;
 }
 </style>
 </head>
@@ -49,7 +49,9 @@ th {
 <table class="no-border">
 <tr>
     <td width="70%">
+        {% if logo_base64 %}
         <img src="data:image/png;base64,{{ logo_base64 }}" height="60">
+        {% endif %}
     </td>
     <td width="30%" class="text-right">
         <strong>FICHA DE PRODUCTO</strong><br>
@@ -67,26 +69,32 @@ th {
 </tr>
 <tr>
     <td width="20%"><strong>Nombre</strong></td>
-    <td width="30%">{{ producto.nombre }}</td>
+    <td width="30%">{{ producto.nombre|default:"—" }}</td>
     <td width="20%"><strong>Categoría</strong></td>
-    <td width="30%">{{ producto.categoria }}</td>
+    <td width="30%">{{ producto.categoria|default:"—"|safe }}</td>
 </tr>
 <tr>
     <td><strong>Marca</strong></td>
-    <td>{{ producto.marca }}</td>
+    <td>{{ producto.marca|default:"—"|safe }}</td>
     <td><strong>Modelo</strong></td>
-    <td>{{ producto.modelo }}</td>
+    <td>{{ producto.modelo|default:"—"|safe }}</td>
 </tr>
 <tr>
     <td><strong>Serie</strong></td>
-    <td>{{ producto.serie }}</td>
+    <td>{{ producto.serie|default:"—"|safe }}</td>
     <td><strong>Existencia</strong></td>
-    <td>{{ producto.existencia }}</td>
+    <td class="estado-stock {% if producto.existencia == 'SIN STOCK' %}sin-stock{% endif %}">
+        {{ producto.existencia|default:"—" }}
+    </td>
 </tr>
 <tr>
     <td><strong>Proveedor</strong></td>
     <td colspan="3">
-        {{ producto.proveedor.nombre_empresa|default:"—" }}
+        {% if producto.proveedor %}
+            {{ producto.proveedor.nombre_empresa }}
+        {% else %}
+            —
+        {% endif %}
     </td>
 </tr>
 </table>
@@ -99,7 +107,7 @@ th {
     <th>Descripción</th>
 </tr>
 <tr>
-    <td>{{ producto.descripcion|default:"—" }}</td>
+    <td>{{ producto.descripcion|default:"—"|safe }}</td>
 </tr>
 </table>
 
@@ -113,7 +121,7 @@ th {
 <tr>
     <td>
         {% for equipo in producto.equipo.all %}
-            {{ equipo.codigo_interno }} - {{ equipo.nombre }}<br>
+            {{ equipo.codigo_interno|default:"—" }} - {{ equipo.nombre|default:"—" }}<br>
         {% empty %}
             —
         {% endfor %}
@@ -138,7 +146,13 @@ th {
 </tr>
 <tr>
     <td><strong>Fecha Compra</strong></td>
-    <td colspan="3">{{ producto.fecha_compra|default:"—" }}</td>
+    <td colspan="3">
+        {% if producto.fecha_compra %}
+            {{ producto.fecha_compra|date:"d/m/Y" }}
+        {% else %}
+            —
+        {% endif %}
+    </td>
 </tr>
 </table>
 
@@ -151,18 +165,16 @@ th {
 </tr>
 <tr>
     <td width="30%" class="text-center">
-        <div class="imagen-box">
-            {% if producto.imagen_producto %}
-            <img src="{{ producto.imagen_producto.path }}" width="170" height="170">
+        {% if producto.imagen_producto %}
+            <img src="{{ producto.imagen_producto.path }}" width="140" height="140">
         {% else %}
             <br><br><br>
             <strong>Sin imagen</strong>
         {% endif %}
-        </div>
     </td>
     <td width="70%">
         <strong>Notas:</strong><br>
-        {{ producto.notas|default:"—" }}
+        {{ producto.notas|default:"—"|safe }}
     </td>
 </tr>
 </table>

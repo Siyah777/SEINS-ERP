@@ -1,6 +1,13 @@
 from datetime import timedelta
 from django.utils import timezone
 from actividades.models import Ordendetrabajo
+import os
+import base64
+from io import BytesIO
+from django.conf import settings
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from django.http import HttpResponse
 
 
 def generar_ots(detalle, cantidad=1):
@@ -56,6 +63,7 @@ def generar_ots(detalle, cantidad=1):
                 tipo_actividad="mantenimiento_preventivo",
                 horarios_actividad=detalle.horarios_actividad,
                 horas_hombre_estimadas=getattr(detalle, "horas_estimadas", 0),
+                notas = f"{detalle.notas}",
                 detalleplan=detalle  # ← ENLACE TRAZABLE DEL PLAN A LA OT
             )
 
@@ -99,7 +107,7 @@ def generar_ots(detalle, cantidad=1):
 
         frecuencia = detalle.frecuencia
 
-        if frecuencia == "cada_8_horas":
+        if frecuencia == "8h":
             fecha += timedelta(hours=8)
         elif frecuencia == "diario":
             fecha += timedelta(days=1)
@@ -117,8 +125,6 @@ def generar_ots(detalle, cantidad=1):
             fecha += timedelta(days=180)
         elif frecuencia == "anual":
             fecha += timedelta(days=365)
-        elif frecuencia == "personalizado":
-            fecha += timedelta(days=detalle.dias_personalizados)
 
     # ------------------------------------------------------------
     # ACTUALIZAR PROXIMA FECHA DEL DETALLE
@@ -128,6 +134,30 @@ def generar_ots(detalle, cantidad=1):
 
     return ots_creadas
 
+def generar_pdf_plan(plan):
+    """
+    Genera un PDF resumen de un plan de mantenimiento individual.
+    Incluye logo, plan y todos sus detalles.
+    """
+    template = get_template('resumen_planes_mantenimiento.html')
+    
+    # Leer logo y convertir a base64
+    logo_path = os.path.join(settings.BASE_DIR, 'static', 'img', 'logo.png')
+    with open(logo_path, 'rb') as f:
+        logo_base64 = base64.b64encode(f.read()).decode('utf-8')
 
+    context = {
+        'plan': plan,
+        'logo_base64': logo_base64
+    }
+
+    html = template.render(context)
+    pdf_buffer = BytesIO()
+    pisa_status = pisa.CreatePDF(html, dest=pdf_buffer)
+    if pisa_status.err:
+        return HttpResponse('Error al generar PDF', status=500)
+
+    pdf_buffer.seek(0)
+    return pdf_buffer
 
 

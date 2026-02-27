@@ -39,6 +39,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [ BASE_DIR / 'static' ]
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # Configuración API Hacienda
 HACIENDA_USER = env('HACIENDA_USER')

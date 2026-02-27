@@ -3,6 +3,8 @@ from django.contrib import messages
 from .utils import generar_ots
 from .models import PlanMantenimiento, DetallePlanMantenimiento
 from django.urls import reverse
+from django.http import HttpResponse
+from .utils import generar_pdf_plan
 
 
 def generar_ots_view(request, plan_id):
@@ -45,3 +47,10 @@ def detalle_plan_view(request, plan_id):
     url_admin = reverse("admin:planes_mantenimiento_planmantenimiento_changelist")
     return redirect(url_admin)
 
+def resumen_plan_pdf(request, plan_id):
+    plan = get_object_or_404(PlanMantenimiento, id=plan_id)
+    pdf_buffer = generar_pdf_plan(plan)
+    
+    response = HttpResponse(pdf_buffer, content_type='application/pdf')
+    response['Content-Disposition'] = f'inline; filename="Resumen_Plan_{plan.codigo_plan}.pdf"'
+    return response

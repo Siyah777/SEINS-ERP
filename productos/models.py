@@ -1,5 +1,6 @@
 from django.db import models
 from core.utils.imagenes import ImageReduceMixin
+from core.fields import RichTextSimpleField
 
 
 def ruta_imagen_producto(instance, filename):
@@ -17,18 +18,18 @@ class Producto(ImageReduceMixin, models.Model):
     id_producto = models.AutoField(primary_key=True)
     correlativo = models.CharField(max_length=20, unique=True, blank=True, null=True)
     nombre = models.CharField(max_length=100, unique=True, default="Nombre del Producto")
-    descripcion = models.TextField(blank=True, null=True, default="Descripción del Producto")
-    categoria = models.CharField(max_length=100)
+    descripcion = RichTextSimpleField(blank=True, null=True, default="Descripción del Producto")
+    categoria = RichTextSimpleField(max_length=100)
     equipo = models.ManyToManyField('equipos.Equipo', blank=True)
     proveedor = models.ForeignKey('proveedores.Proveedor', on_delete=models.CASCADE, blank=True, null=True)
-    marca = models.CharField(max_length=100)
-    serie = models.CharField(max_length=100, unique=False)
-    modelo = models.CharField(max_length=100)
+    marca = RichTextSimpleField(max_length=100)
+    serie = RichTextSimpleField(max_length=100, unique=False)
+    modelo = RichTextSimpleField(max_length=100)
     existencia = models.TextField(choices=EXISTENCIA_CHOICES, default='EN STOCK')
     precio_unitario = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, help_text="Colocar precios sin IVA")
     factura_compra = models.CharField(max_length=100, blank=True, null=True)
     fecha_compra = models.DateField(blank=True, null=True)
-    notas = models.TextField(blank=True, null=True)
+    notas = RichTextSimpleField(blank=True, null=True)
     imagen_producto = models.ImageField(upload_to=ruta_imagen_producto, null=True, blank=True)
     
     def save(self, *args, **kwargs):

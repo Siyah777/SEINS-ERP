@@ -28,3 +28,5 @@ class ProcedimientoAdmin(admin.ModelAdmin):
         return format_html('<a class="button" href="{}" target="_blank">Documento en PDF</a>', url)
 
     documentacion_pdf.short_description = 'PDF'
+    
+   

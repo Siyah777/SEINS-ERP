@@ -2,221 +2,218 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8" />
+
 <style>
-    @page {
-        size: letter;
-        margin: 50px 60px;
-    }
+@page {
+    size: letter;
+    margin: 50px 60px;
+}
 
-    body {
-        font-family: "Times New Roman", serif;
-        font-size: 16px;
-        line-height: 1.25;
-        color: #333;
-        margin: 0;
-        position: relative;
-        padding-bottom: 150px;
-    }
+body {
+    font-family: "Times New Roman", serif;
+    font-size: 14px;
+    line-height: 1.3;
+    color: #333;
+}
 
-    .contenedor-principal {
-        page-break-inside: avoid !important;
-        page-break-after: avoid !important;
-        page-break-before: avoid !important;
-        break-inside: avoid !important;
-        break-after: avoid !important;
-        break-before: avoid !important;
-        padding-bottom: 15px;
-    }
+.header-container {
+    text-align: center;
+    margin-bottom: 10px;
+}
 
-    .header-container {
-        text-align: center;
-        margin-bottom: 5px;
-        page-break-inside: avoid;
-    }
+.logo {
+    width: 85px;
+}
 
-    .logo {
-        width: 85px;
-        height: auto;
-        margin-bottom: 8px;
-    }
+.empresa-info {
+    font-size: 13px;
+    line-height: 1.2;
+}
 
-    .empresa-info {
-        font-size: 14px;
-        line-height: 1.2;
-        color: #555;
-        margin-bottom: 0px;
-    }
+h3 {
+    font-size: 15px;
+    margin-top: 15px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #4b86b4;
+    padding-bottom: 3px;
+}
 
-    h2 {
-        font-size: 18px;
-        margin-bottom: 0px;
-        text-align: center;
-        color: #2a4d69;
-        page-break-inside: avoid;
-    }
+p {
+    margin: 6px 0;
+    text-align: justify;
+}
 
-    h3 {
-        font-size: 16px;
-        margin-top: 10px;
-        margin-bottom: 10px;
-        color: #4b86b4;
-        border-bottom: 2px solid #4b86b4;
-        padding-bottom: 3px;
-        page-break-inside: avoid;
-    }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 5px;
+}
 
-    p {
-        margin: 6px 0;
-        text-align: justify;
-    }
+th, td {
+    border: 1px solid #bbb;
+    padding: 6px;
+    font-size: 12px;
+}
 
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 5px;
-        page-break-inside: avoid;
-        page-break-after: auto;
-    }
+th {
+    background-color: #4b86b4;
+    color: white;
+}
 
-    th, td {
-        border: 1px solid #bbb;
-        padding: 6px 8px;
-        text-align: left;
-        vertical-align: middle;
-        font-size: 13px;
-    }
-
-    th {
-        background-color: #4b86b4;
-        color: white;
-    }
-
-    tbody tr:nth-child(even) {
-        background-color: #f2f7fb;
-    }
-
-    .section {
-        margin-top: 12px;
-        page-break-inside: avoid;
-    }
-
-    .saludo, .despedida {
-        font-style: italic;
-        margin-top: 8px;
-        margin-bottom: 8px;
-    }
-
-   .signature-table {
-        position: absolute;
-        bottom: 50px;
-        left: 60px;
-        right: 60px;
-        width: auto;
-        page-break-inside: avoid;
-    }
-
-    .signature-cell {
-        width: 50%;
-        text-align: center;
-        vertical-align: top;
-        font-size: 12px;
-    }
-
-    .signature-line {
-        border-top: 1px solid #000;
-        margin: 0 auto 6px auto;
-        width: 80%;
-    }
+.signature-line {
+    border-top: 1px solid #000;
+    margin-top: 50px;
+}
 </style>
 </head>
+
 <body>
 
-    <div class="contenedor-principal">
-
-        <div class="header-container">
-            <img src="data:image/png;base64,{{ logo_base64 }}" alt="Logo" class="logo" />
-        </div>
-        <div class="empresa-info">
-                <br><strong>Cotización N.º </strong>{{ cotizacion.correlativo }}<br />
-                <br><strong>Fecha:</strong> {{ cotizacion.fecha|date:"d/m/Y" }}<br />
-        </div>
-
-        <h3><strong>Cliente:</strong> {{ cotizacion.cliente }}</h3>
-
-        <div class="section">
-            {% if cotizacion.detalles_servicios.all or cotizacion.detalles_productos.all %}
-            <table>
-                <thead>
-                    <tr>
-                        <th>Descripción</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            {{ cotizacion.Descripcion }}
-                            {% if cotizacion.equipo.all %}
-                                <br>A el(los) equipo(s):
-                                {% for eq in cotizacion.equipo.all %}
-                                    <br>• {{ eq.nombre }} (Código: {{ eq.codigo_interno }})
-                                {% endfor %}
-                            {% endif %}
-                        </td>
-                        <td>${{ cotizacion.total }} + IVA (${{cotizacion.total_iva}})</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+<!-- HEADER -->
+<div class="header-container">
+    {% if logo_base64 %}
+        <img src="data:image/png;base64,{{ logo_base64 }}" class="logo" />
     {% endif %}
+</div>
 
-        <div class="section">
-            <h3>Productos incluidos:</h3>
-            {% if cotizacion.detalles_productos.all %}
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Cantidad</th>
-                            <th>Unidad</th>
-                            <th>Nombre del Producto</th>
-                            <th>Correlativo</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for item in cotizacion.detalles_productos.all %}
-                            <tr>
-                                <td>{{ item.cantidad }}</td>
-                                <td>{{ item.producto.unidades_cantidad|default:"Unidad" }}</td>
-                                <td>{{ item.producto.nombre }}</td>
-                                <td>{{ item.producto.correlativo }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            {% else %}
-                <p>No se han agregado productos a esta cotización.</p>
-            {% endif %}
-        </div>
+<div class="empresa-info">
+    <strong>Cotización N.º:</strong> {{ cotizacion.correlativo|default:"—" }}<br />
+    <strong>Fecha:</strong> {{ cotizacion.fecha|date:"d/m/Y" }}<br />
+</div>
 
-    </div> <!-- fin contenedor-principal -->
+<h3>Cliente: {{ cotizacion.cliente }}</h3>
 
-    <h3>Firmas:</h3>
-    <table class="signature-table">
-        <tr>
-            <td class="signature-cell">
-                <div class="signature-line"></div>
-                <p>Nombre del emisor:</p>
-                <p>{{ cotizacion.usuario.get_full_name }}</p>
-            </td>
-            <td class="signature-cell">
-                <div class="signature-line"></div>
-                <p>Estatus de la cotización:</p>
-                <p><strong>{{ cotizacion.estatus }}</strong></p>
-            </td>
-        </tr>
-    </table>
+<!-- DESCRIPCIÓN GENERAL -->
+<table>
+<tr>
+    <th>Descripción General</th>
+    <th>Total</th>
+</tr>
+<tr>
+    <td>
+        {{ cotizacion.Descripcion|safe }}
+
+        {% if cotizacion.equipo.all %}
+            <br><br><strong>Equipos:</strong>
+            {% for eq in cotizacion.equipo.all %}
+                <br>• {{ eq.nombre }} (Código: {{ eq.codigo_interno }})
+            {% endfor %}
+        {% endif %}
+    </td>
+    <td>
+        ${{ cotizacion.total|floatformat:2 }}<br>
+        + IVA (13%): ${{ cotizacion.total_iva|floatformat:2 }}
+    </td>
+</tr>
+</table>
+
+<br>
+
+<!-- PRODUCTOS -->
+<h3>Productos incluidos</h3>
+
+{% if cotizacion.detalles_productos.exists %}
+<table>
+<thead>
+<tr>
+    <th>Cantidad</th>
+    <th>Unidad</th>
+    <th>Producto</th>
+    <th>Correlativo</th>
+</tr>
+</thead>
+<tbody>
+{% for item in cotizacion.detalles_productos.all %}
+<tr>
+    <td>{{ item.cantidad }}</td>
+    <td>{{ item.unidades_cantidad|default:"Unidad" }}</td>
+    <td>{{ item.producto.nombre|default:"—" }}</td>
+    <td>{{ item.producto.correlativo|default:"—" }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{% else %}
+<p>No se han agregado productos.</p>
+{% endif %}
+
+<br>
+
+<!-- SERVICIOS -->
+<h3>Servicios incluidos</h3>
+
+{% if cotizacion.detalles_servicios.exists %}
+<table>
+<thead>
+<tr>
+    <th>Cantidad</th>
+    <th>Unidad</th>
+    <th>Servicio</th>
+</tr>
+</thead>
+<tbody>
+{% for item in cotizacion.detalles_servicios.all %}
+<tr>
+    <td>{{ item.cantidad }}</td>
+    <td>{{ item.unidades_cantidad|default:"Unidad" }}</td>
+    <td>{{ item.servicio.nombre|default:"—" }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{% else %}
+<p>No se han agregado servicios.</p>
+{% endif %}
+
+<br>
+
+<!-- CONDICIONES -->
+<h3>Condiciones Comerciales</h3>
+
+<table>
+<tr>
+    <td width="50%">
+        <strong>Validez:</strong> {{ cotizacion.validez_oferta }} {{ cotizacion.unidades_oferta }}
+    </td>
+    <td width="50%">
+        <strong>Condición de pago:</strong> {{ cotizacion.condiciones_pago }}
+    </td>
+</tr>
+{% if cotizacion.condiciones_pago == "Credito" %}
+<tr>
+    <td colspan="2">
+        <strong>Días de crédito:</strong> {{ cotizacion.dias_credito }}
+    </td>
+</tr>
+{% endif %}
+</table>
+
+<br><br>
+
+<!-- FIRMAS (SIN position absolute) -->
+<h3>Firmas</h3>
+
+<table style="border: none;">
+<tr>
+<td width="50%" style="border: none; text-align: center;">
+    <div class="signature-line"></div>
+    <p>Emisor</p>
+    <p>{{ cotizacion.usuario.get_full_name|default:"—" }}</p>
+</td>
+<td width="50%" style="border: none; text-align: center;">
+    <div class="signature-line"></div>
+    <p>Estatus</p>
+    <p><strong>{{ cotizacion.estatus|capfirst }}</strong></p>
+</td>
+</tr>
+</table>
+
+<br><br>
+
+
+<center>
+Documento generado por SEINS-ERP
+</center>
 
 </body>
 </html>
-
-

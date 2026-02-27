@@ -1,11 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import User
 from clientes.models import Cliente
+from core.fields import RichTextSimpleField
 
 class Reporte(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
-    categoria = models.CharField(max_length=100)
-    descripcion = models.TextField()
+    categoria = RichTextSimpleField(max_length=100)
+    descripcion = RichTextSimpleField()
     cantidad = models.PositiveIntegerField()
     usuario = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     fecha_inicio = models.DateField()

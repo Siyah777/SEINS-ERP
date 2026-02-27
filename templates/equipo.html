@@ -40,6 +40,24 @@ th {
     text-align: center;
     vertical-align: middle;
 }
+
+/* 👇 MUY IMPORTANTE para tablas dentro de RichText */
+.richtext table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 4px;
+}
+
+.richtext td, 
+.richtext th {
+    border: 1px solid #000;
+    padding: 3px;
+    font-size: 9px;
+}
+
+.richtext th {
+    background-color: #eee;
+}
 </style>
 </head>
 
@@ -71,17 +89,29 @@ th {
 </tr>
 <tr>
     <td><strong>Descripción</strong></td>
-    <td colspan="3">{{ equipo.descripcion }}</td>
+    <td colspan="3">
+        <div class="richtext">
+            {{ equipo.descripcion|safe }}
+        </div>
+    </td>
 </tr>
 <tr>
     <td><strong>Cliente</strong></td>
     <td>{{ equipo.cliente.nombre_empresa|default:"Uso interno" }}</td>
     <td><strong>Categoría</strong></td>
-    <td>{{ equipo.categoria }}</td>
+    <td>
+        <div class="richtext">
+            {{ equipo.categoria|safe }}
+        </div>
+    </td>
 </tr>
 <tr>
     <td><strong>Ubicación</strong></td>
-    <td colspan="3">{{ equipo.ubicacion }}</td>
+    <td colspan="3">
+        <div class="richtext">
+            {{ equipo.ubicacion|safe }}
+        </div>
+    </td>
 </tr>
 </table>
 
@@ -130,7 +160,9 @@ th {
         {% endif %}
     </td>
     <td>
-        {{ equipo.especificaciones }}
+        <div class="richtext">
+            {{ equipo.especificaciones|safe }}
+        </div>
     </td>
 </tr>
 </table>
@@ -143,7 +175,11 @@ th {
     <th>NOTAS</th>
 </tr>
 <tr>
-    <td>{{ equipo.notas|default:"—" }}</td>
+    <td>
+        <div class="richtext">
+            {{ equipo.notas|default:"—"|safe }}
+        </div>
+    </td>
 </tr>
 </table>
 
