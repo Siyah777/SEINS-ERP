@@ -36,11 +36,6 @@ class Documentacion(models.Model):
     fecha_creacion = models.DateTimeField(auto_now_add=True, blank=True)
     activo = models.BooleanField(default=True)
     
-    #revision = models.CharField(max_length=10, default="00")
-    #elaboro = models.CharField(max_length=150, blank=True)
-    #reviso = models.CharField(max_length=150, blank=True)
-    #aprobo = models.CharField(max_length=150, blank=True)
-
     class Meta:
         db_table = 'documentacion_procedimiento'
         ordering = ['codigo_documento']
@@ -61,7 +56,7 @@ class PasoProcedimiento(ImageReduceMixin, models.Model):
     )
 
     orden = models.PositiveIntegerField()
-    descripcion = models.TextField()
+    descripcion = RichTextMediumField()
 
     imagen = models.ImageField(
         upload_to='documentacion/procedimientos/pasos/',
@@ -95,7 +90,7 @@ class ActividadFinal(models.Model):
         verbose_name = "Actividad final"
         verbose_name_plural = "Actividades finales"
 
-    descripcion = models.TextField()
+    descripcion = RichTextMediumField()
 
     def __str__(self):
         return self.descripcion[:50]
