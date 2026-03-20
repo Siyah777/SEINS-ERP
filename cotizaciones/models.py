@@ -4,7 +4,7 @@ from servicios.models import Servicio
 from productos.models import Producto
 from inventario.models import Inventario
 from django.contrib.auth.models import User
-from core.fields import RichTextSimpleField
+from core.fields import RichTextMediumField
 from decimal import Decimal
 from decimal import Decimal, ROUND_HALF_UP
 from datetime import datetime
@@ -23,7 +23,7 @@ class Cotizacion(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)  # Cliente que solicita la cotización
     equipo = models.ManyToManyField('equipos.Equipo', blank=True) # Equipos relacionados con la cotización
     correlativo = models.CharField(max_length=20, unique=True, blank=True, null=True)
-    Descripcion = RichTextSimpleField(blank=False, null=False, default='Descripcion de la cotización')  # Descripción de la cotización
+    Descripcion = RichTextMediumField(blank=False, null=False, default='Descripcion de la cotización')  # Descripción de la cotización
     porcentaje_administracion = models.DecimalField(max_digits=5, decimal_places=2, default=0)  # Porcentaje de administración
     porcentaje_ganancia = models.DecimalField(max_digits=5, decimal_places=2, default=0)  # Porcentaje de ganancia
     validez_oferta = models.PositiveIntegerField(default=15)  # Días de validez de la oferta

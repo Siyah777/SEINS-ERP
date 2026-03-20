@@ -24,7 +24,6 @@ def generar_ots(modeladmin, request, queryset):
 @admin.register(PlanMantenimiento)
 class PlanMantenimientoAdmin(admin.ModelAdmin):
     list_display = ( 'codigo_plan', 'descripcion', 'fecha_modificacion','ver_pdf_link', "btn_generar_ots",)
-    search_fields = ('equipo__nombre', 'codigo_plan')
     actions = [generar_ots]
     readonly_fields = ('fecha_creacion', 'fecha_modificacion')
     inlines = [DetallePlanMantenimientoInline]
@@ -68,5 +67,5 @@ class DetallePlanMantenimientoAdmin(admin.ModelAdmin):
         return ", ".join(e.nombre for e in obj.herramientas.all())
 
     mostrar_herramientas.short_description = "herramientas"
-    search_fields = ('plan__equipo__nombre', 'actividad', 'especialista')
+    #search_fields = ('plan__equipo__nombre', 'actividad', 'especialista')
    

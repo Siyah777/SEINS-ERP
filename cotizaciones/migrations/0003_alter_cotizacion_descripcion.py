@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='cotizacion',
             name='Descripcion',
-            field=core.fields.RichTextSimpleField(default='Descripcion de la cotización'),
+            field=core.fields.RichTextMediumField(default='Descripcion de la cotización'),
         ),
     ]

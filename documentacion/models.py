@@ -1,6 +1,6 @@
 from django.db import models
 from core.utils.imagenes import ImageReduceMixin
-from core.fields import RichTextSimpleField
+from core.fields import RichTextMediumField
 
 
 class Documentacion(models.Model):
@@ -8,16 +8,16 @@ class Documentacion(models.Model):
     codigo_documento = models.TextField(max_length=50, blank=True)
     descripcion = models.TextField(blank=True)
 
-    justificacion = RichTextSimpleField(blank=True)
-    objetivos = RichTextSimpleField(blank=True)
+    justificacion = RichTextMediumField(blank=True)
+    objetivos = RichTextMediumField(blank=True)
 
     equipos = models.ManyToManyField('equipos.Equipo', blank=True)
-    categoria = RichTextSimpleField(max_length=100)
+    categoria = RichTextMediumField(max_length=100)
 
-    insumos_necesarios = RichTextSimpleField(blank=True)
-    herramientas_necesarias = RichTextSimpleField(blank=True)
+    insumos_necesarios = RichTextMediumField(blank=True)
+    herramientas_necesarias = RichTextMediumField(blank=True)
 
-    personal_tecnico = RichTextSimpleField(
+    personal_tecnico = RichTextMediumField(
         max_length=255,
         help_text="Ej: 1 técnico mecánico, 1 electricista", blank=True
     )
@@ -26,8 +26,8 @@ class Documentacion(models.Model):
         help_text="Duración estimada del procedimiento", blank=True, null=True
     )
 
-    actividades_finales = RichTextSimpleField(default="Ninguna")
-    referencias = RichTextSimpleField(blank=True, null=True)
+    actividades_finales = RichTextMediumField(default="Ninguna")
+    referencias = RichTextMediumField(blank=True, null=True)
 
     creado_por = models.ForeignKey(
         'auth.User', on_delete=models.SET_NULL, null=True
@@ -36,10 +36,10 @@ class Documentacion(models.Model):
     fecha_creacion = models.DateTimeField(auto_now_add=True, blank=True)
     activo = models.BooleanField(default=True)
     
-    revision = models.CharField(max_length=10, default="00")
-    elaboro = models.CharField(max_length=150, blank=True)
-    reviso = models.CharField(max_length=150, blank=True)
-    aprobo = models.CharField(max_length=150, blank=True)
+    #revision = models.CharField(max_length=10, default="00")
+    #elaboro = models.CharField(max_length=150, blank=True)
+    #reviso = models.CharField(max_length=150, blank=True)
+    #aprobo = models.CharField(max_length=150, blank=True)
 
     class Meta:
         db_table = 'documentacion_procedimiento'

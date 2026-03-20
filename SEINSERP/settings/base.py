@@ -75,7 +75,7 @@ INSTALLED_APPS = [
     'innovacion',
     'analisis_retroalimentacion',
     'contabilidad',
-    'ckeditor',
+    'django_ckeditor_5',
 ]
 
 MIDDLEWARE = [
@@ -318,16 +318,33 @@ JAZZMIN_UI_TWEAKS = {
     "body_bg": "bg-dark",  # Esto puede cambiar el fondo general
 }
 
-CKEDITOR_CONFIGS = {
-    "basic": {
+CKEDITOR_5_CONFIGS = {
+    "medium": {
         "toolbar": [
-            ["Bold", "Italic", "Underline"],
-            ["NumberedList", "BulletedList"],
-            ["Table"],
-            ["Link"],
-            ["RemoveFormat"],
+            "heading", "|",
+            "bold", "italic", "underline", "strikethrough", "|",
+            "numberedList", "bulletedList", "|",
+            "outdent", "indent", "|",
+            "link", "blockQuote", "|",
+            "insertTable", "|",
+            "removeFormat", "|",
+            "undo", "redo"
         ],
-        "format_tags": "p;h2;h3;h4",
-        "removePlugins": "stylesheetparser,image,uploadimage,flash",
-    },
+
+        "heading": {
+            "options": [
+                {"model": "paragraph", "title": "Párrafo", "class": "ck-heading_paragraph"},
+                {"model": "heading2", "view": "h2", "title": "Encabezado 2", "class": "ck-heading_heading2"},
+                {"model": "heading3", "view": "h3", "title": "Encabezado 3", "class": "ck-heading_heading3"},
+            ]
+        },
+
+        "table": {
+            "contentToolbar": [
+                "tableColumn",
+                "tableRow",
+                "mergeTableCells"
+            ]
+        }
+    }
 }

@@ -1,15 +1,15 @@
 from django.db import models
-from core.fields import RichTextSimpleField
+from core.fields import RichTextMediumField
 
 class Proveedor(models.Model):
     # Definir los campos de la base de datos
     nombre_empresa = models.CharField(max_length=100)
     correlativo = models.CharField(max_length=20, unique=True, blank=True, null=True)
-    descripcion = RichTextSimpleField(max_length=100, default= 'descripcion de productos o servicios lo que proveen')
-    nombre_contacto = RichTextSimpleField(max_length=100, default='Nombre')
+    descripcion = RichTextMediumField(max_length=100, default= 'descripcion de productos o servicios lo que proveen')
+    nombre_contacto = RichTextMediumField(max_length=100, default='Nombre')
     correo_electronico = models.CharField(max_length=100, default ='ejemplo@dominio.com')
     telefono = models.CharField(max_length=15, default ='+503 7777-7777')
-    direccion = RichTextSimpleField()
+    direccion = RichTextMediumField()
     nit_proveedor= models.CharField(max_length=20, default='0000000000')
     nrc_proveedor= models.CharField(max_length=20, blank=True, null=True)
     tipo_proveedor = models.CharField(
@@ -24,7 +24,7 @@ class Proveedor(models.Model):
     retencion_renta = models.BooleanField(default=False)
     municipio = models.CharField(max_length=100, blank=True, null=True)
     departamento = models.CharField(max_length=100, blank=True, null=True)
-    notas = RichTextSimpleField(max_length=100, blank=True)
+    notas = RichTextMediumField(max_length=100, blank=True)
     class Meta:
         verbose_name = "Proveedor"
         verbose_name_plural = "Proveedores"

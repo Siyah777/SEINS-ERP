@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 from .utils import cargar_actividades, obtener_codigo_actividad
 from django.db import transaction
-from core.fields import RichTextSimpleField
+from core.fields import RichTextMediumField
 
 DEPARTAMENTOS_CHOICES = [
     ("00", "Otros (Extranjeros)"),
@@ -74,7 +74,7 @@ class Cliente(models.Model):
     id_cliente = models.AutoField(primary_key=True )
     correlativo = models.CharField(max_length=20, unique=True, blank=True, null=True)
     nombre_empresa = models.CharField(max_length=255, unique=True)
-    direccion = RichTextSimpleField()
+    direccion = RichTextMediumField()
     nit= models.CharField(max_length=20, unique=True, default='0000000000', help_text="Numero sin guiones ni espacios")
     nrc= models.CharField(max_length=20, blank=True, null=True, help_text="Numero sin guiones ni espacios")
     tipo_cliente = models.CharField(max_length=50, choices=[
@@ -89,7 +89,7 @@ class Cliente(models.Model):
     aplica_retencion = models.BooleanField(default=False)
     correo = models.CharField(max_length=100, default='ejemplo@midominio.com')
     telefono_contacto = models.CharField(max_length=15, help_text="Numero sin guiones ni espacios")
-    sub_area = RichTextSimpleField(max_length=100)
+    sub_area = RichTextMediumField(max_length=100)
     nombre_contacto = models.CharField(max_length=255)
     departamento = models.CharField(
         max_length=2,

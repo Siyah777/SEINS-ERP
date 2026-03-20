@@ -4,11 +4,11 @@ from documentacion.models import Documentacion
 from proveedores.models import Proveedor
 from cotizaciones.models import Cotizacion
 from datetime import datetime, timedelta
-from core.fields import RichTextSimpleField
+from core.fields import RichTextMediumField
 
 class PlanMantenimiento(models.Model):
     codigo_plan = models.CharField(max_length=100, unique=True, default='PM-001')
-    descripcion = RichTextSimpleField(default="Plan de mantenimiento personalizado")
+    descripcion = RichTextMediumField(default="Plan de mantenimiento personalizado")
     fecha_creacion = models.DateField(auto_now_add=True)
     fecha_modificacion = models.DateField(auto_now=True)
     
@@ -60,7 +60,7 @@ class DetallePlanMantenimiento(models.Model):
     tiempo_realizacion_estimado = models.DurationField(blank=True, null=True)
     hora_realizacion_estimada = models.TimeField(null=True, blank=True)
     proxima_fecha = models.DateTimeField(null=True, blank=True)
-    notas = RichTextSimpleField(blank=True)
+    notas = RichTextMediumField(blank=True)
     creado_en = models.DateTimeField(auto_now_add=True)
     
     

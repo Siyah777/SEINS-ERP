@@ -14,16 +14,16 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='inventario',
             name='categoria',
-            field=core.fields.RichTextSimpleField(max_length=100),
+            field=core.fields.RichTextMediumField(max_length=100),
         ),
         migrations.AlterField(
             model_name='inventario',
             name='consideraciones',
-            field=core.fields.RichTextSimpleField(blank=True, null=True),
+            field=core.fields.RichTextMediumField(blank=True, null=True),
         ),
         migrations.AlterField(
             model_name='inventario',
             name='ubicacion',
-            field=core.fields.RichTextSimpleField(default='Bodega Principal', max_length=1000),
+            field=core.fields.RichTextMediumField(default='Bodega Principal', max_length=1000),
         ),
     ]

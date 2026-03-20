@@ -14,31 +14,31 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='producto',
             name='categoria',
-            field=core.fields.RichTextSimpleField(max_length=100),
+            field=core.fields.RichTextMediumField(max_length=100),
         ),
         migrations.AlterField(
             model_name='producto',
             name='descripcion',
-            field=core.fields.RichTextSimpleField(blank=True, default='Descripción del Producto', null=True),
+            field=core.fields.RichTextMediumField(blank=True, default='Descripción del Producto', null=True),
         ),
         migrations.AlterField(
             model_name='producto',
             name='marca',
-            field=core.fields.RichTextSimpleField(max_length=100),
+            field=core.fields.RichTextMediumField(max_length=100),
         ),
         migrations.AlterField(
             model_name='producto',
             name='modelo',
-            field=core.fields.RichTextSimpleField(max_length=100),
+            field=core.fields.RichTextMediumField(max_length=100),
         ),
         migrations.AlterField(
             model_name='producto',
             name='notas',
-            field=core.fields.RichTextSimpleField(blank=True, null=True),
+            field=core.fields.RichTextMediumField(blank=True, null=True),
         ),
         migrations.AlterField(
             model_name='producto',
             name='serie',
-            field=core.fields.RichTextSimpleField(max_length=100),
+            field=core.fields.RichTextMediumField(max_length=100),
         ),
     ]

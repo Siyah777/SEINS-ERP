@@ -14,11 +14,11 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='detalleplanmantenimiento',
             name='notas',
-            field=core.fields.RichTextSimpleField(blank=True),
+            field=core.fields.RichTextMediumField(blank=True),
         ),
         migrations.AlterField(
             model_name='planmantenimiento',
             name='descripcion',
-            field=core.fields.RichTextSimpleField(default='Plan de mantenimiento personalizado'),
+            field=core.fields.RichTextMediumField(default='Plan de mantenimiento personalizado'),
         ),
     ]

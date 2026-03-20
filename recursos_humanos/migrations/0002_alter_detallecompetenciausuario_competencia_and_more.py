@@ -14,26 +14,26 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='detallecompetenciausuario',
             name='competencia',
-            field=core.fields.RichTextSimpleField(),
+            field=core.fields.RichTextMediumField(),
         ),
         migrations.AlterField(
             model_name='detallecompetenciausuario',
             name='descripcion',
-            field=core.fields.RichTextSimpleField(),
+            field=core.fields.RichTextMediumField(),
         ),
         migrations.AlterField(
             model_name='empleado',
             name='cargo',
-            field=core.fields.RichTextSimpleField(max_length=100, verbose_name='Cargo'),
+            field=core.fields.RichTextMediumField(max_length=100, verbose_name='Cargo'),
         ),
         migrations.AlterField(
             model_name='empleado',
             name='observaciones',
-            field=core.fields.RichTextSimpleField(blank=True, null=True, verbose_name='Observaciones'),
+            field=core.fields.RichTextMediumField(blank=True, null=True, verbose_name='Observaciones'),
         ),
         migrations.AlterField(
             model_name='empleado',
             name='permisos',
-            field=core.fields.RichTextSimpleField(blank=True, null=True, verbose_name='Permisos adicionales'),
+            field=core.fields.RichTextMediumField(blank=True, null=True, verbose_name='Permisos adicionales'),
         ),
     ]

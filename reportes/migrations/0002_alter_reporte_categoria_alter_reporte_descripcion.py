@@ -14,11 +14,11 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='reporte',
             name='categoria',
-            field=core.fields.RichTextSimpleField(max_length=100),
+            field=core.fields.RichTextMediumField(max_length=100),
         ),
         migrations.AlterField(
             model_name='reporte',
             name='descripcion',
-            field=core.fields.RichTextSimpleField(),
+            field=core.fields.RichTextMediumField(),
         ),
     ]

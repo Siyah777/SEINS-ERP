@@ -14,11 +14,11 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='cliente',
             name='direccion',
-            field=core.fields.RichTextSimpleField(),
+            field=core.fields.RichTextMediumField(),
         ),
         migrations.AlterField(
             model_name='cliente',
             name='sub_area',
-            field=core.fields.RichTextSimpleField(max_length=100),
+            field=core.fields.RichTextMediumField(max_length=100),
         ),
     ]

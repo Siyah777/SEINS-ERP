@@ -14,36 +14,36 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='equipocliente',
             name='categoria',
-            field=core.fields.RichTextSimpleField(default='General', max_length=100),
+            field=core.fields.RichTextMediumField(default='General', max_length=100),
         ),
         migrations.AlterField(
             model_name='equipocliente',
             name='descripcion',
-            field=core.fields.RichTextSimpleField(default='equipo de uso en empresa', max_length=100),
+            field=core.fields.RichTextMediumField(default='equipo de uso en empresa', max_length=100),
         ),
         migrations.AlterField(
             model_name='equipocliente',
             name='estatus',
-            field=core.fields.RichTextSimpleField(default='funcionando', max_length=50),
+            field=core.fields.RichTextMediumField(default='funcionando', max_length=50),
         ),
         migrations.AlterField(
             model_name='equipocliente',
             name='marca',
-            field=core.fields.RichTextSimpleField(default='Generico', max_length=100),
+            field=core.fields.RichTextMediumField(default='Generico', max_length=100),
         ),
         migrations.AlterField(
             model_name='equipocliente',
             name='modelo',
-            field=core.fields.RichTextSimpleField(default='Modelo Generico', max_length=100),
+            field=core.fields.RichTextMediumField(default='Modelo Generico', max_length=100),
         ),
         migrations.AlterField(
             model_name='equipocliente',
             name='serie',
-            field=core.fields.RichTextSimpleField(default='Serie Generica', max_length=100),
+            field=core.fields.RichTextMediumField(default='Serie Generica', max_length=100),
         ),
         migrations.AlterField(
             model_name='equipocliente',
             name='ubicacion',
-            field=core.fields.RichTextSimpleField(default='Ubicación del equipo segun el cliente', max_length=100),
+            field=core.fields.RichTextMediumField(default='Ubicación del equipo segun el cliente', max_length=100),
         ),
     ]

@@ -6,7 +6,7 @@ from documentacion.models import Documentacion
 from django.utils.timezone import now
 from proveedores.models import Proveedor
 from equipos.models import Herramienta
-from core.fields import RichTextSimpleField
+from core.fields import RichTextMediumField
 import base64
 from PIL import Image
 from io import BytesIO
@@ -114,23 +114,19 @@ class Ordendetrabajo(models.Model):
         ('entrega_retiro', 'Entrega_retiro'),
         ('fabricacion', 'Fabricacion'),
         ('fontaneria', 'Fontaneria'),
-        ('limpieza', 'Limpieza'),
-        ('operacion', 'Operacion'),
-        ('proyecto', 'Proyecto'),
-        ('cambio', 'Cambio'),
         ('construccion', 'Construccion'),
-        ('instalacion/desinstalacion electrica', 'Instalación/Desinstalación electrica'),
-        ('montaje/desmontaje mecanico', 'Montaje/Desmontaje mecanico'),
-        ('reemplazo', 'Reemplazo'),
+        ('instalacion', 'Instalación'),
+        ('desinstalacion', 'Desinstalación'),
+        ('montaje', 'Montaje'),
+        ('desmontaje', 'Desmontaje'),
         ('reparacion', 'Reparación'),
-        ('varios', 'Varios'),
         ('otro', 'Otro'),
     ]
     
     cliente = models.ForeignKey('clientes.Cliente', on_delete=models.CASCADE)
     equipo = models.ManyToManyField('equipos.Equipo', blank=True)
     correlativo = models.CharField(max_length=20, unique=True, blank=True, null=True)
-    descripcion = RichTextSimpleField(blank=True)
+    descripcion = RichTextMediumField(blank=True)
     cotizacion = models.ForeignKey(Cotizacion, blank=False, on_delete=models.CASCADE,)
     prioridad = models.CharField(max_length=10, choices=PRIORIDAD_CHOICES, default='media')
     tipo_actividad = models.CharField(
@@ -154,8 +150,8 @@ class Ordendetrabajo(models.Model):
     horarios_actividad = models.CharField(max_length=4, choices=HORARIOS, default='8-5')
     documentos_necesarios = models.ManyToManyField(Documentacion, blank=True)
     proveedores = models.ManyToManyField(Proveedor, blank=True)
-    notas = RichTextSimpleField(blank=True)
-    comentarios = RichTextSimpleField(blank=True)
+    notas = RichTextMediumField(blank=True)
+    comentarios = RichTextMediumField(blank=True)
     imagen_antes_1 = models.ImageField(upload_to=ruta_imagen_antes, null=True, blank=True)
     imagen_antes_2 = models.ImageField(upload_to=ruta_imagen_antes, null=True, blank=True)
     imagen_despues_1 = models.ImageField(upload_to=ruta_imagen_despues, null=True, blank=True)

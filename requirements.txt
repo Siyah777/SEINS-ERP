@@ -106,4 +106,4 @@ num2words==0.5.14
 qrcode==8.2
 django-jsignature==0.12
 django-signature==0.3.1
-django-ckeditor==6.7.3
+django-ckeditor-5==0.2.20

@@ -14,16 +14,16 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='compra',
             name='descripcion_general',
-            field=core.fields.RichTextSimpleField(),
+            field=core.fields.RichTextMediumField(),
         ),
         migrations.AlterField(
             model_name='detalleproductos',
             name='descripcion_producto',
-            field=core.fields.RichTextSimpleField(blank=True),
+            field=core.fields.RichTextMediumField(blank=True),
         ),
         migrations.AlterField(
             model_name='detalleservicios',
             name='descripcion_servicio',
-            field=core.fields.RichTextSimpleField(blank=True),
+            field=core.fields.RichTextMediumField(blank=True),
         ),
     ]

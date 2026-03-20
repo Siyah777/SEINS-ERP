@@ -10,7 +10,7 @@ from django.urls import reverse
 class InventarioAdmin(admin.ModelAdmin):
     list_display = ('producto', 'categoria', 'cantidad', 'stock_minimo', 'proveedor', 'fecha_ingreso', 'fecha_salida', 'inventario_pdf')
     list_filter = ('categoria', 'fecha_ingreso', 'fecha_salida', 'proveedor')
-    search_fields = ('producto__nombre', 'proveedor__nombre')
+    
     
     def inventario_pdf(self, obj):
         url = reverse('inventario_pdf', args=[obj.pk])

@@ -1,21 +1,21 @@
 from django.db import models
 from clientes.models import Cliente
 from actividades.models import Ordendetrabajo
-from core.fields import RichTextSimpleField
+from core.fields import RichTextMediumField
 import datetime
 from datetime import timedelta
 
 class EquipoCliente(models.Model):
     nombre = models.CharField(max_length=200)
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
-    descripcion = RichTextSimpleField(max_length=100, default='equipo de uso en empresa')
-    marca = RichTextSimpleField(max_length=100, default='Generico')
-    modelo = RichTextSimpleField(max_length=100, default='Modelo Generico')
-    serie = RichTextSimpleField(max_length=100, default='Serie Generica')
+    descripcion = RichTextMediumField(max_length=100, default='equipo de uso en empresa')
+    marca = RichTextMediumField(max_length=100, default='Generico')
+    modelo = RichTextMediumField(max_length=100, default='Modelo Generico')
+    serie = RichTextMediumField(max_length=100, default='Serie Generica')
     codigo_interno = models.CharField(max_length=100, default='Codigo Interno segun SG')
-    ubicacion = RichTextSimpleField(max_length=100, default='Ubicación del equipo segun el cliente')
-    estatus = RichTextSimpleField(max_length=50, default='funcionando')  # Ej. "Disponible", "En mantenimiento", etc.
-    categoria = RichTextSimpleField(max_length=100, null=False, default='General')  # Ej. "Computadoras", "Herramientas", etc.
+    ubicacion = RichTextMediumField(max_length=100, default='Ubicación del equipo segun el cliente')
+    estatus = RichTextMediumField(max_length=50, default='funcionando')  # Ej. "Disponible", "En mantenimiento", etc.
+    categoria = RichTextMediumField(max_length=100, null=False, default='General')  # Ej. "Computadoras", "Herramientas", etc.
     cantidad = models.PositiveIntegerField(default=0)  # Para contar la cantidad de equipos
     
     def __str__(self):

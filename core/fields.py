@@ -1,6 +1,6 @@
-from ckeditor.fields import RichTextField
+from django_ckeditor_5.fields import CKEditor5Field
 
-class RichTextSimpleField(RichTextField):
+class RichTextMediumField(CKEditor5Field):
     def __init__(self, *args, **kwargs):
-        kwargs["config_name"] = "basic"
+        kwargs.setdefault("config_name", "medium")
         super().__init__(*args, **kwargs)

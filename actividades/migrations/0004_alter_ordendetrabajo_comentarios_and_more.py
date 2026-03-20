@@ -14,16 +14,16 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='ordendetrabajo',
             name='comentarios',
-            field=core.fields.RichTextSimpleField(blank=True),
+            field=core.fields.RichTextMediumField(blank=True),
         ),
         migrations.AlterField(
             model_name='ordendetrabajo',
             name='descripcion',
-            field=core.fields.RichTextSimpleField(blank=True),
+            field=core.fields.RichTextMediumField(blank=True),
         ),
         migrations.AlterField(
             model_name='ordendetrabajo',
             name='notas',
-            field=core.fields.RichTextSimpleField(blank=True),
+            field=core.fields.RichTextMediumField(blank=True),
         ),
     ]

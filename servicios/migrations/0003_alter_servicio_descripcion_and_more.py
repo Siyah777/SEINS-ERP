@@ -14,21 +14,21 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='servicio',
             name='descripcion',
-            field=core.fields.RichTextSimpleField(max_length=200),
+            field=core.fields.RichTextMediumField(max_length=200),
         ),
         migrations.AlterField(
             model_name='servicio',
             name='especialidad',
-            field=core.fields.RichTextSimpleField(max_length=100),
+            field=core.fields.RichTextMediumField(max_length=100),
         ),
         migrations.AlterField(
             model_name='servicio',
             name='nombre',
-            field=core.fields.RichTextSimpleField(max_length=100),
+            field=core.fields.RichTextMediumField(max_length=100),
         ),
         migrations.AlterField(
             model_name='servicio',
             name='notas',
-            field=core.fields.RichTextSimpleField(default='consideraciones', max_length=100),
+            field=core.fields.RichTextMediumField(default='consideraciones', max_length=100),
         ),
     ]

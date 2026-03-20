@@ -32,7 +32,7 @@ class HistorialTrabajos(admin.ModelAdmin):
 class HerramientaAdmin(admin.ModelAdmin):
     list_display = ('codigo_interno', 'nombre', 'categoria', 'cantidad', 'modelo', 'marca', 'estado', 'herramienta_pdf')
     list_filter = ('estado', 'categoria', 'marca')
-    search_fields = ('nombre', 'modelo', 'serie', 'marca')
+    search_fields = ('nombre', 'codigo_interno', 'marca')
     list_per_page = 20
     
     def herramienta_pdf(self, obj):

@@ -1,7 +1,7 @@
 from django.db import models
 from decimal import Decimal, ROUND_HALF_UP
 from proveedores.models import Proveedor
-from core.fields import RichTextSimpleField
+from core.fields import RichTextMediumField
 from productos.models import Producto
 from servicios.models import Servicio
 import logging
@@ -12,7 +12,7 @@ class Compra(models.Model):
     proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
     factura_compra = models.CharField(max_length=50, blank=True, null=True)
     correlativo = models.CharField(max_length=20, unique=True, blank=True, null=True)
-    descripcion_general = RichTextSimpleField()
+    descripcion_general = RichTextMediumField()
     costo_total = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'))
     costo_total_iva = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'))
     fecha_compra = models.DateField()
@@ -73,7 +73,7 @@ class DetalleProductos(models.Model):
     compra = models.ForeignKey(Compra, related_name="detalles_productos", on_delete=models.CASCADE)
     producto = models.ForeignKey(Producto, null=True, blank=True, on_delete=models.SET_NULL)
     cantidad = models.PositiveIntegerField(default=1)
-    descripcion_producto = RichTextSimpleField(blank=True)
+    descripcion_producto = RichTextMediumField(blank=True)
     cliente = models.ManyToManyField('clientes.Cliente', blank=True)  # Cliente al que se le realiza la compra
     equipo = models.ManyToManyField('equipos.Equipo', blank=True)
     precio_unitario = models.DecimalField(max_digits=10, decimal_places=2, editable=False)
@@ -102,7 +102,7 @@ class DetalleServicios(models.Model):
     compra = models.ForeignKey(Compra, related_name="detalles_servicios", on_delete=models.CASCADE)
     servicio = models.ForeignKey(Servicio, null=True, blank=True, on_delete=models.SET_NULL)
     cantidad = models.PositiveIntegerField(default=1)
-    descripcion_servicio =RichTextSimpleField(blank=True)
+    descripcion_servicio =RichTextMediumField(blank=True)
     cliente = models.ManyToManyField('clientes.Cliente', blank=True)  # Cliente al que se le realiza la compra
     equipo = models.ManyToManyField('equipos.Equipo', blank=True)
     unidades_cantidad = models.CharField(max_length=50, default='Unidad')  # Unidades de la cantidad
