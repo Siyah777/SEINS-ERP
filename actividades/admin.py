@@ -1,3 +1,4 @@
+from django.utils.html import strip_tags
 from django.contrib import admin
 from .models import Ordendetrabajo
 from django.urls import reverse
@@ -10,7 +11,7 @@ class TrabajoAdmin(admin.ModelAdmin):
         'correlativo',
         'cliente',
         'mostrar_equipo',
-        'descripcion',
+        'descripcion_limpios',
         'mostrar_personal_asignado',
         'horarios_actividad',
         'fecha_inicio',
@@ -30,10 +31,17 @@ class TrabajoAdmin(admin.ModelAdmin):
     
     readonly_fields = ('cliente',
         'correlativo',
-        'descripcion',
+        ('descripcion_limpios'),
         'equipo',
         'detalleplan',
         ) # Campos de solo lectura
+    
+    exclude = ('descripcion',)
+     
+    def descripcion_limpios(self, obj):
+        return strip_tags(obj.descripcion)
+
+    descripcion_limpios.short_description = "Descripción"
     
     def estatus_coloreado(self, obj):
         colores = {

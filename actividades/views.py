@@ -85,7 +85,7 @@ def generar_pdf_orden_trabajo(request, orden_id):
     html_content = template.render(context)
 
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = f'filename={orden.correlativo} - {orden.descripcion}.pdf'
+    response['Content-Disposition'] = f'filename={orden.correlativo}.pdf'
 
     result = io.BytesIO()
     pdf = pisa.pisaDocument(io.BytesIO(html_content.encode("UTF-8")), dest=result)

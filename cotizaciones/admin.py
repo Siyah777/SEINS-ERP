@@ -1,3 +1,4 @@
+from django.utils.html import strip_tags
 from django.contrib import admin
 from .models import Cotizacion, DetalleCotizacionProductos, DetalleCotizacionServicios 
 from .models import ListaDeMateriales
@@ -19,10 +20,15 @@ class ListaDeMaterialesInline(admin.StackedInline): #StackedInline
 
 @admin.register(Cotizacion)
 class CotizacionAdmin(admin.ModelAdmin):
-    list_display = ("correlativo", "cliente", "mostrar_equipo", "Descripcion", "fecha", "estatus_coloreado", "total_con_dolar", "ver_pdf")
+    list_display = ("correlativo", "cliente", "mostrar_equipo", "Descripcion_limpios", "fecha", "estatus_coloreado", "total_con_dolar", "ver_pdf")
     list_per_page = 20
     readonly_fields = ("total", "total_iva", "correlativo", "usuario")
     list_filter = ("usuario", "cliente", ("equipo", admin.RelatedOnlyFieldListFilter), "estatus", "fecha")
+    
+    def Descripcion_limpios(self, obj):
+        return strip_tags(obj.Descripcion)
+
+    Descripcion_limpios.short_Description = "Descripción"
     
     def mostrar_equipo(self, obj):
         return ", ".join([str(c) for c in obj.equipo.all()])
