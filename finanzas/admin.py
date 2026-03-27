@@ -1,5 +1,7 @@
 from django.contrib import admin
 from .models import Presupuesto, Ingreso, Gasto, CuentaPorCobrar, CuentaPorPagar
+from django.utils.html import format_html
+from django.urls import reverse
 
 class IngresoInline(admin.TabularInline):
     model = Ingreso
@@ -11,9 +13,15 @@ class GastoInline(admin.TabularInline):
 
 @admin.register(Presupuesto)
 class PresupuestoAdmin(admin.ModelAdmin):
-    list_display = ('nombre', 'total_ingresos', 'total_gastos', 'balance_total')
+    list_display = ('nombre', 'total_ingresos', 'total_gastos', 'balance_total', 'ver_pdf')
     readonly_fields = ('total_ingresos', 'total_gastos', 'balance_total')
     inlines = [IngresoInline, GastoInline]
+    
+    def ver_pdf(self, obj):
+        url = reverse('pdf_presupuesto', args=[obj.pk])
+        return format_html(f'<a href="{url}" target="_blank">📄 PDF</a>')
+
+    ver_pdf.short_description = "PDF"
 
 @admin.register(CuentaPorCobrar)
 class CuentaPorCobrarAdmin(admin.ModelAdmin):

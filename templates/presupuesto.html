@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Helvetica;
+            font-size: 10pt;
+        }
+
+        .header-container {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #003366;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th, td {
+            border: 1px solid #000;
+            padding: 5px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #D9E1F2;
+        }
+
+        .resumen {
+            margin-top: 10px;
+        }
+
+        .positivo {
+            color: green;
+        }
+
+        .negativo {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header-container">
+    <img src="data:image/png;base64,{{ logo_base64 }}" alt="Logo" style="width:150px;" />
+</div>
+
+<h2><strong>Resumen de Presupuesto {{ presupuesto.nombre }}</strong></h2>
+<p><strong>Descripción:</strong> {{ presupuesto.descripcion }}</p>
+
+<!-- RESUMEN -->
+<table class="resumen">
+    <tr>
+        <th>Total Ingresos</th>
+        <th>Total Gastos</th>
+        <th>Balance</th>
+    </tr>
+    <tr>
+        <td>${{ presupuesto.total_ingresos }}</td>
+        <td>${{ presupuesto.total_gastos }}</td>
+        <td class="{% if presupuesto.balance_total >= 0 %}positivo{% else %}negativo{% endif %}">
+            ${{ presupuesto.balance_total }}
+        </td>
+    </tr>
+</table>
+
+<!-- INGRESOS -->
+<h3>Ingresos</h3>
+<table>
+    <tr>
+        <th>Nombre</th>
+        <th>Monto</th>
+        <th>Fecha</th>
+    </tr>
+    {% for ingreso in ingresos %}
+    <tr>
+        <td>{{ ingreso.nombre }}</td>
+        <td>${{ ingreso.monto }}</td>
+        <td>{{ ingreso.fecha }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="3">No hay ingresos</td></tr>
+    {% endfor %}
+</table>
+
+<!-- GASTOS -->
+<h3>Gastos</h3>
+<table>
+    <tr>
+        <th>Nombre</th>
+        <th>Monto</th>
+        <th>Fecha</th>
+    </tr>
+    {% for gasto in gastos %}
+    <tr>
+        <td>{{ gasto.nombre }}</td>
+        <td>${{ gasto.monto }}</td>
+        <td>{{ gasto.fecha }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="3">No hay gastos</td></tr>
+    {% endfor %}
+</table>
+<center>Documento generado por SEINS-ERP</center>
+</body>
+</html>

@@ -49,5 +49,6 @@ urlpatterns = [
     path('inventario/', include('inventario.urls')),
     path('documentacion/', include('documentacion.urls')),
     path("ckeditor5/", include("django_ckeditor_5.urls")),
+    path('finanzas/', include('finanzas.urls')),
 ]
 
