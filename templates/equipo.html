@@ -85,7 +85,7 @@ th {
 </tr>
 <tr>
     <td><strong>Nombre</strong></td>
-    <td colspan="3">{{ equipo.nombre }}</td>
+    <td colspan="3">{{ equipo.nombre|safe }}</td>
 </tr>
 <tr>
     <td><strong>Descripción</strong></td>
@@ -136,8 +136,8 @@ th {
 </tr>
 <tr>
     <td><strong>Estatus</strong></td>
-    <td>{{ equipo.estatus }}</td>
-    <td><strong>Componentes</strong></td>
+    <td>{{ equipo.estatus|safe }}</td>
+    <td><strong>Componentes|safe</strong></td>
     <td>{{ equipo.componentes }}</td>
 </tr>
 </table>

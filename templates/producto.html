@@ -69,8 +69,8 @@ th {
 </tr>
 <tr>
     <td width="20%"><strong>Nombre</strong></td>
-    <td width="30%">{{ producto.nombre|default:"—" }}</td>
-    <td width="20%"><strong>Categoría</strong></td>
+    <td width="30%">{{ producto.nombre|default:"—"|safe }}</td>
+    <td width="20%"><strong>Categoría|safe</strong></td>
     <td width="30%">{{ producto.categoria|default:"—"|safe }}</td>
 </tr>
 <tr>
@@ -121,7 +121,7 @@ th {
 <tr>
     <td>
         {% for equipo in producto.equipo.all %}
-            {{ equipo.codigo_interno|default:"—" }} - {{ equipo.nombre|default:"—" }}<br>
+            {{ equipo.codigo_interno|default:"—" }} - {{ equipo.nombre|default:"—"|safe }}<br>
         {% empty %}
             —
         {% endfor %}

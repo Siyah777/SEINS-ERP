@@ -61,7 +61,7 @@ p { margin: 0; word-wrap: break-word; }
 {% for i in item.items %}
 {% if i.tipo == "Producto" %}
 <tr>
-    <td class="nombre"><p>{{ i.nombre }}</p></td>
+    <td class="nombre"><p>{{ i.nombre|safe }}</p></td>
     <td class="descripcion"><p>{{ i.descripcion|safe }}</p></td>
     <td class="clientes"><p>{% if i.clientes %}{{ i.clientes|join:", " }}{% else %}-{% endif %}</p></td>
     <td class="cantidad"><p>{{ i.cantidad }}</p></td>

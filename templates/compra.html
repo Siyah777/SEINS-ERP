@@ -31,7 +31,22 @@ th {
 
 .no-border td {
     border: none;
+
 }
+.ckeditor-content p {
+    margin: 0 0 4px 0;
+    line-height: 1.2;
+}
+
+.ckeditor-content ul {
+    margin: 0;
+    padding-left: 12px;
+}
+
+.ckeditor-content li {
+    margin: 0;
+}
+
 </style>
 </head>
 
@@ -67,7 +82,9 @@ th {
 <tr>
     <td><strong>Descripción General:</strong></td>
     <td colspan="3">
-        {{ compra.descripcion_general|default:"—"|safe }}
+        <div class="ckeditor-content">
+            {{ compra.descripcion_general|default:"—"|safe }}
+        </div>
     </td>
 </tr>
 </table>

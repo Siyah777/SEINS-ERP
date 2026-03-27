@@ -64,6 +64,20 @@ th {
     border-top: 1px solid #000;
     margin-top: 50px;
 }
+
+.ckeditor-content p {
+    margin: 0 0 4px 0;
+    line-height: 1.2;
+}
+
+.ckeditor-content ul {
+    margin: 0;
+    padding-left: 12px;
+}
+
+.ckeditor-content li {
+    margin: 0;
+}
 </style>
 </head>
 
@@ -91,13 +105,21 @@ th {
 </tr>
 <tr>
     <td>
-        {{ cotizacion.Descripcion|safe }}
+        <div class="ckeditor-content">
+            {{ cotizacion.Descripcion|safe }}
+        </div>
 
         {% if cotizacion.equipo.all %}
-            <br><br><strong>Equipos:</strong>
-            {% for eq in cotizacion.equipo.all %}
-                <br>• {{ eq.nombre }} (Código: {{ eq.codigo_interno }})
-            {% endfor %}
+            <div style="margin-top: 5px;">
+                <strong>Equipos:</strong>
+                <ul style="margin: 0; padding-left: 12px;">
+                    {% for eq in cotizacion.equipo.all %}
+                        <li>
+                            {{ eq.nombre }} (Código: {{ eq.codigo_interno }})
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
         {% endif %}
     </td>
     <td>
@@ -127,7 +149,7 @@ th {
 <tr>
     <td>{{ item.cantidad }}</td>
     <td>{{ item.unidades_cantidad|default:"Unidad" }}</td>
-    <td>{{ item.producto.nombre|default:"—" }}</td>
+    <td>{{ item.producto.nombre|default:"—"|safe }}</td>
     <td>{{ item.producto.correlativo|default:"—" }}</td>
 </tr>
 {% endfor %}
@@ -156,7 +178,7 @@ th {
 <tr>
     <td>{{ item.cantidad }}</td>
     <td>{{ item.unidades_cantidad|default:"Unidad" }}</td>
-    <td>{{ item.servicio.nombre|default:"—" }}</td>
+    <td>{{ item.servicio.nombre|default:"—"|safe }}</td>
 </tr>
 {% endfor %}
 </tbody>

@@ -79,6 +79,27 @@
             vertical-align: top; /* o middle si querés centrar verticalmente */
         }
 
+        .ckeditor-content p {
+            margin: 0 0 3px 0;
+            line-height: 1.2;
+        }
+
+        .ckeditor-content span {
+            line-height: 1.2;
+        }
+
+        .ckeditor-content ul {
+            margin: 0;
+            padding-left: 12px;
+        }
+
+        .ckeditor-content li {
+            margin: 0;
+        }
+        .ckeditor-content p::before {
+            content: "- ";
+        }
+
     </style>
 </head>
 <body>
@@ -131,10 +152,15 @@
         <tr>
             <th class="columna-izquierda">Descripcion del trabajo</th>
             <td colspan="3">
-                - {{ orden.cotizacion.Descripcion }} (según {{ orden.cotizacion.correlativo }})<br/>
+                <div class="ckeditor-content">
+                    {{ orden.cotizacion.Descripcion|safe }}
+                </div>
+
+                <p>(según {{ orden.cotizacion.correlativo }})</p>
+
                 {% if orden.equipo.all %}
-                    A el(los) equipo(s):
-                    <ul style="margin: 0; padding-left: 10px;">
+                    <p>A el(los) equipo(s):</p>
+                    <ul>
                         {% for eq in orden.equipo.all %}
                             <li>
                                 {{ eq.nombre }}, Código: {{ eq.codigo_interno }} 
@@ -231,11 +257,19 @@
     </tr>
     <tr>
         <th class="columna-izquierda">Notas</th>
-        <td colspan="3">{{ orden.notas }}</td>
+        <td colspan="3" class="fila-alta">
+            <div class="ckeditor-content">
+                {{ orden.notas|safe }}
+            </div>
+        </td>
     </tr>
     <tr>
         <th class="columna-izquierda fila-alta">Comentarios finales</th>
-        <td colspan="3" class="fila-alta">{{ orden.comentarios }}</td>
+        <td colspan="3" class="fila-alta">
+            <div class="ckeditor-content">
+                {{ orden.comentarios|safe }}
+            </div>
+        </td>
     </tr>
 </table>
 

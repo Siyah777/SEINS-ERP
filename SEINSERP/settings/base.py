@@ -345,6 +345,6 @@ CKEDITOR_5_CONFIGS = {
                 "tableRow",
                 "mergeTableCells"
             ]
-        }
+        } 
     }
 }

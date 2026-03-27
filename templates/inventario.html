@@ -59,7 +59,7 @@ th {
 <table>
 <tr>
     <th width="25%">Producto</th>
-    <td width="75%">{{ inventario.producto.nombre|default:"—" }}</td>
+    <td width="75%">{{ inventario.producto.nombre|default:"—"|safe }}</td>
 </tr>
 <tr>
     <th>Categoría</th>

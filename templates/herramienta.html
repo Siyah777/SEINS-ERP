@@ -85,7 +85,7 @@ th {
 </tr>
 <tr>
     <td><strong>Nombre</strong></td>
-    <td colspan="3">{{ herramienta.nombre }}</td>
+    <td colspan="3">{{ herramienta.nombre|safe }}</td>
 </tr>
 <tr>
     <td><strong>Descripción</strong></td>
@@ -109,7 +109,7 @@ th {
     <td><strong>Cantidad</strong></td>
     <td>{{ herramienta.cantidad }}</td>
     <td><strong>Componentes</strong></td>
-    <td>{{ herramienta.componentes }}</td>
+    <td>{{ herramienta.componentes|safe }}</td>
 </tr>
 </table>
 
