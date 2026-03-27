@@ -89,7 +89,7 @@ class Cliente(models.Model):
     aplica_retencion = models.BooleanField(default=False)
     correo = models.CharField(max_length=100, default='ejemplo@midominio.com')
     telefono_contacto = models.CharField(max_length=15, help_text="Numero sin guiones ni espacios")
-    sub_area = RichTextMediumField(max_length=100)
+    sub_area = models.CharField(max_length=100)
     nombre_contacto = models.CharField(max_length=255)
     departamento = models.CharField(
         max_length=2,

@@ -4,8 +4,8 @@ from core.fields import RichTextMediumField
 class Servicio(models.Model):
     id_servicio = models.AutoField(primary_key=True)
     correlativo = models.CharField(max_length=30, unique=True, blank=True, null=True)
-    nombre = RichTextMediumField(max_length=100)
-    especialidad = RichTextMediumField(max_length=100)
+    nombre = models.CharField(max_length=100)
+    especialidad = models.CharField(max_length=100)
     descripcion = RichTextMediumField(max_length=200)
     precio_unitario = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     descripcion_unidad = models.CharField(max_length=100, default='Unidades para el precio unitario, ej. por milla')

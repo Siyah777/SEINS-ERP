@@ -6,7 +6,7 @@ class Proveedor(models.Model):
     nombre_empresa = models.CharField(max_length=100)
     correlativo = models.CharField(max_length=20, unique=True, blank=True, null=True)
     descripcion = RichTextMediumField(max_length=100, default= 'descripcion de productos o servicios lo que proveen')
-    nombre_contacto = RichTextMediumField(max_length=100, default='Nombre')
+    nombre_contacto = models.CharField(max_length=100, default='Nombre')
     correo_electronico = models.CharField(max_length=100, default ='ejemplo@dominio.com')
     telefono = models.CharField(max_length=15, default ='+503 7777-7777')
     direccion = RichTextMediumField()
