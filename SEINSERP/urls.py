@@ -50,5 +50,6 @@ urlpatterns = [
     path('documentacion/', include('documentacion.urls')),
     path("ckeditor5/", include("django_ckeditor_5.urls")),
     path('finanzas/', include('finanzas.urls')),
+    path('indicadores/', include('indicadores.urls')),
 ]
 

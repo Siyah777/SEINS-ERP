@@ -1,0 +1,204 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}Indicadores SEINS{% endblock %}
+
+
+{% block extrastyle %}
+{{ block.super }}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+.content-wrapper,
+.content {
+    background: #f4f6f9;
+}
+
+.card {
+    border: none;
+    border-radius: 14px;
+}
+
+.card-body h6 {
+    font-size: 14px;
+    color: #6c757d;
+    margin-bottom: 8px;
+}
+
+.card-body h3 {
+    font-weight: 700;
+}
+
+.dashboard-title {
+    font-weight: 700;
+    margin-bottom: 25px;
+}
+</style>
+{% endblock %}
+
+
+{% block extrahead %}
+{{ block.super }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- FILTROS -->
+    <div class="row mb-4">
+
+        <div class="col-md-2">
+            <select id="mes" class="form-control">
+                <option value="">Todos</option>
+                <option value="1">Enero</option>
+                <option value="2">Febrero</option>
+                <option value="3">Marzo</option>
+                <option value="4">Abril</option>
+                <option value="5">Mayo</option>
+                <option value="6">Junio</option>
+                <option value="7">Julio</option>
+                <option value="8">Agosto</option>
+                <option value="9">Septiembre</option>
+                <option value="10">Octubre</option>
+                <option value="11">Noviembre</option>
+                <option value="12">Diciembre</option>
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <select id="anio" class="form-control">
+                <option value="2026">2026</option>
+                <option value="2025">2025</option>
+                <option value="2024">2024</option>
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <button onclick="cargarDashboard()" class="btn btn-primary w-100">
+                Filtrar
+            </button>
+        </div>
+
+        <div class="col-md-2">
+            <button onclick="exportarPDF()" class="btn btn-danger w-100">
+            📄 Exportar PDF
+            </button>
+        </div>
+    </div>
+
+
+    <h2 class="dashboard-title">📊 Centro de Indicadores Estratégicos</h2>
+
+
+    <!-- TARJETAS KPI -->
+    <div class="row g-3 mb-4">
+
+        <div class="col-md-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h6>Total OTs</h6>
+                    <h3 id="total_ots">0</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h6>Costos</h6>
+                    <h3 id="facturacion">$0</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h6>Preventivos</h6>
+                    <h3 id="preventivos">0</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h6>Correctivos</h6>
+                    <h3 id="correctivos">0</h3>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- GRAFICOS ACTUALES -->
+    <div class="row g-4">
+
+        <div class="col-md-6">
+            <div class="card p-3 shadow-sm">
+                <canvas id="clientesChart"></canvas>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card p-3 shadow-sm">
+                <canvas id="tiposChart"></canvas>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="card p-3 shadow-sm">
+                <canvas id="costosChart"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row g-4 mt-2">
+
+    <div class="col-md-6">
+            <div class="card p-3 shadow-sm">
+                <canvas id="equiposChart"></canvas>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card p-3 shadow-sm">
+                <canvas id="equiposCostosChart"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- NUEVOS GRAFICOS -->
+    <div class="row g-4 mt-2">
+
+        <div class="col-md-6">
+            <div class="card p-3 shadow-sm">
+                <canvas id="comparativoChart"></canvas>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card p-3 shadow-sm">
+                <canvas id="tendenciaChart"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block extrajs %}
+{{ block.super }}
+<script src="{% static 'js/dashboard.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+
+<style>
+body{
+    font-family: Helvetica;
+    font-size:12px;
+    color:#222;
+}
+
+h1{
+    text-align:center;
+    font-size:24px;
+    margin-bottom:0;
+}
+
+h2{
+    background:#1f2937;
+    color:white;
+    padding:7px;
+    font-size:14px;
+    margin-top:20px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-bottom:20px;
+}
+
+th,td{
+    border:1px solid #ccc;
+    padding:6px;
+    text-align:left;
+}
+
+th{
+    background:#f0f0f0;
+}
+
+.kpi{
+    width:48%;
+    display:inline-block;
+    padding:12px;
+    border:1px solid #ddd;
+    margin:1%;
+    vertical-align:top;
+    background:#fafafa;
+    text-align:center;
+    box-sizing:border-box;
+}
+
+.kpi b{
+    font-size:13px;
+}
+
+.kpi .valor{
+    font-size:22px;
+    font-weight:bold;
+    margin-top:8px;
+}
+
+.footer{
+    margin-top:30px;
+    text-align:center;
+    font-size:10px;
+    color:#777;
+}
+
+.center{
+    text-align:center;
+}
+
+.logo{
+    width:170px;
+    display:block;
+    margin:auto;
+    margin-bottom:10px;
+}
+
+.grafica{
+    text-align:center;
+    margin-top:10px;
+    margin-bottom:20px;
+    page-break-inside:avoid;
+}
+
+.grafica img{
+    width:520px;
+    height:auto;
+}
+
+.salto{
+    page-break-before:always;
+}
+
+.obs{
+    border:1px solid #ccc;
+    padding:10px;
+    background:#f9f9f9;
+    margin-bottom:15px;
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- PORTADA -->
+<div class="center">
+
+{% if logo_base64 %}
+<img src="data:image/png;base64,{{ logo_base64 }}" class="logo">
+{% endif %}
+
+<h1>Informe Ejecutivo de Indicadores</h1>
+
+<p>
+<b>Período Analizado:</b> {{ mes }} {{ anio }}
+</p>
+
+<p>
+<b>Fecha de Emisión:</b> {{ fecha }}
+</p>
+
+</div>
+
+
+<!-- RESUMEN EJECUTIVO -->
+<h2>Resumen Ejecutivo</h2>
+
+<div class="kpi">
+<b>OTs Finalizadas</b>
+<div class="valor">{{ kpis.total_ots }}</div>
+</div>
+
+<div class="kpi">
+<b>Facturación Total</b>
+<div class="valor">${{ kpis.facturacion_total }}</div>
+</div>
+
+<div class="kpi">
+<b>Mantenimientos Preventivos</b>
+<div class="valor">{{ kpis.preventivos }}</div>
+</div>
+
+<div class="kpi">
+<b>Mantenimientos Correctivos</b>
+<div class="valor">{{ kpis.correctivos }}</div>
+</div>
+
+
+<h2>Conclusión Ejecutiva</h2>
+
+<div class="obs">
+Durante el período {{ mes }} {{ anio }}, se ejecutaron
+<b>{{ kpis.total_ots }}</b> órdenes de trabajo finalizadas.
+
+Se registró una facturación total de
+<b>${{ kpis.facturacion_total }}</b>.
+
+La operación muestra una relación de
+<b>{{ kpis.preventivos }}</b> preventivos frente a
+<b>{{ kpis.correctivos }}</b> correctivos.
+</div>
+
+
+<!-- TABLAS -->
+<h2>Top Clientes Atendidos</h2>
+
+<table>
+<tr>
+<th>Cliente</th>
+<th>Total OTs</th>
+</tr>
+
+{% for x in clientes %}
+<tr>
+<td>{{ x.cliente__nombre_empresa }}</td>
+<td>{{ x.total }}</td>
+</tr>
+{% endfor %}
+</table>
+
+
+<h2>Equipos con Más OTs</h2>
+
+<table>
+<tr>
+<th>Código</th>
+<th>Equipo</th>
+<th>Total</th>
+</tr>
+
+{% for x in equipos %}
+<tr>
+<td>{{ x.equipo__codigo_interno }}</td>
+<td>{{ x.equipo__nombre }}</td>
+<td>{{ x.total }}</td>
+</tr>
+{% endfor %}
+</table>
+
+
+<h2>Equipos con Mayor Costo</h2>
+
+<table>
+<tr>
+<th>Código</th>
+<th>Equipo</th>
+<th>Total</th>
+</tr>
+
+{% for x in equipos_costos %}
+<tr>
+<td>{{ x.equipo__codigo_interno }}</td>
+<td>{{ x.equipo__nombre }}</td>
+<td>${{ x.total }}</td>
+</tr>
+{% endfor %}
+</table>
+
+
+<!-- GRAFICAS AL FINAL -->
+<div class="salto"></div>
+
+<h2>Gráficas de Gestión</h2>
+
+{% if clientes_img %}
+<div class="grafica">
+<p><b>Top Clientes Atendidos</b></p>
+<img src="{{ clientes_img }}">
+</div>
+{% endif %}
+
+{% if tipos_img %}
+<div class="grafica">
+<p><b>Distribución de Actividades Ejecutadas</b></p>
+<img src="{{ tipos_img }}">
+</div>
+{% endif %}
+
+{% if costos_img %}
+<div class="grafica">
+<p><b>Costos por Cliente</b></p>
+<img src="{{ costos_img }}">
+</div>
+{% endif %}
+
+{% if equipos_img %}
+<h2>Equipos con Más OTs</h2>
+<div class="grafica">
+<img src="{{ equipos_img }}">
+</div>
+{% endif %}
+
+{% if equipos_costos_img %}
+<h2>Equipos con Mayor Costo</h2>
+<div class="grafica">
+<img src="{{ equipos_costos_img }}">
+</div>
+{% endif %}
+
+{% if comparativo_img %}
+<h2>Comparativo Mensual</h2>
+<div class="grafica">
+<img src="{{ comparativo_img }}">
+</div>
+{% endif %}
+
+{% if tendencia_img %}
+<h2>Tendencia Preventivo vs Correctivo</h2>
+<div class="grafica">
+<img src="{{ tendencia_img }}">
+</div>
+{% endif %}
+
+<div class="footer">
+SEINS-ERP © Informe generado automáticamente
+</div>
+
+</body>
+</html>
