@@ -50,3 +50,4 @@ dist/
 
 media/
 !media/.gitkeep
+staticfiles/
