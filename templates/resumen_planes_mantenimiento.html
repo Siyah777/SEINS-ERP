@@ -50,6 +50,7 @@ p { margin:0; }
 {% if plan.detalles.all %}
 <table>
 <tr>
+    <th class="detalle">Descripcion</th>
     <th class="detalle">Motivo / Actividad</th>
     <th class="frecuencia">Frecuencia</th>
     <th class="cliente">Cliente</th>
@@ -58,11 +59,11 @@ p { margin:0; }
     <th class="proveedores">Proveedores</th>
     <th class="herramientas">Herramientas</th>
     <th class="personas">Cant. Personas</th>
-    <th class="tiempo">Hora Estimada</th>
 </tr>
 
 {% for d in plan.detalles.all %}
 <tr>
+    <td class="detalle">{{ d.cotizacion.Descripcion }}</td>
     <td class="detalle">{{ d.motivo_actividad }}</td>
     <td class="frecuencia">{{ d.get_frecuencia_display }}</td>
     <td class="cliente">{% if d.cotizacion and d.cotizacion.cliente %}{{ d.cotizacion.cliente.nombre_empresa }}{% else %}-{% endif %}</td>
@@ -71,8 +72,6 @@ p { margin:0; }
     <td class="proveedores">{% if d.proveedores.all %}{{ d.proveedores.all|join:", " }}{% else %}-{% endif %}</td>
     <td class="herramientas">{% if d.herramientas.all %}{{ d.herramientas.all|join:", " }}{% else %}-{% endif %}</td>
     <td class="personas">{{ d.cantidad_personas }}</td>
-    <td class="tiempo">{% if d.tiempo_realizacion_estimado %}{{ d.tiempo_realizacion_estimado }}{% else %}-{% endif %}</td>
-</tr>
 {% endfor %}
 </table>
 {% else %}
