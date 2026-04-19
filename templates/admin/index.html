@@ -14,7 +14,7 @@
       </a>
 
       <a href="{% url 'admin:actividades_ordendetrabajo_changelist' %}?estatus__exact=programado" class="resumen-card programada">
-          <i class="fas fa-calendar-alt"></i>
+          <i class="fas fa-calendar-alt" style="color:#00008B;"></i>
           <div>
             <h4>Programadas</h4>
             <p>{{ resumen_actividades.programado|default:0 }}</p>
@@ -22,23 +22,10 @@
       </a>
 
       <a href="{% url 'admin:actividades_ordendetrabajo_changelist' %}?estatus__exact=en_proceso" class="resumen-card proceso">
-        <i class="fas fa-cogs"></i>
+        <i class="fas fa-cogs" style="color:#fd7e14;"></i>
         <div>
           <h4>En Proceso</h4>
           <p>{{ resumen_actividades.en_proceso|default:0 }}</p>
-        </div>
-      </a>
-    </div>
-  </div>
-
-   <div class="resumen-actividades">
-    <h2>Cotizaciones</h2>
-    <div class="resumen-grid">
-      <a href="{% url 'admin:cotizaciones_cotizacion_changelist' %}?estatus__exact=pendiente" class="resumen-card pendiente">
-        <i class="fas fa-file-invoice-dollar text-danger"></i>
-        <div>
-          <h4>Pendientes</h4>
-          <p>{{ resumen_actividades.cotizaciones_pendientes }}</p>
         </div>
       </a>
     </div>
@@ -52,7 +39,7 @@
         <!-- CRÍTICAS -->
         <a href="{% url 'admin:actividades_ordendetrabajo_changelist' %}?prioridad__exact=critica&estatus__in=pendiente,en_proceso,programado"
           class="resumen-card">
-          <i class="fas fa-exclamation-triangle" style="color:#dc3545;"></i>
+          <i class="fas fa-fire" style="color:#dc3545;"></i>
           <div>
             <h4>Crítica</h4>
             <p>{{ resumen_actividades.criticas }}</p>
@@ -62,13 +49,29 @@
         <!-- ALTAS -->
         <a href="{% url 'admin:actividades_ordendetrabajo_changelist' %}?prioridad__exact=alta&estatus__in=pendiente,en_proceso,programado"
           class="resumen-card">
-          <i class="fas fa-exclamation-triangle" style="color:#fd7e14;"></i>
+          <i class="fas fa-bolt" style="color:#fd7e14;"></i>
           <div>
             <h4>Alta</h4>
             <p>{{ resumen_actividades.altas }}</p>
           </div>
         </a>
 
+      </div>
+    </div>
+  </div>
+
+  <div class="resumen-actividades">
+      <h2>Cotizaciones por revisar</h2>
+
+      <div class="resumen-grid">
+
+        <a href="{% url 'admin:cotizaciones_cotizacion_changelist' %}?estatus__exact=pendiente" class="resumen-card">
+          <i class="fas fa-file-invoice-dollar text-danger"></i>
+          <div>
+            <h4>Pendientes</h4>
+            <p>{{ resumen_actividades.cotizaciones_pendientes }}</p>
+          </div>
+        </a>
       </div>
     </div>
   </div>
@@ -364,6 +367,7 @@
     background: transparent;
     border-radius: 12px;
     padding: 15px;
+    background: white;
   }
   .modulo h3 {
     font-size: 1.5em;
@@ -380,7 +384,7 @@
   .modulo-card {
     flex: 1 1 200px;
     max-width: 240px;
-    background: linear-gradient(135deg, #91ccd6, #e0d27e);
+    background: linear-gradient(135deg, #B0E0E6, #e0d27e);
     border-radius: 16px;
     padding: 20px;
     box-shadow: 0 6px 18px rgba(0,0,0,0.08);
@@ -397,7 +401,7 @@
   .modulo-card:hover {
     transform: translateY(-6px);
     box-shadow: 0 12px 25px rgba(0,0,0,0.15);
-    background: linear-gradient(135deg, #e0d27e, #91ccd6);
+    background: linear-gradient(135deg, #e0d27e, #B0E0E6);
   }
   .modulo-card i { font-size: 1.8em; }
 
