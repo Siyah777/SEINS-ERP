@@ -460,6 +460,28 @@
   font-weight: 600;
   padding: 3px 6px;
   border-radius: 6px;
+  min-height: 38px;
+  white-space: normal !important;
+}
+
+/* TEXTO INTERNO */
+.fc-daygrid-event .fc-event-title {
+  white-space: pre-line !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  line-height: 1.15;
+  font-size: 11px;
+}
+
+@media (max-width: 768px) {
+  .fc-daygrid-event .fc-event-title {
+    font-size: 9px;
+  }
+
+  .fc-daygrid-event {
+    min-height: 28px;
+    padding: 2px 4px;
+  }
 }
 
 </style>

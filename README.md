@@ -1,6 +1,9 @@
 # SEINS-ERP
 
-**SEINS-ERP** es un sistema **ERP de código abierto** diseñado para **empresas de ingeniería, mantenimiento industrial y logística**, especialmente aquellas que requieren control técnico, trazabilidad operativa y escalabilidad.
+SEINS-ERP Community
+v0.9.0-beta
+
+**SEINS-ERP Community** es un sistema **ERP de código abierto** diseñado para **empresas de ingeniería, mantenimiento industrial y logística**, especialmente aquellas que requieren control técnico, trazabilidad operativa y escalabilidad.
 
 El proyecto nace de la experiencia real en **mantenimiento, metrología y operación de sistemas críticos**, y busca cerrar la brecha entre la gestión administrativa y la realidad técnica del campo.
 
@@ -10,7 +13,7 @@ Está construido con **Django**, **PostgreSQL** y **Docker**, bajo una arquitect
 
 ## 🎯 Objetivo del proyecto
 
-Proveer una plataforma ERP que permita a empresas técnicas:
+Proveer una plataforma ERP - CMMS que permita a empresas técnicas:
 
 * Gestionar **inventarios, ventas y facturación** de forma integrada.
 * Administrar **mantenimiento, proyectos y órdenes de trabajo**.
@@ -23,22 +26,22 @@ SEINS-ERP no es un proyecto académico; es un sistema pensado para **uso real**,
 
 ## 🚀 Características principales
 
-* 📦 **Inventarios**
+* 📦 **Inventarios**  
   Gestión de repuestos, existencias y control de stock.
 
-* 🧾 **Ventas y Facturación**
+* 🧾 **Ventas y Facturación**  
   Generación de documentos comerciales e integración con **facturación electrónica (DTE – El Salvador)**.
 
-* 🛠 **Mantenimiento y Proyectos**
+* 🛠 **Mantenimiento y Proyectos**  
   Órdenes de trabajo, seguimiento de actividades, historial y reportes técnicos.
 
-* 🧩 **Arquitectura modular**
+* 🧩 **Arquitectura modular**  
   Cada módulo puede evolucionar de forma independiente.
 
-* 🔐 **Seguridad y roles**
+* 🔐 **Seguridad y roles**  
   Gestión de usuarios y permisos basada en roles.
 
-* ☁️ **Listo para producción**
+* ☁️ **Listo para producción**  
   Desplegado en entornos reales usando contenedores Docker.
 
 ---
@@ -47,13 +50,13 @@ SEINS-ERP no es un proyecto académico; es un sistema pensado para **uso real**,
 
 SEINS-ERP utiliza una arquitectura clásica y robusta:
 
-* **Backend**: Django + Django REST Framework
-* **Base de datos**: PostgreSQL
-* **Infraestructura**: Docker / Docker Compose
-* **Servidor web**: Apache + WSGI (Waitress)
+* **Backend**: Django + Django REST Framework  
+* **Base de datos**: PostgreSQL  
+* **Infraestructura**: Docker / Docker Compose  
+* **Servidor web**: Apache + WSGI (Waitress)  
 * **Frontend**:
 
-  * Django Admin para administradores internos
+  * Django Admin para administradores internos  
   * React (en desarrollo) para clientes y proveedores
 
 Esta arquitectura permite escalar el sistema y adaptarlo a distintos contextos empresariales.
@@ -69,71 +72,76 @@ git clone https://github.com/Siyah777/seins-erp.git
 mv seins-erp SEINSERP
 cd SEINSERP
 docker compose -f docker-compose.prod.yml up -d --build
-```
 
-Asegúrate de configurar correctamente las **variables de entorno** antes del despliegue.
+Asegúrate de configurar correctamente las variables de entorno antes del despliegue.
 
----
+🧪 Estado del proyecto
 
-## 🧪 Estado del proyecto
-
-SEINS-ERP se encuentra en **desarrollo activo**, con módulos funcionales y otros en evolución.
+SEINS-ERP se encuentra en desarrollo activo, con módulos funcionales y otros en evolución.
 
 ✔ Inventarios
 ✔ Ventas y facturación básica
 ✔ Mantenimiento / OT
 🚧 Indicadores, analítica y automatizaciones avanzadas
 
----
-
-## 🌐 Proyectos en producción
-
-* Sitio corporativo: [https://seinsv.com](https://seinsv.com)
-* Plataforma activa: [https://seinsv.online](https://seinsv.online)
+🌐 Proyectos en producción
+Sitio corporativo: https://seinsv.com
+Plataforma activa: https://seinsv.online
 
 Estos entornos demuestran el uso real del sistema en producción.
 
----
-
-## 🧑‍💻 Contribuciones
+🧑‍💻 Contribuciones
 
 Las contribuciones son bienvenidas.
 
 Antes de enviar un PR:
 
-* Revisa la **Guía de Contribución** (próximamente).
-* Respeta el **Código de Conducta** del proyecto.
-* Documenta los cambios realizados.
+Revisa la Guía de Contribución (próximamente).
+Respeta el Código de Conducta del proyecto.
+Documenta los cambios realizados.
 
----
+Toda contribución enviada al proyecto será considerada bajo la licencia AGPLv3 del repositorio, salvo acuerdo escrito distinto.
 
-## 📄 Licencia
+📄 Licencia
 
-Este proyecto está licenciado bajo la **MIT License**.
-Consulta el archivo `LICENSE` para más detalles.
+Este proyecto está licenciado bajo la GNU Affero General Public License v3.0 (AGPLv3).
 
----
+Esto significa que:
 
-## 👤 Autor y contacto
+Puedes usar, estudiar y modificar el software.
+Puedes redistribuirlo bajo la misma licencia.
+Si ejecutas una versión modificada como servicio en red, debes poner a disposición el código fuente correspondiente.
 
-**Sergio Erazo**
+Consulta el archivo LICENSE para más detalles.
+
+🧭 Ediciones del ecosistema SEINS
+Community Edition (este repositorio)
+
+Versión abierta orientada a comunidad, auditoría técnica, autoalojamiento y colaboración.
+
+PlataformaSEINS (privada)
+
+Versión cerrada de uso interno y comercial con módulos avanzados, automatizaciones premium, integraciones empresariales y nuevas capacidades.
+
+👤 Autor y contacto
+
+Sergio Erazo
 Ingeniero Mecánico | Software & Cloud Engineering
 
-* GitHub: [https://github.com/Siyah777](https://github.com/Siyah777)
-* Proyecto: [https://github.com/Siyah777/SEINS-ERP](https://github.com/Siyah777/SEINS-ERP)
-* Sitio web: [https://seinsv.com](https://seinsv.com)
-
----
-
-## 👥 Colaboradores
+GitHub: https://github.com/Siyah777
+Proyecto: https://github.com/Siyah777/SEINS-ERP
+Sitio web: https://seinsv.com
+👥 Colaboradores
 
 SEINS-ERP es un proyecto abierto que crece gracias al trabajo colaborativo.
 
 Christian Eduardo Jiménez Escobar
-Colaborador destacado, Inversionista
+Colaborador destacado | Inversionista
 
 Email: cristianeescobar03@gmail.com
 
-> SEINS-ERP representa la convergencia entre ingeniería, operación y tecnología.
-> Construido desde la experiencia real, no desde la teoría.
+SEINS-ERP representa la convergencia entre ingeniería, operación y tecnología.
+Construido desde la experiencia real, no desde la teoría
 
+Starting from version 2.0.0, SEINS-ERP Community is licensed under AGPLv3.
+Previous releases remain under their original license terms.

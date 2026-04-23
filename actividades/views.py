@@ -113,8 +113,10 @@ def calendario_eventos(request):
             "q": "",
         })
         
+        cliente_nombre = act.cliente.nombre_empresa if act.cliente else "Sin cliente"
+        
         eventos.append({
-            "title": getattr(act, "titulo", f"{act.correlativo}"),
+            "title": getattr(act, "titulo", f"{act.correlativo}\n{cliente_nombre}"),
             "start": act.fecha_inicio.isoformat(),
             "url": url_filtrada,
             "extendedProps": {
