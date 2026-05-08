@@ -18,13 +18,13 @@ class Equipo(ImageReduceMixin, models.Model):
     IMAGE_FIELDS = ("imagen_equipo",)
     
     nombre = models.CharField(max_length=500, default='equipo_interno')
-    descripcion = RichTextMediumField(max_length=1000, default='equipo de uso en empresa')
+    descripcion = models.TextField(max_length=1000, default='equipo de uso en empresa')
     cliente = models.ForeignKey('clientes.Cliente', on_delete=models.CASCADE, blank=True, null=True)
     marca = models.CharField(max_length=100, default='Generico')
     modelo = models.CharField(max_length=100, default='Modelo Generico')
     serie = models.CharField(max_length=100, default='Serie Generica')
     codigo_interno = models.CharField(max_length=100, default='Codigo Interno segun SG')
-    ubicacion = RichTextMediumField(max_length=1000, default='Ubicación del equipo en la empresa')
+    ubicacion = models.TextField(max_length=1000, default='Ubicación del equipo en la empresa')
     estatus = models.CharField(max_length=50, default='funcionando')
     categoria =models.CharField(max_length=100, null=False, default='General')
     componentes = models.PositiveIntegerField(default=1)
@@ -51,7 +51,7 @@ class Herramienta(ImageReduceMixin, models.Model):
     ]
 
     nombre = models.CharField(max_length=100)
-    descripcion = RichTextMediumField(blank=True)
+    descripcion = models.TextField(blank=True)
     categoria = models.CharField(max_length=100)
     cantidad = models.PositiveIntegerField()
     modelo = models.CharField(max_length=100, blank=True)

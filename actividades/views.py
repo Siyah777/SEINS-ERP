@@ -15,6 +15,8 @@ from django.utils import timezone
 from datetime import timedelta
 from django.urls import reverse
 from urllib.parse import urlencode
+import zipfile
+import re
 
 
 def obtener_logo_base64():
@@ -34,65 +36,30 @@ def image_to_base64(field):
 
 @login_required
 def generar_pdf_orden_trabajo(request, orden_id):
-    orden = get_object_or_404(Ordendetrabajo, pk=orden_id)
-    template = get_template('orden_trabajo_pdf.html')
-    
-    # 🔹 Obtener técnico principal (el primero asignado)
-    tecnico = orden.personal_asignado.order_by('id').first()  # forzamos orden estable
-    firma_tecnico_base64 = None
-    nombre_tecnico = None
 
-    if tecnico:
-        nombre_tecnico = tecnico.get_full_name() or tecnico.username
-        try:
-            empleado = Empleado.objects.get(usuario=tecnico)
-            if empleado.firma_tecnico_img:
-                firma_tecnico_base64 = image_to_base64(empleado.firma_tecnico_img)
-        except Empleado.DoesNotExist:
-            pass
-    
-    if tecnico:
-        nombre_tecnico = tecnico.get_full_name() or tecnico.username
-        try:
-            empleado = Empleado.objects.get(usuario=tecnico)
-            if empleado.firma_tecnico_img:
-                firma_tecnico_base64 = image_to_base64(empleado.firma_tecnico_img)
-        except Empleado.DoesNotExist:
-            pass
+    orden = get_object_or_404(
+        Ordendetrabajo,
+        pk=orden_id
+    )
 
-    # 🔹 Si el técnico no tiene firma, usar una firma genérica o sello
-    if not firma_tecnico_base64:
-        ruta_generica = os.path.join("static", "img", "firma_generica.png")
-        if os.path.exists(ruta_generica):
-            with open(ruta_generica, "rb") as f:
-                firma_tecnico_base64 = base64.b64encode(f.read()).decode("utf-8")
-        else:
-            firma_tecnico_base64 = None  # No hay imagen, se mostrará texto
+    pdf_bytes = generar_pdf_bytes(orden)
 
-    context = {
-        'orden': orden,
-        'logo_base64': obtener_logo_base64(),
-        'imagen_antes_1': image_to_base64(orden.imagen_antes_1),
-        'imagen_antes_2': image_to_base64(orden.imagen_antes_2),
-        'imagen_despues_1': image_to_base64(orden.imagen_despues_1),
-        'imagen_despues_2': image_to_base64(orden.imagen_despues_2),
-        'firma_cliente': image_to_base64(orden.firma_cliente_img),
-        'firma_tecnico': firma_tecnico_base64,
-        'nombre_tecnico': nombre_tecnico,
-        
-    }
+    if not pdf_bytes:
+        return HttpResponse(
+            "Error al generar PDF",
+            status=500
+        )
 
-    html_content = template.render(context)
+    response = HttpResponse(
+        pdf_bytes,
+        content_type='application/pdf'
+    )
 
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = f'filename={orden.correlativo}.pdf'
+    response['Content-Disposition'] = (
+        f'filename="{orden.correlativo}.pdf"'
+    )
 
-    result = io.BytesIO()
-    pdf = pisa.pisaDocument(io.BytesIO(html_content.encode("UTF-8")), dest=result)
-    if not pdf.err:
-        response.write(result.getvalue())
-        return response
-    return HttpResponse("Error al generar el PDF", status=500)
+    return response
 
 def calendario_eventos(request):
     actividades = Ordendetrabajo.objects.filter(
@@ -125,3 +92,57 @@ def calendario_eventos(request):
         })
     
     return JsonResponse(eventos, safe=False)
+
+def limpiar_nombre_archivo(nombre):
+    return re.sub(r'[\\/*?:"<>|]', "", nombre)
+
+def generar_pdf_bytes(orden):
+
+    template = get_template('orden_trabajo_pdf.html')
+
+    tecnico = orden.personal_asignado.order_by('id').first()
+
+    firma_tecnico_base64 = None
+    nombre_tecnico = None
+
+    if tecnico:
+        nombre_tecnico = tecnico.get_full_name() or tecnico.username
+
+        try:
+            empleado = Empleado.objects.get(usuario=tecnico)
+
+            if empleado.firma_tecnico_img:
+                firma_tecnico_base64 = image_to_base64(
+                    empleado.firma_tecnico_img
+                )
+
+        except Empleado.DoesNotExist:
+            pass
+
+    context = {
+        'orden': orden,
+        'logo_base64': obtener_logo_base64(),
+        'imagen_antes_1': image_to_base64(orden.imagen_antes_1),
+        'imagen_antes_2': image_to_base64(orden.imagen_antes_2),
+        'imagen_despues_1': image_to_base64(orden.imagen_despues_1),
+        'imagen_despues_2': image_to_base64(orden.imagen_despues_2),
+        'firma_cliente': image_to_base64(
+            orden.firma_cliente_img
+        ),
+        'firma_tecnico': firma_tecnico_base64,
+        'nombre_tecnico': nombre_tecnico,
+    }
+
+    html_content = template.render(context)
+
+    result = io.BytesIO()
+
+    pdf = pisa.pisaDocument(
+        io.BytesIO(html_content.encode("UTF-8")),
+        dest=result
+    )
+
+    if pdf.err:
+        return None
+
+    return result.getvalue()

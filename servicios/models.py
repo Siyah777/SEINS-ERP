@@ -6,7 +6,7 @@ class Servicio(models.Model):
     correlativo = models.CharField(max_length=30, unique=True, blank=True, null=True)
     nombre = models.CharField(max_length=100)
     especialidad = models.CharField(max_length=100)
-    descripcion = RichTextMediumField(max_length=200)
+    descripcion = models.TextField(max_length=200)
     precio_unitario = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     descripcion_unidad = models.CharField(max_length=100, default='Unidades para el precio unitario, ej. por milla')
     notas = RichTextMediumField(max_length=100, default='consideraciones')

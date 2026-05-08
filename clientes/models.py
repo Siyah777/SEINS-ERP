@@ -74,7 +74,7 @@ class Cliente(models.Model):
     id_cliente = models.AutoField(primary_key=True )
     correlativo = models.CharField(max_length=20, unique=True, blank=True, null=True)
     nombre_empresa = models.CharField(max_length=255, unique=True)
-    direccion = RichTextMediumField()
+    direccion = models.TextField()
     nit= models.CharField(max_length=20, unique=True, default='0000000000', help_text="Numero sin guiones ni espacios")
     nrc= models.CharField(max_length=20, blank=True, null=True, help_text="Numero sin guiones ni espacios")
     tipo_cliente = models.CharField(max_length=50, choices=[

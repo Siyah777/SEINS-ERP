@@ -8,7 +8,7 @@ from core.fields import RichTextMediumField
 
 class PlanMantenimiento(models.Model):
     codigo_plan = models.CharField(max_length=100, unique=True, default='PM-001')
-    descripcion = RichTextMediumField(default="Plan de mantenimiento personalizado")
+    descripcion = models.TextField(default="Plan de mantenimiento personalizado")
     fecha_creacion = models.DateField(auto_now_add=True)
     fecha_modificacion = models.DateField(auto_now=True)
     

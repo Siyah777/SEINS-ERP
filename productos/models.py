@@ -18,7 +18,7 @@ class Producto(ImageReduceMixin, models.Model):
     id_producto = models.AutoField(primary_key=True)
     correlativo = models.CharField(max_length=20, unique=True, blank=True, null=True)
     nombre = models.CharField(max_length=100, unique=True, default="Nombre del Producto")
-    descripcion = RichTextMediumField(blank=True, null=True, default="Descripción del Producto")
+    descripcion = models.TextField(blank=True, null=True, default="Descripción del Producto")
     categoria = models.CharField(max_length=100)
     equipo = models.ManyToManyField('equipos.Equipo', blank=True)
     proveedor = models.ForeignKey('proveedores.Proveedor', on_delete=models.CASCADE, blank=True, null=True)

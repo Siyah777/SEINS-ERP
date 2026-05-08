@@ -5,11 +5,11 @@ class Proveedor(models.Model):
     # Definir los campos de la base de datos
     nombre_empresa = models.CharField(max_length=100)
     correlativo = models.CharField(max_length=20, unique=True, blank=True, null=True)
-    descripcion = RichTextMediumField(max_length=100, default= 'descripcion de productos o servicios lo que proveen')
+    descripcion = models.TextField(max_length=100, default= 'descripcion de productos o servicios lo que proveen')
     nombre_contacto = models.CharField(max_length=100, default='Nombre')
     correo_electronico = models.CharField(max_length=100, default ='ejemplo@dominio.com')
     telefono = models.CharField(max_length=15, default ='+503 7777-7777')
-    direccion = RichTextMediumField()
+    direccion = models.TextField()
     nit_proveedor= models.CharField(max_length=20, default='0000000000')
     nrc_proveedor= models.CharField(max_length=20, blank=True, null=True)
     tipo_proveedor = models.CharField(

@@ -16,13 +16,13 @@ class Inventario(ImageReduceMixin, models.Model):
     IMAGE_FIELDS = ("imagen_inventario",)
     
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
-    categoria = RichTextMediumField(max_length=100)
+    categoria = models.CharField(max_length=100)
     cantidad = models.PositiveIntegerField()
     proveedor = models.ForeignKey(Proveedor, on_delete=models.SET_NULL, null=True, blank=True)
-    ubicacion = RichTextMediumField(max_length=1000, default='Bodega Principal')
+    ubicacion = models.TextField(max_length=1000, default='Bodega Principal')
     fecha_ingreso = models.DateField()
     fecha_salida = models.DateField(null=True, blank=True)
-    consideraciones =RichTextMediumField(blank=True, null=True)
+    consideraciones =models.TextField(blank=True, null=True)
     stock_minimo = models.PositiveIntegerField(default=0)
     imagen_inventario = models.ImageField(upload_to=ruta_imagen_inventario, null=True, blank=True)
     

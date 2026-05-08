@@ -4,6 +4,12 @@ from .models import Ordendetrabajo
 from django.urls import reverse
 from django.utils.html import format_html
 from django.contrib.admin import DateFieldListFilter
+import zipfile
+import io
+import re
+from django.http import HttpResponse
+from .views import generar_pdf_bytes
+from datetime import datetime
 
 @admin.register(Ordendetrabajo)
 class TrabajoAdmin(admin.ModelAdmin):
@@ -121,3 +127,69 @@ class TrabajoAdmin(admin.ModelAdmin):
     search_fields = ('correlativo',) 
     filter_horizontal = ('personal_asignado',)  # Para seleccionar múltiples usuarios con un widget más cómodo
     date_hierarchy = 'fecha_inicio'
+    
+    actions = ['descargar_pdfs_zip']
+    
+    def descargar_pdfs_zip(
+        self,
+        request,
+        queryset
+    ):
+
+        buffer = io.BytesIO()
+
+        with zipfile.ZipFile(
+            buffer,
+            'w',
+            zipfile.ZIP_DEFLATED
+        ) as zip_file:
+
+            for orden in queryset:
+
+                pdf_bytes = generar_pdf_bytes(orden)
+
+                if not pdf_bytes:
+                    continue
+
+                descripcion = strip_tags(
+                    orden.descripcion or ""
+                )[:50]
+
+                descripcion = re.sub(
+                    r'[\\/*?:"<>|]',
+                    "",
+                    descripcion
+                )
+
+                nombre_archivo = (
+                    f"{orden.correlativo} - "
+                    f"{descripcion}.pdf"
+                )
+
+                zip_file.writestr(
+                    nombre_archivo,
+                    pdf_bytes
+                )
+
+        buffer.seek(0)
+
+        response = HttpResponse(
+            buffer.getvalue(),
+            content_type='application/zip'
+        )
+        
+        fecha = datetime.now().strftime("%Y%m%d")
+
+        response[
+            'Content-Disposition'
+        ] = (
+            f'attachment; '
+            f'filename="OTs_{fecha}.zip"'
+        )
+
+        return response
+    
+    
+    descargar_pdfs_zip.short_description = (
+        "Descargar PDFs en ZIP"
+    )
