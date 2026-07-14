@@ -33,3 +33,12 @@ body.login {
     padding: 20px;
     border-radius: 10px;
 }
+
+body.sidebar-mini .main-sidebar {
+    width: 4.6rem;
+    transition: width .2s ease;
+}
+
+body.sidebar-mini .main-sidebar:hover {
+    width: 250px;
+}

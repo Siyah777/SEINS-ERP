@@ -21,7 +21,7 @@ debugpy==1.8.8
 decorator==5.1.1
 Django==5.1.4
 django-cors-headers==4.7.0
-django-jazzmin==3.0.1
+django-jazzmin==3.0.5
 et-xmlfile==1.1.0
 exceptiongroup==1.2.2
 executing==2.1.0

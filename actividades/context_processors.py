@@ -11,6 +11,7 @@ def resumen_actividades(request):
         )
         criticas = base_queryset.filter(prioridad='critica').count()
         altas = base_queryset.filter(prioridad='alta').count()
+        medias = base_queryset.filter(prioridad='media').count()
 
         pendientes = Ordendetrabajo.objects.filter(estatus='pendiente').count()
         en_proceso = Ordendetrabajo.objects.filter(estatus='en_proceso').count()
@@ -27,6 +28,7 @@ def resumen_actividades(request):
                 'cotizaciones_pendientes': cotizaciones_pendientes,
                 'criticas': criticas,
                 'altas': altas,
+                'medias': medias,
             },
         }
 

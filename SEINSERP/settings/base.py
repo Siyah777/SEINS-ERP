@@ -176,7 +176,6 @@ JAZZMIN_SETTINGS = {
     "changeform_format": "horizontal_tabs",
     "show_ui_builder": False,
     "custom_css": "css/custom.css",
-    "theme": "dark",
     "welcome_sign": "Administración de SEINS-ERP",
     "copyright": "SEINS S. A. de C. V",
     "search_model": ["actividades.ordendetrabajo", "cotizaciones.cotizacion"], #"facturacion.factura",
@@ -309,13 +308,14 @@ JAZZMIN_SETTINGS = {
 
 JAZZMIN_UI_TWEAKS = {
     "body_small_text": True,
-    "brand_small_text": False,
-    "accent": "accent-info",
-    "navbar": "navbar-dark navbar-primary",
+    "brand_small_text": True,
+    "accent": "accent-primary",
+    "navbar": "navbar-white navbar-light",
     "no_navbar_border": False,
     "sidebar_nav_small_text": True,
     "footer_small_text": False,
     "body_bg": "bg-dark",  # Esto puede cambiar el fondo general
+    "sidebar_mini": True,
 }
 
 CKEDITOR_5_CONFIGS = {

@@ -56,6 +56,16 @@
           </div>
         </a>
 
+        <!-- MEDIAS -->
+        <a href="{% url 'admin:actividades_ordendetrabajo_changelist' %}?prioridad__exact=media&estatus__in=pendiente,en_proceso,programado"
+          class="resumen-card">
+          <i class="fa-solid fa-star" style="color:#deff05;"></i>
+          <div>
+            <h4>Media</h4>
+            <p>{{ resumen_actividades.medias }}</p>
+          </div>
+        </a>
+
       </div>
     </div>
   </div>
@@ -323,7 +333,7 @@
   }
   .resumen-card {
     flex: 0 1 260px;
-    background: linear-gradient(145deg, #ffffff, #f0f0f0);
+    background: linear-gradient(145deg, white, white);
     border-radius: 16px;
     padding: 20px;
     box-shadow: 0 8px 20px rgba(0,0,0,0.08);
@@ -367,7 +377,7 @@
     background: transparent;
     border-radius: 12px;
     padding: 15px;
-    background: white;
+    background: linear-gradient(145deg, white, white);
   }
   .modulo h3 {
     font-size: 1.5em;
