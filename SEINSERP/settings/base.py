@@ -176,6 +176,7 @@ JAZZMIN_SETTINGS = {
     "changeform_format": "horizontal_tabs",
     "show_ui_builder": False,
     "custom_css": "css/custom.css",
+    "custom_js": "js/custom.js",
     "welcome_sign": "Administración de SEINS-ERP",
     "copyright": "SEINS S. A. de C. V",
     "search_model": ["actividades.ordendetrabajo", "cotizaciones.cotizacion"], #"facturacion.factura",
